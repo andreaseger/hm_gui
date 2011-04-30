@@ -1,16 +1,18 @@
 package gui;
 
+import javax.swing.JFrame;
+
 /**
  * @author Moe
  */
-public class DataDisplay extends javax.swing.JPanel {
+public class DataDisplayLeft extends javax.swing.JPanel {
     /**
      * Current value.
      */
     private int value;
     
-    /** Creates new form DataDisplay */
-    public DataDisplay() {
+    /** Creates new form DataDisplayLeft */
+    public DataDisplayLeft() {
         initComponents();
     }
 
@@ -20,7 +22,7 @@ public class DataDisplay extends javax.swing.JPanel {
      * @param value Value to display.
      * @return Fluent interface.
      */
-    public DataDisplay setValue(int value) {
+    public DataDisplayLeft setValue(int value) {
         if (value == this.value) {
             showSameLabel();
         } else if (value > this.value) {
@@ -35,12 +37,12 @@ public class DataDisplay extends javax.swing.JPanel {
         return this;
     }
     
-    public DataDisplay setUnit(String unit) {
+    public DataDisplayLeft setUnit(String unit) {
         unitLabel.setText(unit);
         return this;
     }
     
-    public DataDisplay setCaption(String caption) {
+    public DataDisplayLeft setCaption(String caption) {
         StringBuilder sb = new StringBuilder("<html>");
         
         for(int i = 0; i < caption.length(); i++) {
@@ -72,12 +74,12 @@ public class DataDisplay extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36));
         valueLabel.setForeground(new java.awt.Color(102, 204, 0));
         valueLabel.setText("000");
         jPanel2.add(valueLabel, java.awt.BorderLayout.CENTER);
 
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
         unitLabel.setForeground(new java.awt.Color(102, 204, 0));
         unitLabel.setText("Unit");
         jPanel2.add(unitLabel, java.awt.BorderLayout.PAGE_END);
@@ -135,4 +137,18 @@ public class DataDisplay extends javax.swing.JPanel {
     private void updateValueLabel() {
         valueLabel.setText(Integer.toString(this.value));
     }
+    
+    public static void main(String... str){
+        
+        JFrame frame = new JFrame("GUI Test");
+        frame.setSize(800, 200);
+        frame.setResizable(true);
+        
+        DataDisplayLeft ddl = new DataDisplayLeft();        
+        ddl.setCaption("ZIP").setUnit("km/h").setValue(888);
+        frame.getContentPane().add(ddl);
+        
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }    
 }

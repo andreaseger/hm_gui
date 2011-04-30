@@ -10,6 +10,8 @@
  */
 package gui;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author Moe
@@ -19,6 +21,13 @@ public class TestFrame extends javax.swing.JFrame {
     /** Creates new form TestFrame */
     public TestFrame() {
         initComponents();
+        
+        DataDisplayLeft dd = new DataDisplayLeft();
+        dd.setCaption("ZIP");
+        dd.setUnit("km/h");
+        dd.setValue(888);
+        dd.setValue(777);
+        getContentPane().add(dd);
     }
 
     /** This method is called from within the constructor to
@@ -31,17 +40,7 @@ public class TestFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        getContentPane().setLayout(new java.awt.FlowLayout());
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
