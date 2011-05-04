@@ -5,6 +5,8 @@
 package parser;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,5 +15,10 @@ import java.util.List;
 public class ParserImpl extends AbstractParser{
   public void ParserCallback(List<Timepoint> points){
      System.out.println("a new timepoint read");
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ex) {
+      Logger.getLogger(ParserImpl.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 }
