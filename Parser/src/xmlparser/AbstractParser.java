@@ -1,4 +1,4 @@
-package parser;
+package xmlparser;
 
 import java.io.FileReader;
 import java.util.ArrayList;

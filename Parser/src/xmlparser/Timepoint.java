@@ -1,4 +1,4 @@
-package parser;
+package xmlparser;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package parser;
+package xmlparser;
 
 public class Input {
 	
