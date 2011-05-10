@@ -10,8 +10,6 @@
  */
 package gui;
 
-import javax.swing.JLabel;
-
 /**
  *
  * @author Moe

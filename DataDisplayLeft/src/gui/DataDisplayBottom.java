@@ -10,6 +10,13 @@
  */
 package gui;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 
 /**
@@ -18,11 +25,46 @@ import javax.swing.JFrame;
  */
 public class DataDisplayBottom extends javax.swing.JPanel {
     private float value;
+    private final List<ClickListener> clickListener = new ArrayList<ClickListener>();
+    
+    public interface ClickListener {
+        public void onClick();
+    }
     
     public DataDisplayBottom() {
         initComponents();
+        for(Component component: this.getComponents()) {
+            component.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    somethingWasClicked(e);
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                }
+            });
+        }
     }
 
+    private void somethingWasClicked(MouseEvent e) {
+        for(ClickListener listener: this.clickListener) {
+            listener.onClick();
+        }
+    }
+    
     public DataDisplayBottom setValue(float value) {
         if (value == this.value) {
             showSameLabel();
@@ -70,6 +112,14 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         return this;
     }    
     
+    /**
+     * Adds a click listener which gets informed when an UI element is clicked.
+     * @param listener Listener to add.
+     */
+    public void addClickListener(ClickListener listener) {
+        this.clickListener.add(listener);
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -101,7 +151,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setForeground(new java.awt.Color(51, 204, 0));
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36));
         valueLabel.setForeground(new java.awt.Color(51, 204, 0));
         valueLabel.setText("0,00");
         jPanel1.add(valueLabel);
@@ -123,12 +173,17 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         unitLabel.setBackground(new java.awt.Color(0, 0, 0));
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
         unitLabel.setForeground(new java.awt.Color(51, 204, 0));
         unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         unitLabel.setText("kg / h / m²");
         add(unitLabel, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * Is called when a UI element was clicked.
+     * @param evt Event.
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel captionLabel;
     private javax.swing.JLabel downLabel;
@@ -140,16 +195,35 @@ public class DataDisplayBottom extends javax.swing.JPanel {
     private javax.swing.JLabel valueLabel;
     // End of variables declaration//GEN-END:variables
 
+    private void setAllBackgrounds(Component component, Color color) {
+        component.setBackground(color);
+        
+        if (component instanceof Container) {
+            for(Component child: ((Container)component).getComponents()) {
+                setAllBackgrounds(child, color);
+            }                         
+        }        
+    }
+    
+    public void setHighlight(boolean highlight) {
+        setAllBackgrounds(this, highlight ? new Color(0, 80, 0) : Color.BLACK);
+    }
+    
     public static void main(String... str){
         
         JFrame frame = new JFrame("GUI Test");
-        frame.setSize(800, 200);
-        frame.setResizable(true);
         
-        DataDisplayBottom ddl = new DataDisplayBottom();        
+        final DataDisplayBottom ddl = new DataDisplayBottom();        
+        ddl.addClickListener(new ClickListener() {
+            @Override
+            public void onClick() {
+                ddl.setHighlight(true);
+            }
+        });
         ddl.setCaption("Boa constrictor").setUnit("km/h/m²").setValue(12.7f);
         frame.getContentPane().add(ddl);
         
+        frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     } 
