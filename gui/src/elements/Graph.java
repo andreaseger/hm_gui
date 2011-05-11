@@ -8,7 +8,7 @@
  *
  * Created on 27.04.2011, 12:01:48
  */
-package gui;
+package elements;
 
 import java.awt.Color;
 import java.awt.Graphics;

@@ -8,7 +8,7 @@
  *
  * Created on 30.04.2011, 11:16:24
  */
-package gui;
+package elements;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -28,7 +28,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
     private final List<ClickListener> clickListener = new ArrayList<ClickListener>();
     
     public interface ClickListener {
-        public void onClick();
+        public void onClick(DataDisplayBottom sender);
     }
     
     public DataDisplayBottom() {
@@ -61,7 +61,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
 
     private void somethingWasClicked(MouseEvent e) {
         for(ClickListener listener: this.clickListener) {
-            listener.onClick();
+            listener.onClick(this);
         }
     }
     
@@ -142,7 +142,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         captionLabel.setBackground(new java.awt.Color(0, 0, 0));
-        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
         captionLabel.setForeground(new java.awt.Color(51, 204, 0));
         captionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         captionLabel.setText("Vasoconstrictor");
@@ -159,13 +159,13 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/down.png"))); // NOI18N
+        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"))); // NOI18N
         jPanel3.add(downLabel, java.awt.BorderLayout.PAGE_END);
 
-        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/same.png"))); // NOI18N
+        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"))); // NOI18N
         jPanel3.add(sameLabel, java.awt.BorderLayout.CENTER);
 
-        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/up.png"))); // NOI18N
+        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"))); // NOI18N
         jPanel3.add(upLabel, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.add(jPanel3);
@@ -216,8 +216,8 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         final DataDisplayBottom ddl = new DataDisplayBottom();        
         ddl.addClickListener(new ClickListener() {
             @Override
-            public void onClick() {
-                ddl.setHighlight(true);
+            public void onClick(DataDisplayBottom sender) {
+                sender.setHighlight(true);
             }
         });
         ddl.setCaption("Boa constrictor").setUnit("km/h/m²").setValue(12.7f);

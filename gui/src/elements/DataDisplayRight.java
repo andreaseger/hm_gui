@@ -1,18 +1,18 @@
-package gui;
+package elements;
 
 import javax.swing.JFrame;
 
 /**
  * @author Moe
  */
-public class DataDisplayLeft extends javax.swing.JPanel {
+public class DataDisplayRight extends javax.swing.JPanel {
     /**
      * Current value.
      */
     private int value;
     
     /** Creates new form DataDisplayLeft */
-    public DataDisplayLeft() {
+    public DataDisplayRight() {
         initComponents();
     }
 
@@ -22,7 +22,7 @@ public class DataDisplayLeft extends javax.swing.JPanel {
      * @param value Value to display.
      * @return Fluent interface.
      */
-    public DataDisplayLeft setValue(int value) {
+    public DataDisplayRight setValue(int value) {
         if (value == this.value) {
             showSameLabel();
         } else if (value > this.value) {
@@ -37,12 +37,12 @@ public class DataDisplayLeft extends javax.swing.JPanel {
         return this;
     }
     
-    public DataDisplayLeft setUnit(String unit) {
+    public DataDisplayRight setUnit(String unit) {
         unitLabel.setText(unit);
         return this;
     }
     
-    public DataDisplayLeft setCaption(String caption) {
+    public DataDisplayRight setCaption(String caption) {
         StringBuilder sb = new StringBuilder("<html>");
         
         for(int i = 0; i < caption.length(); i++) {
@@ -89,13 +89,13 @@ public class DataDisplayLeft extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/down.png"))); // NOI18N
+        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"))); // NOI18N
         jPanel3.add(downLabel, java.awt.BorderLayout.PAGE_END);
 
-        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/same.png"))); // NOI18N
+        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"))); // NOI18N
         jPanel3.add(sameLabel, java.awt.BorderLayout.CENTER);
 
-        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/up.png"))); // NOI18N
+        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"))); // NOI18N
         jPanel3.add(upLabel, java.awt.BorderLayout.PAGE_START);
 
         add(jPanel3);
@@ -144,7 +144,7 @@ public class DataDisplayLeft extends javax.swing.JPanel {
         frame.setSize(800, 200);
         frame.setResizable(true);
         
-        DataDisplayLeft ddl = new DataDisplayLeft();        
+        DataDisplayRight ddl = new DataDisplayRight();        
         ddl.setCaption("ZIP").setUnit("km/h").setValue(888);
         frame.getContentPane().add(ddl);
         
