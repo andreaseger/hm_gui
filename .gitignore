@@ -1,7 +1,9 @@
 XMLParser/build/**/*
 XMLParser/build*
 DataDisplayLeft/build/**/*
+gui/build/**/*
+gui-setup/build/**/*
 /DataDisplayLeft/nbproject/private/
 /XMLParser/nbproject/private/
-/Parser/build/
+/Parser/build/**/*
 /Parser/nbproject/private/
