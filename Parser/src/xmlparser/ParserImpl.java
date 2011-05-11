@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  * @author sch1zo
  */
 public class ParserImpl extends AbstractParser{
+  @Override
   public void ParserCallback(List<Timepoint> points){
      System.out.println("a new timepoint read");
     try {
