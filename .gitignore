@@ -7,3 +7,6 @@ gui-setup/build/**/*
 /XMLParser/nbproject/private/
 /Parser/build/**/*
 /Parser/nbproject/private/
+/Parser/build/
+/gui/nbproject/private/
+/gui/build/
