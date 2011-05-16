@@ -139,10 +139,11 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         unitLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
+        setMinimumSize(new java.awt.Dimension(1, 1));
         setLayout(new java.awt.BorderLayout());
 
         captionLabel.setBackground(new java.awt.Color(0, 0, 0));
-        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         captionLabel.setForeground(new java.awt.Color(51, 204, 0));
         captionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         captionLabel.setText("Vasoconstrictor");
@@ -150,8 +151,9 @@ public class DataDisplayBottom extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setForeground(new java.awt.Color(51, 204, 0));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36));
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(51, 204, 0));
         valueLabel.setText("0,00");
         jPanel1.add(valueLabel);
@@ -173,7 +175,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         unitLabel.setBackground(new java.awt.Color(0, 0, 0));
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         unitLabel.setForeground(new java.awt.Color(51, 204, 0));
         unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         unitLabel.setText("kg / h / m²");
@@ -223,7 +225,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         ddl.setCaption("Boa constrictor").setUnit("km/h/m²").setValue(12.7f);
         frame.getContentPane().add(ddl);
         
-        frame.pack();
+        frame.setSize(133, 96);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     } 

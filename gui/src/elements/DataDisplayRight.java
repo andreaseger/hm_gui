@@ -9,7 +9,7 @@ public class DataDisplayRight extends javax.swing.JPanel {
     /**
      * Current value.
      */
-    private int value;
+    private float value;
     
     /** Creates new form DataDisplayLeft */
     public DataDisplayRight() {
@@ -22,7 +22,7 @@ public class DataDisplayRight extends javax.swing.JPanel {
      * @param value Value to display.
      * @return Fluent interface.
      */
-    public DataDisplayRight setValue(int value) {
+    public DataDisplayRight setValue(float value) {
         if (value == this.value) {
             showSameLabel();
         } else if (value > this.value) {
@@ -74,7 +74,7 @@ public class DataDisplayRight extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36));
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 32)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(102, 204, 0));
         valueLabel.setText("000");
         jPanel2.add(valueLabel, java.awt.BorderLayout.CENTER);
@@ -135,19 +135,19 @@ public class DataDisplayRight extends javax.swing.JPanel {
     }
 
     private void updateValueLabel() {
-        valueLabel.setText(Integer.toString(this.value));
+        valueLabel.setText(Float.toString(this.value));
     }
     
     public static void main(String... str){
         
         JFrame frame = new JFrame("GUI Test");
-        frame.setSize(800, 200);
         frame.setResizable(true);
         
         DataDisplayRight ddl = new DataDisplayRight();        
-        ddl.setCaption("ZIP").setUnit("km/h").setValue(888);
+        ddl.setCaption("BLA").setUnit("km/h").setValue(888).setValue(27.3f);
         frame.getContentPane().add(ddl);
         
+        frame.setSize(133, 120);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }    
