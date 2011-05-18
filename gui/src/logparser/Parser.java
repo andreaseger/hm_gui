@@ -22,8 +22,8 @@ import xmlparser.Timepoint;
  */
 public class Parser {
   private Pattern ptab;
-  private List<Map<Integer,Float>> controllerOutputs;
-  private List<Map<Integer,Float>> controllerInputs;
+  private List<Float[]> controllerOutputs;
+  private List<Float[]> controllerInputs;
   private List<String> controllerTimestamps;
   private final Pattern ptime;
   private final Pattern pinputs;
@@ -32,8 +32,8 @@ public class Parser {
     ptab = Pattern.compile("\\s\\t");
     ptime = Pattern.compile("\\s*,\\s*");
     pinputs = Pattern.compile("(:|\\s)");
-    controllerOutputs = new ArrayList<Map<Integer,Float>>();
-    controllerInputs = new ArrayList<Map<Integer,Float>>();
+    controllerOutputs = new ArrayList<Float[]>();
+    controllerInputs = new ArrayList<Float[]>();
     controllerTimestamps = new ArrayList<String>();
   }
   public void run(String[] files) throws FileNotFoundException{
@@ -68,24 +68,24 @@ public class Parser {
 
     String[] b = pinputs.split(a[1]);
 
-    Map<Integer,Float> inputs = new HashMap<Integer, Float>(4);
+    Float[] inputs = new Float[4];
     for (int i = 1; i < b.length; i++) {
-      inputs.put(i-1, Float.parseFloat(b[i]));
+      inputs[i-1] = Float.parseFloat(b[i]);
     }
 
     String[] c = pinputs.split(a[2]);
-    Map<Integer,Float> outputs = new HashMap<Integer, Float>(4);
+    Float[] outputs = new Float[4];
     for (int i = 1; i < c.length; i++) {
-      outputs.put(i-1, Float.parseFloat(c[i]));
+      outputs[i-1] = Float.parseFloat(c[i]);
     }
     controllerInputs.add(inputs);
     controllerOutputs.add(outputs);
     controllerTimestamps.add(time);
   }
-  public List<Map<Integer,Float>> getInputs(){
+  public List<Float[]> getInputs(){
     return controllerInputs;
   }
-  public List<Map<Integer,Float>> getOutputs(){
+  public List<Float[]> getOutputs(){
     return controllerOutputs;
   }
   public List<String> getTimestamps(){
@@ -96,10 +96,10 @@ public class Parser {
     Parser parser = new Parser();
     parser.run(aArgs);
 
-    for(Map<Integer, Float> p : parser.getInputs()){
+    for(Float[] p : parser.getInputs()){
       System.out.println(p.toString());
     }
-    for(Map<Integer, Float> p : parser.getOutputs()){
+    for(Float[] p : parser.getOutputs()){
       System.out.println(p.toString());
     }
     for(String p : parser.getTimestamps()){

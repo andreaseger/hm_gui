@@ -34,10 +34,10 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     private DataDisplayBottom[] outputs;
     private ObservableParser xmlparser;
     private JLabel testlabel;
-    private List<Map<Integer, Float>> inputList;
-    private List<Map<Integer, Float>> outputList;
     private List<String> timeList;
     private List<Rule> rules;
+    private List<Float[]> inputList;
+    private List<Float[]> outputList;
     
     public MainFrame(){
         initComponents();
@@ -142,11 +142,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     float tmp;
     for(int i = 0; i < inputs.length ;i++){
       //v = t.getInputs().get(i);   //inputs are always the same
-      tmp = inputList.get(t.getId()).get(i);
+      tmp = inputList.get(t.getId())[i];
       inputs[i].setValue(tmp);
     }
     for(int i = 0; i < outputs.length ;i++){
-      tmp = outputList.get(t.getId()).get(i);
+      tmp = outputList.get(t.getId())[i];
       //v = p.get(i).getOutput();
       outputs[i].setValue(tmp);
     }
