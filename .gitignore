@@ -6,7 +6,7 @@ gui/build
 gui/build/**/*
 gui/dist
 gui/dist/**/*
-gui/nbproject/private/private.xml
+gui/nbproject/private/
 
 gui-setup/build
 gui-setup/build/**/*

@@ -15,6 +15,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -99,7 +100,8 @@ public class DataDisplayBottom extends javax.swing.JPanel {
     }
 
     private void updateValueLabel() {
-        valueLabel.setText(Float.toString(this.value));
+        DecimalFormat f = new DecimalFormat("#0.00");
+        valueLabel.setText(f.format(this.value));
     }    
     
     public DataDisplayBottom setUnit(String unit) {

@@ -1,5 +1,6 @@
 package elements;
 
+import java.text.DecimalFormat;
 import javax.swing.JFrame;
 
 /**
@@ -136,7 +137,8 @@ public class DataDisplayRight extends javax.swing.JPanel {
     }
 
     private void updateValueLabel() {
-        valueLabel.setText(Float.toString(this.value));
+        DecimalFormat f = new DecimalFormat("#0.00");
+        valueLabel.setText(f.format(this.value));
     }
     
     public static void main(String... str){
