@@ -6,11 +6,15 @@ package gui;
 
 import elements.Graph;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.geom.Dimension2D;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 /**
  *
@@ -31,9 +35,9 @@ public class MainPanel extends JPanel {
             graphs[i] = new Graph();
             c.gridy = i;
             graphs[i].setMinimumSize(new Dimension(667,120));
+            graphs[i].setSize(667, 120);
+            graphs[i].setPreferredSize(new Dimension(667,120));
             add(graphs[i],c);
         }
-        
-        
     }
 }

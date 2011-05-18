@@ -18,20 +18,21 @@ import java.util.regex.Pattern;
  */
 public class Parser {
   private Pattern p;
-  private List<Rule> rules;
+  private List<List<Rule>> rules;
 
   public Parser(){
     p = Pattern.compile("(\\s|,\\s)");
-    rules = new ArrayList<Rule>();
   }
   public void run(String[] files) throws FileNotFoundException{
-    for(String file:files){
-      processLineByLine(new File(file));
+    rules = new ArrayList<List<Rule>>();
+    for (int i = 0; i < files.length; i++) {
+      rules.add(new ArrayList<Rule>());
+      processLineByLine(new File(files[i]),i);
     }
   }
 
   /** Template method that calls {@link #processLine(String)}.  */
-  public final void processLineByLine(File fFile) throws FileNotFoundException {
+  public final void processLineByLine(File fFile, int index) throws FileNotFoundException {
     //Note that FileReader is used, not File, since File is not Closeable
     Scanner scanner = new Scanner(new FileReader(fFile));
     Boolean foundrules = false;
@@ -45,7 +46,7 @@ public class Parser {
           continue;
         }
         if(foundrules && !line.isEmpty())
-          processLine( line );
+          processLine( line, index );
       }
     }
     finally {
@@ -55,28 +56,27 @@ public class Parser {
       scanner.close();
     }
   }
-  protected void processLine(String aLine){
+  protected void processLine(String aLine,int index){
     String[] a = p.split(aLine);
-    rules.add(new Rule( Integer.parseInt(a[0]),
+    rules.get(index).add(new Rule( Integer.parseInt(a[0]),
                           Integer.parseInt(a[1]),
                           Integer.parseInt(a[2]),
                           Integer.parseInt(a[3]),
                           Integer.parseInt(a[4])));
   }
-  public List<Rule> getRules(){
-    return rules;
+  public List<Rule> getRules(int index){
+    return rules.get(index);
   }
-  public List<Rule> getRules(String[] files) throws FileNotFoundException{
-    run(files);
+  public List<List<Rule> > getAllRules(){
     return rules;
   }
 
 
-  public static void main(String... aArgs) throws FileNotFoundException {
-    Parser parser = new Parser();
-    List<Rule> lr = parser.getRules(aArgs);
-    for(Rule r : lr){
-      System.out.println(r);
-    }
-  }
+//  public static void main(String... aArgs) throws FileNotFoundException {
+//    Parser parser = new Parser();
+//    List<Rule> lr = parser.getRules(aArgs);
+//    for(Rule r : lr){
+//      System.out.println(r);
+//    }
+//  }
 }

@@ -74,7 +74,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
         
         notifyObservers();
         try {
-          Thread.sleep(500);
+          runner.sleep(500);
         } catch (InterruptedException ex) {
           Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
         }
