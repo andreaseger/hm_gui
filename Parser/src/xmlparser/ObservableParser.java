@@ -13,7 +13,7 @@ import java.util.List;
  * 
  * @author Moe
  */
-public class ObservableParser extends AbstractParser implements Runnable{
+public class ObservableParser extends AbstractParser{
     /**
      * Interface which every observer has to implement.
      */
@@ -38,20 +38,6 @@ public class ObservableParser extends AbstractParser implements Runnable{
      * Maximum number of timepoints. If more timepoints are read, the oldest timepoints are discarded.
      */
     private final static int MAX_TIMEPOINTS = 100;
-
-    private Thread runner;
-    private String[] files;
-
-
-    public ObservableParser(String[] files){
-      super();
-      this.files = files;
-
-      runner = new Thread(this);
-    }
-    public void start(){
-      runner.start();
-    }
 
 
     @Override
