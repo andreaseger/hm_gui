@@ -132,8 +132,8 @@ public class DataDisplayRight extends javax.swing.JPanel {
     }
 
     private void loadGraphics() {
-        this.downImage = new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"));
-        this.upImage = new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"));
-        this.sameImage = new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"));
+        this.downImage = new javax.swing.ImageIcon(getClass().getResource("/resource/down.png"));
+        this.upImage = new javax.swing.ImageIcon(getClass().getResource("/resource/up.png"));
+        this.sameImage = new javax.swing.ImageIcon(getClass().getResource("/resource/same.png"));
     }
 }
