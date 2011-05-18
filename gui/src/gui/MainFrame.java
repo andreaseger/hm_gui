@@ -6,10 +6,15 @@ package gui;
 
 import elements.DataDisplayBottom;
 import elements.DataDisplayRight;
+import fisparser.Rule;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,18 +33,15 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     private DataDisplayRight[] inputs;
     private DataDisplayBottom[] outputs;
     private ObservableParser xmlparser;
-  private JLabel testlabel;
+    private JLabel testlabel;
+    private List<Map<Integer, Float>> inputList;
+    private List<Map<Integer, Float>> outputList;
+    private List<String> timeList;
+    private List<Rule> rules;
     
     public MainFrame(){
         initComponents();
-        String[] files = new String[4];
-        files[0] = "resources/controller_ISDN.xml";
-        files[1] = "resources/controller_NEP.xml";
-        files[2] = "resources/controller_DPM.xml";
-        files[3] = "resources/controller_VOL.xml";
-        xmlparser = new ObservableParser(files);
-        xmlparser.addObserver(this);
-        xmlparser.start();
+        startParser();
     }
 
     private void initComponents() {
@@ -91,7 +93,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
 
     private void fillInputPanel(JPanel inputPanel) {
         inputPanel.setLayout(new GridBagLayout());
-  	GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
 	
         inputs = new DataDisplayRight[4]; 
         for(int i = 0; i < inputs.length ;i++){
@@ -136,14 +138,44 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     List<Timepoint> p = points.get(points.size()-1);
     Timepoint t = p.get(0);
     testlabel.setText(Integer.toString(t.getId()));
-    double v;
+    //double v;
+    float tmp;
     for(int i = 0; i < inputs.length ;i++){
-        v = t.getInputs().get(i);   //inputs are always the same
-        inputs[i].setValue((float)v);
+      //v = t.getInputs().get(i);   //inputs are always the same
+      tmp = inputList.get(t.getId()).get(i);
+      inputs[i].setValue(tmp);
     }
     for(int i = 0; i < outputs.length ;i++){
-        v = p.get(i).getOutput();
-        outputs[i].setValue((float)v);
+      tmp = outputList.get(t.getId()).get(i);
+      //v = p.get(i).getOutput();
+      outputs[i].setValue(tmp);
     }
+  }
+
+  private void startParser() {
+      String[] files = new String[4];
+      files[0] = "resources/controller_ISDN.xml";
+      files[1] = "resources/controller_NEP.xml";
+      files[2] = "resources/controller_DPM.xml";
+      files[3] = "resources/controller_VOL.xml";
+      xmlparser = new ObservableParser(files);
+      xmlparser.addObserver(this);
+      logparser.Parser lparser = new logparser.Parser();
+      fisparser.Parser fparser = new fisparser.Parser();
+      try {
+        lparser.run("resources/controller.log");
+        files[0] = "resources/cavacoMamdaniISDNChange.fis";
+        files[1] = "resources/cavacoMamdaniNEPChange.fis";
+        files[2] = "resources/cavacoMamdaniDPMChange.fis";
+        files[3] = "resources/cavacoMamdaniVolChange.fis";
+        //fparser.run(files);
+      } catch (FileNotFoundException ex) {
+        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      inputList = lparser.getInputs();
+      outputList = lparser.getOutputs();
+      timeList = lparser.getTimestamps();
+      //rules = fparser.getRules();
+      xmlparser.start();
   }
 }   
