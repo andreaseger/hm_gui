@@ -10,3 +10,4 @@ gui-setup/build/**/*
 /Parser/build/
 /gui/nbproject/private/
 /gui/build/
+/gui/dist/

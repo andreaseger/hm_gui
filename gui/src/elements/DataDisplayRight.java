@@ -135,7 +135,7 @@ public class DataDisplayRight extends javax.swing.JPanel {
     }
 
     private void updateValueLabel() {
-        valueLabel.setText(String.format("%.1g", this.value));
+        valueLabel.setText(Float.toString(this.value)); //String.format("%.1g", this.value)
     }
     
     public static void main(String... str){

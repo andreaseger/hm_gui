@@ -12,7 +12,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -95,15 +94,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
         inputPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 	
-        inputs = new DataDisplayRight[4]; 
+        inputs = new DataDisplayRight[4];
+        c.gridx = 0;
         for(int i = 0; i < inputs.length ;i++){
             inputs[i] = new DataDisplayRight();
             inputs[i].setCaption("MVP");
-        }
-        
-
-        for(int i = 0; i < inputs.length ;i++){
-            c.gridx = 0;
             c.gridy = i;
             inputPanel.add(inputs[i], c);
         }
@@ -128,7 +123,6 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
         outputPanel.add(new JPanel(), c);
         for(int i = 0; i < outputs.length ;i++){
             c.gridx = i+1;
-            c.gridy = 0;
             outputPanel.add(outputs[i], c);
         }
     }
@@ -164,10 +158,10 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
       fisparser.Parser fparser = new fisparser.Parser();
       try {
         lparser.run("resources/controller.log");
-        files[0] = "resources/cavacoMamdaniISDNChange.fis";
-        files[1] = "resources/cavacoMamdaniNEPChange.fis";
-        files[2] = "resources/cavacoMamdaniDPMChange.fis";
-        files[3] = "resources/cavacoMamdaniVolChange.fis";
+//        files[0] = "resources/cavacoMamdaniISDNChange.fis";
+//        files[1] = "resources/cavacoMamdaniNEPChange.fis";
+//        files[2] = "resources/cavacoMamdaniDPMChange.fis";
+//        files[3] = "resources/cavacoMamdaniVolChange.fis";
         //fparser.run(files);
       } catch (FileNotFoundException ex) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
