@@ -116,6 +116,7 @@ public class DataDisplayRight extends javax.swing.JPanel {
     private javax.swing.JLabel valueLabel;
     // End of variables declaration//GEN-END:variables
 
+
     private void showSameLabel() {
         upLabel.setVisible(false);
         downLabel.setVisible(false);

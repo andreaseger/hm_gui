@@ -7,13 +7,15 @@ package xmlparser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An observable XML parser.
  * 
  * @author Moe
  */
-public class ObservableParser extends AbstractParser{
+public class ObservableParser extends AbstractParser implements Runnable{
     /**
      * Interface which every observer has to implement.
      */
@@ -39,6 +41,28 @@ public class ObservableParser extends AbstractParser{
      */
     private final static int MAX_TIMEPOINTS = 100;
 
+    private Thread runner;
+    private String[] files;
+
+    public ObservableParser(String[] files){
+      super();
+      this.files = files;
+
+      runner = new Thread(this);
+    }
+
+    public void start(){
+      runner.start();
+    }
+
+    @Override
+    public void run() {
+      try {
+        run(files);
+      } catch (Exception ex) {
+        //Logger.getLogger(ThreadedParser.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
 
     @Override
     public void ParserCallback(List<Timepoint> points) {
@@ -49,6 +73,11 @@ public class ObservableParser extends AbstractParser{
         }
         
         notifyObservers();
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
