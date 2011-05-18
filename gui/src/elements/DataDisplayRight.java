@@ -1,6 +1,8 @@
 package elements;
 
+import java.awt.Dimension;
 import java.text.DecimalFormat;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -11,11 +13,25 @@ public class DataDisplayRight extends javax.swing.JPanel {
      * Current value.
      */
     private float value;
+    private ImageIcon downImage;
+    private ImageIcon upImage;
+    private ImageIcon sameImage;
     
     /** Creates new form DataDisplayLeft */
-    public DataDisplayRight() {
+    public DataDisplayRight(int width, int height) {
         initComponents();
+        loadGraphics();
+        setAllSizes(width, height);
     }
+    
+    private void setAllSizes(int width, int height) {
+        Dimension d = new Dimension(width, height);
+        
+        setSize(d);
+        setMinimumSize(d);
+        setMaximumSize(d);
+        setPreferredSize(d);
+    }    
 
     /**
      * Sets the value to display.
@@ -25,11 +41,11 @@ public class DataDisplayRight extends javax.swing.JPanel {
      */
     public DataDisplayRight setValue(float value) {
         if (value == this.value) {
-            showSameLabel();
+            showSameGraphics();
         } else if (value > this.value) {
-            showUpLabel();
+            showUpGraphics();
         } else {
-            showDownLabel();
+            showDownGraphics();
         }
         
         this.value = value;
@@ -63,95 +79,61 @@ public class DataDisplayRight extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         valueLabel = new javax.swing.JLabel();
         unitLabel = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        downLabel = new javax.swing.JLabel();
-        sameLabel = new javax.swing.JLabel();
-        upLabel = new javax.swing.JLabel();
         captionLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
+        setMinimumSize(new java.awt.Dimension(133, 120));
+        setPreferredSize(new java.awt.Dimension(133, 120));
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(102, 204, 0));
         valueLabel.setText("000,00");
         jPanel2.add(valueLabel, java.awt.BorderLayout.CENTER);
 
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         unitLabel.setForeground(new java.awt.Color(102, 204, 0));
         unitLabel.setText("Unit");
         jPanel2.add(unitLabel, java.awt.BorderLayout.PAGE_END);
 
         add(jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"))); // NOI18N
-        jPanel3.add(downLabel, java.awt.BorderLayout.PAGE_END);
-
-        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"))); // NOI18N
-        jPanel3.add(sameLabel, java.awt.BorderLayout.CENTER);
-
-        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"))); // NOI18N
-        jPanel3.add(upLabel, java.awt.BorderLayout.PAGE_START);
-
-        add(jPanel3);
-
-        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         captionLabel.setForeground(new java.awt.Color(102, 204, 0));
         captionLabel.setText("<html>\nM<br />\nA<br />\nP");
         add(captionLabel);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel captionLabel;
-    private javax.swing.JLabel downLabel;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel sameLabel;
     private javax.swing.JLabel unitLabel;
-    private javax.swing.JLabel upLabel;
     private javax.swing.JLabel valueLabel;
     // End of variables declaration//GEN-END:variables
 
 
-    private void showSameLabel() {
-        upLabel.setVisible(false);
-        downLabel.setVisible(false);
-        sameLabel.setVisible(true);
+    private void showSameGraphics() {
+        unitLabel.setIcon(this.sameImage);
     }
 
-    private void showUpLabel() {
-        upLabel.setVisible(true);
-        downLabel.setVisible(false);
-        sameLabel.setVisible(false);
+    private void showUpGraphics() {
+        unitLabel.setIcon(this.upImage);
     }
 
-    private void showDownLabel() {
-        upLabel.setVisible(false);
-        downLabel.setVisible(true);
-        sameLabel.setVisible(false);
+    private void showDownGraphics() {
+        unitLabel.setIcon(this.downImage);
     }
 
     private void updateValueLabel() {
         DecimalFormat f = new DecimalFormat("#0.00");
         valueLabel.setText(f.format(this.value));
     }
-    
-    public static void main(String... str){
-        
-        JFrame frame = new JFrame("GUI Test");
-        frame.setResizable(true);
-        
-        DataDisplayRight ddl = new DataDisplayRight();        
-        ddl.setCaption("BLA").setUnit("km/h").setValue(888).setValue(27.3f);
-        frame.getContentPane().add(ddl);
-        
-        frame.setSize(133, 120);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }    
+
+    private void loadGraphics() {
+        this.downImage = new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"));
+        this.upImage = new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"));
+        this.sameImage = new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"));
+    }
 }

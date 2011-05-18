@@ -13,11 +13,13 @@ package elements;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -27,13 +29,34 @@ import javax.swing.JFrame;
 public class DataDisplayBottom extends javax.swing.JPanel {
     private float value;
     private final List<ClickListener> clickListener = new ArrayList<ClickListener>();
+    private ImageIcon downImage;
+    private ImageIcon upImage;
+    private ImageIcon sameImage;
+
+    private void loadGraphics() {
+        this.downImage = new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"));
+        this.upImage = new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"));
+        this.sameImage = new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"));        
+    }
+
+    private void setAllSizes(int width, int height) {
+        Dimension d = new Dimension(width, height);
+        
+        setSize(d);
+        setMinimumSize(d);
+        setMaximumSize(d);
+        setPreferredSize(d);
+    }
     
     public interface ClickListener {
         public void onClick(DataDisplayBottom sender);
     }
     
-    public DataDisplayBottom() {
+    public DataDisplayBottom(int width, int height) {
         initComponents();
+        loadGraphics();
+        setAllSizes(width, height);
+        
         for(Component component: this.getComponents()) {
             component.addMouseListener(new MouseListener() {
                 @Override
@@ -68,11 +91,11 @@ public class DataDisplayBottom extends javax.swing.JPanel {
     
     public DataDisplayBottom setValue(float value) {
         if (value == this.value) {
-            showSameLabel();
+            showSameGraphics();
         } else if (value > this.value) {
-            showUpLabel();
+            showUpGraphics();
         } else {
-            showDownLabel();
+            showDownGraphics();
         }
         
         this.value = value;
@@ -81,22 +104,16 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         return this;        
     }
     
-    private void showSameLabel() {
-        upLabel.setVisible(false);
-        downLabel.setVisible(false);
-        sameLabel.setVisible(true);
+    private void showSameGraphics() {
+        valueLabel.setIcon(this.sameImage);
     }
 
-    private void showUpLabel() {
-        upLabel.setVisible(true);
-        downLabel.setVisible(false);
-        sameLabel.setVisible(false);
+    private void showUpGraphics() {
+        valueLabel.setIcon(this.upImage);
     }
 
-    private void showDownLabel() {
-        upLabel.setVisible(false);
-        downLabel.setVisible(true);
-        sameLabel.setVisible(false);
+    private void showDownGraphics() {
+        valueLabel.setIcon(this.downImage);
     }
 
     private void updateValueLabel() {
@@ -134,10 +151,6 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         captionLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         valueLabel = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        downLabel = new javax.swing.JLabel();
-        sameLabel = new javax.swing.JLabel();
-        upLabel = new javax.swing.JLabel();
         unitLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 0, 0));
@@ -145,7 +158,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         captionLabel.setBackground(new java.awt.Color(0, 0, 0));
-        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
+        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         captionLabel.setForeground(new java.awt.Color(51, 204, 0));
         captionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         captionLabel.setText("Vasoconstrictor");
@@ -155,29 +168,15 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         jPanel1.setForeground(new java.awt.Color(51, 204, 0));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(51, 204, 0));
         valueLabel.setText("000,00");
         jPanel1.add(valueLabel);
 
-        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        downLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/down.png"))); // NOI18N
-        jPanel3.add(downLabel, java.awt.BorderLayout.PAGE_END);
-
-        sameLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/same.png"))); // NOI18N
-        jPanel3.add(sameLabel, java.awt.BorderLayout.CENTER);
-
-        upLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/elements/up.png"))); // NOI18N
-        jPanel3.add(upLabel, java.awt.BorderLayout.PAGE_START);
-
-        jPanel1.add(jPanel3);
-
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         unitLabel.setBackground(new java.awt.Color(0, 0, 0));
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         unitLabel.setForeground(new java.awt.Color(51, 204, 0));
         unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         unitLabel.setText("kg / h / m²");
@@ -190,12 +189,8 @@ public class DataDisplayBottom extends javax.swing.JPanel {
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel captionLabel;
-    private javax.swing.JLabel downLabel;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel sameLabel;
     private javax.swing.JLabel unitLabel;
-    private javax.swing.JLabel upLabel;
     private javax.swing.JLabel valueLabel;
     // End of variables declaration//GEN-END:variables
 
@@ -212,23 +207,4 @@ public class DataDisplayBottom extends javax.swing.JPanel {
     public void setHighlight(boolean highlight) {
         setAllBackgrounds(this, highlight ? new Color(0, 80, 0) : Color.BLACK);
     }
-    
-    public static void main(String... str){
-        
-        JFrame frame = new JFrame("GUI Test");
-        
-        final DataDisplayBottom ddl = new DataDisplayBottom();        
-        ddl.addClickListener(new ClickListener() {
-            @Override
-            public void onClick(DataDisplayBottom sender) {
-                sender.setHighlight(true);
-            }
-        });
-        ddl.setCaption("Boa constrictor").setUnit("km/h/m²").setValue(12.7f);
-        frame.getContentPane().add(ddl);
-        
-        frame.setSize(133, 96);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    } 
 }

@@ -97,7 +97,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
         inputs = new DataDisplayRight[4];
         c.gridx = 0;
         for(int i = 0; i < inputs.length ;i++){
-            inputs[i] = new DataDisplayRight();
+            inputs[i] = new DataDisplayRight(133, 120);
             inputs[i].setCaption("MVP");
             c.gridy = i;
             inputPanel.add(inputs[i], c);
@@ -110,7 +110,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
 	
         outputs = new DataDisplayBottom[4];
         for(int i = 0; i < outputs.length ;i++){
-            outputs[i] = new DataDisplayBottom();
+            outputs[i] = new DataDisplayBottom(133, 120);
             //outputs[i].setCaption("test").setUnit("km/h").setValue(42).setValue(32);
             outputs[i].addClickListener(new DataDisplayBottom.ClickListener() {
               public void onClick(DataDisplayBottom sender) {
