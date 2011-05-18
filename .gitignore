@@ -1,7 +1,6 @@
 XMLParser/build/**/*
 XMLParser/build*
 DataDisplayLeft/build/**/*
-<<<<<<< HEAD
 
 gui/build
 gui/build/**/*
