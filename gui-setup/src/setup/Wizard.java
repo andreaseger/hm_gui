@@ -6,6 +6,7 @@ package setup;
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 /**
  * Wizard
@@ -38,14 +38,17 @@ public class Wizard extends JFrame {
 	private String title;
 	private ArrayList<JPanel> panels;
 	private int currentPanel;
+        private Middle middle;
         
-        private Reader reader;
+        private boolean page3 = false; 
+        private int counter = 0;
+
         
       
-	public Wizard(String title, ArrayList<JPanel> panels, Reader reader) {
+	public Wizard(String title, ArrayList<JPanel> panels, Middle middle) {
 		this.title = title;
 		this.panels = panels;
-                this.reader = reader;
+                this.middle = middle;
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle(title);
@@ -79,7 +82,9 @@ public class Wizard extends JFrame {
 		//bottom
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 2));
+                Dimension dim = new Dimension(90,26);
 		backButton = new JButton("Back", new ImageIcon("berg-tal-plakat.png"));
+                backButton.setPreferredSize(dim);
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -89,6 +94,7 @@ public class Wizard extends JFrame {
 		bottomPanel.add(backButton);
 		nextButton = new JButton("Next", new ImageIcon("berg-tal-plakat.png"));
 		nextButton.setHorizontalTextPosition(JButton.LEFT);
+                nextButton.setPreferredSize(dim);
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -97,6 +103,7 @@ public class Wizard extends JFrame {
 		});
 		bottomPanel.add(nextButton);
 		cancelButton = new JButton("Cancel", new ImageIcon("berg-tal-plakat.png"));
+                cancelButton.setPreferredSize(dim);
 		cancelButton.setHorizontalTextPosition(JButton.LEFT);
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -120,7 +127,13 @@ public class Wizard extends JFrame {
                     
 			dispose();
 		} else {
-			currentPanel++;
+                       if(currentPanel == 1 && counter == 0){
+                            page3 = true;
+                            ++counter;
+                        }
+                        if(!page3){
+                            currentPanel++;
+                        }
 			updatePanel();
 			updateButtons();
 		}
@@ -133,9 +146,17 @@ public class Wizard extends JFrame {
 	}
 	
 	private void updatePanel() {
+                JPanel panelPage3 = getPanelPage3();
 		container.removeAll();
 		container.setLayout(new BorderLayout());
-		container.add(panels.get(currentPanel), BorderLayout.CENTER);
+                if(page3){
+                    ++currentPanel;
+                    panels.add(currentPanel, panelPage3);
+                    container.add(panelPage3, BorderLayout.CENTER);
+                    page3 = false;
+                }else{
+                    container.add(panels.get(currentPanel), BorderLayout.CENTER);
+                }
 		container.validate();
 		container.repaint();
 	}
@@ -160,6 +181,10 @@ public class Wizard extends JFrame {
 		}
 	}
         
-        
+        private JPanel getPanelPage3(){
+            JPanel panel1 = middle.getPanelTherapy2();
+            
+            return panel1;
+        }
 }
 
