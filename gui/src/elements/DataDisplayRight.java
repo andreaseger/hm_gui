@@ -75,9 +75,9 @@ public class DataDisplayRight extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 32)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(102, 204, 0));
-        valueLabel.setText("000");
+        valueLabel.setText("000,00");
         jPanel2.add(valueLabel, java.awt.BorderLayout.CENTER);
 
         unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));

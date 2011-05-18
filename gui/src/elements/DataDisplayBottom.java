@@ -145,7 +145,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         captionLabel.setBackground(new java.awt.Color(0, 0, 0));
-        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        captionLabel.setFont(new java.awt.Font("Tahoma", 1, 14));
         captionLabel.setForeground(new java.awt.Color(51, 204, 0));
         captionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         captionLabel.setText("Vasoconstrictor");
@@ -155,9 +155,9 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         jPanel1.setForeground(new java.awt.Color(51, 204, 0));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        valueLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         valueLabel.setForeground(new java.awt.Color(51, 204, 0));
-        valueLabel.setText("0,00");
+        valueLabel.setText("000,00");
         jPanel1.add(valueLabel);
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
@@ -177,7 +177,7 @@ public class DataDisplayBottom extends javax.swing.JPanel {
         add(jPanel1, java.awt.BorderLayout.CENTER);
 
         unitLabel.setBackground(new java.awt.Color(0, 0, 0));
-        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        unitLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
         unitLabel.setForeground(new java.awt.Color(51, 204, 0));
         unitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         unitLabel.setText("kg / h / m²");
