@@ -104,6 +104,12 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
         }
     }
 
+    private void dehighlightAllOutputs() {
+        for(DataDisplayBottom output: this.outputs) {
+            output.setHighlight(false);
+        }
+    }
+    
     private void fillOutputPanel(JPanel outputPanel) {
         outputPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -114,6 +120,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
             //outputs[i].setCaption("test").setUnit("km/h").setValue(42).setValue(32);
             outputs[i].addClickListener(new DataDisplayBottom.ClickListener() {
               public void onClick(DataDisplayBottom sender) {
+                  dehighlightAllOutputs();
                   sender.setHighlight(true);
               }
             });
