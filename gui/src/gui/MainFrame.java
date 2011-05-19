@@ -4,8 +4,8 @@
  */
 package gui;
 
-import elements.DataDisplayBottom;
-import elements.DataDisplayRight;
+import elements.DataDisplayOutput;
+import elements.DataDisplayInput;
 import fisparser.Rule;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -33,8 +33,8 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   private JPanel inputPanel;
   private JPanel outputPanel;
   private JPanel buttonPanel;
-  private DataDisplayRight[] inputs;
-  private DataDisplayBottom[] outputs;
+  private DataDisplayInput[] inputs;
+  private DataDisplayOutput[] outputs;
   private ObservableParser xmlparser;
   private JLabel testlabel;
   private List<String> timeList;
@@ -108,10 +108,10 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     inputPanel.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
 
-    inputs = new DataDisplayRight[4];
+    inputs = new DataDisplayInput[4];
     c.gridx = 0;
     for (int i = 0; i < inputs.length; i++) {
-      inputs[i] = new DataDisplayRight(133, 120);
+      inputs[i] = new DataDisplayInput(133, 120);
       inputs[i].setCaption("MVP");
       c.gridy = i;
       if (i == inputs.length-1) {
@@ -123,7 +123,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
 
 
     private void dehighlightAllOutputs() {
-        for(DataDisplayBottom output: this.outputs) {
+        for(DataDisplayOutput output: this.outputs) {
             output.setHighlight(false);
         }
     }
@@ -160,11 +160,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     outputPanel.add(pause);
     //outputPanel.setBackground(Color.black);
 
-    outputs = new DataDisplayBottom[4];
+    outputs = new DataDisplayOutput[4];
     for (int i = 0; i < outputs.length; i++) {
-      outputs[i] = new DataDisplayBottom(133,120);
-      outputs[i].addClickListener(new DataDisplayBottom.ClickListener() {
-        public void onClick(DataDisplayBottom sender) {
+      outputs[i] = new DataDisplayOutput(133,120);
+      outputs[i].addClickListener(new DataDisplayOutput.ClickListener() {
+        public void onClick(DataDisplayOutput sender) {
           dehighlightAllOutputs();
           sender.setHighlight(true);
         }
