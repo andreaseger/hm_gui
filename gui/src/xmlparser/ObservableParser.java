@@ -6,6 +6,7 @@ package xmlparser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +35,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
     /**
      * Data.
      */
-    private final List<List<Timepoint>> timepoints = new ArrayList<List<Timepoint>>();
+    private final LinkedList<List<Timepoint>> timepoints = new LinkedList<List<Timepoint>>();
     
     /**
      * Maximum number of timepoints. If more timepoints are read, the oldest timepoints are discarded.
@@ -66,19 +67,23 @@ public class ObservableParser extends AbstractParser implements Runnable{
 
     @Override
     public void ParserCallback(List<Timepoint> points) {
-        timepoints.add(points);
-        
-        while(timepoints.size() > MAX_TIMEPOINTS) {
-            timepoints.remove(0);
-        }
-        
-        notifyObservers();
-        
-        try {
-          runner.sleep(500);
-        } catch (InterruptedException ex) {
-          Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
-        }                
+      timepoints.add(points);
+
+      while(timepoints.size() > MAX_TIMEPOINTS) {
+          timepoints.removeFirst();
+      }
+      //HACK to get faster to the interesting data
+      if (points.get(0).getId() < 250) {
+        return;
+      }
+
+      notifyObservers();
+
+      try {
+        runner.sleep(1000);
+      } catch (InterruptedException ex) {
+        Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
+      }                
     }
 
     /**

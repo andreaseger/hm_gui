@@ -1,5 +1,6 @@
 package xmlparser;
 
+import fisparser.RulesOutput;
 import java.util.Map;
 
 public class Timepoint {
@@ -57,6 +58,9 @@ public class Timepoint {
 	public Double getOutput() {
 		return _output;
 	}
+  public String printOutputByRule(RulesOutput r){
+    return r.toString() + "=" + _output;
+  }
 
 	public void setOutput(Double output) {
 		this._output = output;
