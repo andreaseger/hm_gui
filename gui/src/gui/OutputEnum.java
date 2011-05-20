@@ -13,10 +13,10 @@ import java.util.Map;
  * @author sch1zo
  */
 public enum OutputEnum {
-  ISDN(0,"ISDN"),
-  NEP(1,"NEP"),
-  DPM(2,"DPM"),
-  VOL(3,"VOL");
+  VOL(0,"VOL"),
+  DPM(1,"DPM"),
+  NEP(2,"NEP"),
+  ISDN(3,"ISDN");
 
   private static final Map<Integer, OutputEnum> lookup = new HashMap<Integer, OutputEnum>();
 
@@ -39,6 +39,9 @@ public enum OutputEnum {
 
   public String getName() {
     return name;
+  }
+  public String getUnit(){
+    return "ug/kg/min";
   }
 
   public String getXMLPath() {

@@ -68,7 +68,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
       try {
         run(files);
       } catch (Exception ex) {
-        //Logger.getLogger(ThreadedParser.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
 

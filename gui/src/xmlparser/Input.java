@@ -1,6 +1,7 @@
 package xmlparser;
 
 import fisparser.RulesInput;
+import gui.FuzzyPanel;
 import java.text.DecimalFormat;
 
 public class Input {
@@ -31,14 +32,13 @@ public class Input {
 
 
   public String printByRule(RulesInput r){
-    DecimalFormat f = new DecimalFormat("#00.0");
     switch (r) {
       case LOW:
-        return r.toString() + "=" + f.format(_low*100) + "%";
+        return String.format(FuzzyPanel.getFormatString(),r,_low*100);
       case NORMAL:
-        return r.toString() + "=" + f.format(_normal*100) + "%";
+        return String.format(FuzzyPanel.getFormatString(),r,_normal*100);
       case HIGH:
-        return r.toString() + "=" + f.format(_high*100) + "%";
+        return String.format(FuzzyPanel.getFormatString(),r,_high*100);
     }
     return "error";
   }
