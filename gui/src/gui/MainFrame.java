@@ -11,11 +11,11 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,12 +38,13 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   //private List<String> timeList;
   private List<Float[]> inputList;
   private List<Float[]> outputList;
-  private List<List<Rule>> rules;
   private JLabel lpause;
   private boolean pause;
   private Icon ipause;
   private Icon iplay;
+  private static final Color foregroundColor = new Color(51, 204, 0);
   private FuzzyPanel fuzzyPanel;
+  private EnumMap<OutputEnum, List<Rule>> rules;
 
   public MainFrame() {
     initComponents();
@@ -178,6 +179,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     List<Timepoint> p = points.get(points.size() - 1);
     Timepoint t = p.get(0);
 
+    // HACK
     setTitle(Integer.toString(t.getId()));
 
     float tmp;
@@ -192,29 +194,28 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
       outputs[i].setValue(tmp);
     }
     if (fuzzyPanel.isVisible()) {
-      int o = 3;  //which output sets should be shown
-      fuzzyPanel.updateData(p, o); //send newest point to fuzzypanel
+      EnumMap<OutputEnum, Timepoint> h = new EnumMap<OutputEnum, Timepoint>(OutputEnum.class);
+      for (int i = 0; i < p.size(); i++) {
+        h.put(OutputEnum.get(i), p.get(i));
+      }
+      fuzzyPanel.updateData(h, OutputEnum.VOL); //send newest point to fuzzypanel
     }
   }
 
   private void startParser() {
-    String[] files = new String[4];
-    files[0] = "resources/controller_ISDN.xml";
-    files[1] = "resources/controller_NEP.xml";
-    files[2] = "resources/controller_DPM.xml";
-    files[3] = "resources/controller_VOL.xml";
-    xmlparser = new ObservableParser(files);
+    xmlparser = new ObservableParser(OutputEnum.ISDN.getXMLPath(),
+      OutputEnum.NEP.getXMLPath(),
+      OutputEnum.DPM.getXMLPath(),
+      OutputEnum.VOL.getXMLPath());
     xmlparser.addObserver(this);
     logparser.Parser lparser = new logparser.Parser();
     fisparser.Parser fparser = new fisparser.Parser();
     try {
       lparser.run("resources/controller.log");
-      String[] ffiles = new String[4];
-      ffiles[0] = "resources/cavacoMamdaniISDNChange.fis";
-      ffiles[1] = "resources/cavacoMamdaniNEPChange.fis";
-      ffiles[2] = "resources/cavacoMamdaniDPMChange.fis";
-      ffiles[3] = "resources/cavacoMamdaniVolChange.fis";
-      fparser.run(ffiles);
+      fparser.run(OutputEnum.ISDN.getFisPath(),
+        OutputEnum.NEP.getFisPath(),
+        OutputEnum.DPM.getFisPath(),
+        OutputEnum.VOL.getFisPath());
     } catch (FileNotFoundException ex) {
       Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -260,5 +261,9 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     fuzzyPanel.setSize(667, 480);
     fuzzyPanel.setVisible(true);
     this.add(fuzzyPanel);
+  }
+
+  public static Color getForegroundColor() {
+    return foregroundColor;
   }
 }

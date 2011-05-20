@@ -5,25 +5,19 @@
 package gui;
 
 import fisparser.Rule;
-import fisparser.RulesInput;
-import fisparser.RulesOutput;
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.text.DecimalFormat;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import xmlparser.Input;
 import xmlparser.Timepoint;
 
@@ -32,40 +26,42 @@ import xmlparser.Timepoint;
  * @author sch1zo
  */
 public class FuzzyPanel extends JPanel{
-  private final List<List<Rule>> rules;
   private JTable rulesTable;
   private FuzzyData fdata;
-  private JScrollPane scollPane;
+  private final EnumMap<OutputEnum, List<Rule>> rules;
+  private JLabel output;
+  private final DecimalFormat f;
 
   /** Creates new form FuzzyPanel */
-  FuzzyPanel(List<List<Rule>> rules, String[] header) {
+  FuzzyPanel(EnumMap<OutputEnum, List<Rule>> rules, String[] header) {
     this.rules = rules;
+    f = new DecimalFormat("#0.0");
     fdata = new FuzzyData(header);
     initComponents();
   }
 
   // o is the outputs index in rules and points
-  void updateData(List<Timepoint> points, int o) {
+  void updateData(EnumMap<OutputEnum, Timepoint> points, OutputEnum o) {
     Timepoint t = points.get(o);
     fdata.clearData();
-    if(t.getOutput() != 0){
-      Map<Integer, Double> cr = t.getRules();
-      Map<Integer, Input> s = t.getSets();
-      // at least one rule is active
-      for (int i = 0; i < 81; i++) {
-        if(cr.get(i) != 0){
-          Rule r =rules.get(o).get(i);
+    Map<Integer, Double> cr = t.getRules();
+    Map<Integer, Input> s = t.getSets();
+    if (!cr.isEmpty()){
+      for (Integer i : cr.keySet()) {
+          Rule r = rules.get(o).get(i);
           fdata._data.add(new String[]{ i +"",
                                         s.get(0).printByRule(r.MAP),
                                         s.get(1).printByRule(r.CVP),
                                         s.get(2).printByRule(r.CL1),
                                         s.get(3).printByRule(r.SVR),
-                                        t.printOutputByRule(r.OUT)
+                                        r.OUT + "=" + f.format(cr.get(i)*100) + "%"
                         });
-        }
       }
-      fdata.fireTableDataChanged();
+      output.setText("Output = " + t.getOutput());
+    } else {
+      output.setText("No Rules active");
     }
+    fdata.fireTableDataChanged();
   }
 
   public void setAllSizes(int width, int height){
@@ -78,21 +74,21 @@ public class FuzzyPanel extends JPanel{
 
   private void initComponents() {
     setLayout(null);
-    setBackground(Color.red);
 
     rulesTable = new JTable(fdata);
     rulesTable.setLocation(0, 80);
-    rulesTable.setSize(660, 400);
-    rulesTable.setForeground(new Color(51, 204, 0));
-    rulesTable.setBackground(Color.BLACK);
+    rulesTable.setSize(660, 300);
+    rulesTable.setForeground(MainFrame.getForegroundColor());
     rulesTable.setAlignmentX(LEFT_ALIGNMENT);
     rulesTable.setGridColor(Color.DARK_GRAY);
+    rulesTable.setColumnSelectionAllowed(false);
+    rulesTable.setRowSelectionAllowed(false);
 
     rulesTable.getTableHeader().setLocation(0, 55);
     rulesTable.getTableHeader().setSize(660, 25);
-    rulesTable.getTableHeader().setBackground(Color.BLACK);
-    rulesTable.getTableHeader().setForeground(Color.GREEN);
-
+    rulesTable.getTableHeader().setForeground(MainFrame.getForegroundColor());
+    rulesTable.getTableHeader().setResizingAllowed(false);
+    rulesTable.getTableHeader().setReorderingAllowed(false);
 
     TableColumn column = null;
     for (int i = 0; i < 6; i++) {
@@ -112,9 +108,22 @@ public class FuzzyPanel extends JPanel{
     add(rulesTable.getTableHeader());
     add(rulesTable);
 
-//    scollPane = new JScrollPane(rulesTable);
-//    rulesTable.setPreferredScrollableViewportSize(new Dimension(600, 400));
+    //TODO fontsize to small
+    output = new JLabel();
+    output.setLocation(100, 380);
+    output.setSize(560, 50);
+    output.setForeground(MainFrame.getForegroundColor());
 
-//    this.add(scollPane);
+    add(output);
+    setAllBackgrounds(this,Color.black);
   }
+    private void setAllBackgrounds(Component component, Color color) {
+        component.setBackground(color);
+
+        if (component instanceof Container) {
+            for (Component child : ((Container) component).getComponents()) {
+                setAllBackgrounds(child, color);
+            }
+        }
+    }
 }

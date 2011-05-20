@@ -52,6 +52,13 @@ public class ObservableParser extends AbstractParser implements Runnable{
       runner = new Thread(this);
     }
 
+    public ObservableParser(String o0, String o1, String o2,String o3){
+      super();
+      this.files = new String[]{o0,o1,o2,o3};
+
+      runner = new Thread(this);
+    }
+
     public void start(){
       runner.start();
     }

@@ -1,5 +1,6 @@
 package xmlparser;
 
+import gui.OutputEnum;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,9 +38,10 @@ abstract public class AbstractParser{
 
 		for (int i = 0; i < minsize; i++) {
       List<Timepoint> newItems = new ArrayList<Timepoint>();
-      for(NodeList l:nlists){
-        Element ts = (Element) l.item(i);
+      for(int n=0;n<nlists.size();n++){
+        Element ts = (Element) nlists.get(n).item(i);
         Timepoint next = new Timepoint();
+        next.setType(OutputEnum.get(n));
 
         next.setId(Integer.parseInt(ts.getNodeName().substring(9, ts.getNodeName().length())) );
 
@@ -66,7 +68,10 @@ abstract public class AbstractParser{
         for (int j = 0; j < ruleattrs.getLength(); j++) {
           Attr rule = (Attr) ruleattrs.item(j);
           int index = Integer.parseInt(rule.getName().substring(4, rule.getName().length()));
-          rules.put(index, Double.parseDouble(rule.getValue()) );
+          double value = Double.parseDouble(rule.getValue());
+          if(value != 0){
+            rules.put(index, value );
+          }
         }
 
         next.setRules(rules);

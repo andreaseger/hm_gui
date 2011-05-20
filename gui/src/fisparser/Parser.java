@@ -4,11 +4,15 @@
  */
 package fisparser;
 
+import gui.OutputEnum;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -18,17 +22,23 @@ import java.util.regex.Pattern;
  */
 public class Parser {
   private Pattern p;
-  private List<List<Rule>> rules;
+  private EnumMap<OutputEnum, List<Rule>> rules;
 
   public Parser(){
     p = Pattern.compile("(\\s|,\\s)");
   }
   public void run(String[] files) throws FileNotFoundException{
-    rules = new ArrayList<List<Rule>>();
+    rules = new EnumMap<OutputEnum, List<Rule>>(OutputEnum.class);
+    //rules = new ArrayList<List<Rule>>();
     for (int i = 0; i < files.length; i++) {
-      rules.add(new ArrayList<Rule>());
+      rules.put(OutputEnum.get(i), new ArrayList<Rule>());
+      //rules.add(new ArrayList<Rule>());
       processLineByLine(new File(files[i]),i);
     }
+  }
+
+  public void run(String o0,String o1, String o2, String o3) throws FileNotFoundException{
+    run(new String[]{o0,o1,o2,o3});
   }
 
   /** Template method that calls {@link #processLine(String)}.  */
@@ -58,25 +68,20 @@ public class Parser {
   }
   protected void processLine(String aLine,int index){
     String[] a = p.split(aLine);
-    rules.get(index).add(new Rule( Integer.parseInt(a[0]),
-                          Integer.parseInt(a[1]),
-                          Integer.parseInt(a[2]),
-                          Integer.parseInt(a[3]),
-                          Integer.parseInt(a[4])));
+
+    rules.get(OutputEnum.get(index)).add(new Rule(  Integer.parseInt(a[0]),
+                                                    Integer.parseInt(a[1]),
+                                                    Integer.parseInt(a[2]),
+                                                    Integer.parseInt(a[3]),
+                                                    Integer.parseInt(a[4])));
   }
   public List<Rule> getRules(int index){
-    return rules.get(index);
+    return rules.get(OutputEnum.get(index));
   }
-  public List<List<Rule> > getAllRules(){
+  public List<Rule> getRules(OutputEnum o){
+    return rules.get(o);
+  }
+  public EnumMap<OutputEnum,List<Rule> > getAllRules(){
     return rules;
   }
-
-
-//  public static void main(String... aArgs) throws FileNotFoundException {
-//    Parser parser = new Parser();
-//    List<Rule> lr = parser.getRules(aArgs);
-//    for(Rule r : lr){
-//      System.out.println(r);
-//    }
-//  }
 }

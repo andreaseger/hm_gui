@@ -45,7 +45,4 @@ public class FuzzyData extends AbstractTableModel{
   public boolean isCellEditable(int row, int col) {
       return false;
   }
-  public boolean isCellSelected(int row, int col) {
-      return false;
-  }
 }

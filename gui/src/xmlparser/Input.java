@@ -1,7 +1,7 @@
 package xmlparser;
 
 import fisparser.RulesInput;
-import fisparser.RulesOutput;
+import java.text.DecimalFormat;
 
 public class Input {
 	
@@ -31,13 +31,14 @@ public class Input {
 
 
   public String printByRule(RulesInput r){
+    DecimalFormat f = new DecimalFormat("#00.0");
     switch (r) {
       case LOW:
-        return r.toString() + "=" + _low;
+        return r.toString() + "=" + f.format(_low*100) + "%";
       case NORMAL:
-        return r.toString() + "=" + _normal;
+        return r.toString() + "=" + f.format(_normal*100) + "%";
       case HIGH:
-        return r.toString() + "=" + _high;
+        return r.toString() + "=" + f.format(_high*100) + "%";
     }
     return "error";
   }

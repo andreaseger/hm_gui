@@ -1,10 +1,11 @@
 package xmlparser;
 
-import fisparser.RulesOutput;
+import gui.OutputEnum;
 import java.util.Map;
 
 public class Timepoint {
 	private Integer _id;
+  private OutputEnum _type;
 	private Map<Integer,Double> _inputs;
 	private Map<Integer,Input> _sets;
 	private Map<Integer, Double> _rules;
@@ -14,9 +15,10 @@ public class Timepoint {
 		super();
 	}
 
-	public Timepoint(Integer id, Map<Integer,Double> inputs, Map<Integer,Input> sets, Map<Integer, Double> rules, Double output) {
+	public Timepoint(Integer id, OutputEnum type, Map<Integer,Double> inputs, Map<Integer,Input> sets, Map<Integer, Double> rules, Double output) {
 		super();
 		this._id = id;
+    this._type = type;
 		this._inputs = inputs;
 		this._sets = sets;
 		this._rules = rules;
@@ -29,6 +31,14 @@ public class Timepoint {
 
 	public void setId(Integer id) {
 		this._id = id;
+	}
+
+	public OutputEnum getType() {
+		return _type;
+	}
+
+	public void setType(OutputEnum type) {
+		this._type = type;
 	}
 
 	public Map<Integer,Double> getInputs() {
@@ -58,9 +68,6 @@ public class Timepoint {
 	public Double getOutput() {
 		return _output;
 	}
-  public String printOutputByRule(RulesOutput r){
-    return r.toString() + "=" + _output;
-  }
 
 	public void setOutput(Double output) {
 		this._output = output;
