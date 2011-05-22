@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.util.EnumMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -177,6 +176,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
         public void onClick(DataDisplayOutput sender) {
           dehighlightAllOutputs();
           sender.setHighlight(true);
+          fuzzyPanel.setOutputType(OutputEnum.ISDN);  //TODO
         }
       });
       outputs[i].setLocation(i * 133, 0);
@@ -192,11 +192,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   }
 
   public void update(ObservableParser parser) {
-    List<List<Timepoint>> timepoints = parser.getTimepoints();
-    List<Timepoint> p = timepoints.get(timepoints.size()-1);
+    List<Timepoint> p = parser.getLastTimepoint();
+    
     int id = p.get(0).getId();
-    // HACK
-    setTitle(Integer.toString(id));
+
+    setTitle(Integer.toString(id)); // HACK
 
     float tmp;
 
@@ -215,10 +215,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   }
 
   private void startParser() {
-    xmlparser = new ObservableParser(OutputEnum.VOL.getXMLPath(),
-      OutputEnum.DPM.getXMLPath(),
-      OutputEnum.NEP.getXMLPath(),
-      OutputEnum.ISDN.getXMLPath());
+    xmlparser = new ObservableParser(OutputEnum.VOL, OutputEnum.DPM, OutputEnum.NEP, OutputEnum.ISDN);
+//    xmlparser = new ObservableParser(OutputEnum.VOL.getXMLPath(),
+//      OutputEnum.DPM.getXMLPath(),
+//      OutputEnum.NEP.getXMLPath(),
+//      OutputEnum.ISDN.getXMLPath());
     xmlparser.addObserver(this);
     logparser.Parser lparser = new logparser.Parser();
     fisparser.Parser fparser = new fisparser.Parser();
@@ -236,6 +237,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     //timeList = lparser.getTimestamps();
     rules = fparser.getAllRules();
     fuzzyPanel.setRules(rules);
+    fuzzyPanel.setAbsInputs(inputList);
     fuzzyPanel.setParser(xmlparser);
     xmlparser.start();
   }

@@ -12,9 +12,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -36,17 +34,26 @@ public class FuzzyPanel extends JPanel{
   private EnumMap<OutputEnum, List<Rule>> rules;
   private ObservableParser parser;
   private int current_id;
-  private OutputEnum current_output;
+  private OutputEnum output_type;
   private static final String format = "%s=%3.2f%%";
   private JLabel output;
   private JLabel title;
   private JLabel next;
   private JLabel prev;
+  private JLabel input;
+  private List<Float[]> inputs;
 
   /** Creates new form FuzzyPanel */
   FuzzyPanel(EnumMap<OutputEnum, List<Rule>> rules, String[] header) {
     this.rules = rules;
     fdata = new FuzzyData(header);
+    initComponents();
+  }
+
+  FuzzyPanel(EnumMap<OutputEnum, List<Rule>> rules, String[] header, OutputEnum output_type) {
+    this.rules = rules;
+    this.fdata = new FuzzyData(header);
+    this.output_type = output_type;
     initComponents();
   }
 
@@ -56,21 +63,32 @@ public class FuzzyPanel extends JPanel{
   public void setRules(EnumMap<OutputEnum, List<Rule>> rules){
     this.rules = rules;
   }
-  
-  void updateData(List<Timepoint> p, OutputEnum o){
+  public void setOutputType(OutputEnum output_type){
+    this.output_type = output_type;
+  }
+
+  public void updateData(List<Timepoint> p){
     EnumMap<OutputEnum, Timepoint> h = new EnumMap<OutputEnum, Timepoint>(OutputEnum.class);
     for (int i = 0; i < p.size(); i++) {
       h.put(OutputEnum.get(i), p.get(i));
     }
+    updateData(h, output_type);
+  }
+
+  public void updateData(List<Timepoint> p, OutputEnum o){
+    EnumMap<OutputEnum, Timepoint> h = new EnumMap<OutputEnum, Timepoint>(OutputEnum.class);
+    for (int i = 0; i < p.size(); i++) {
+      h.put(OutputEnum.get(i), p.get(i));
+    }
+    output_type = o;
     updateData(h, o);
   }
 
   // o is the outputs index in rules and points
-  void updateData(EnumMap<OutputEnum, Timepoint> points, OutputEnum o) {
+  private void updateData(EnumMap<OutputEnum, Timepoint> points, OutputEnum o) {
     Timepoint t = points.get(o);
     current_id = t.getId();
-    current_output = o;
-    title.setText(current_id + " | " + o.getName());
+    title.setText("Timepoint# " + current_id);
     fdata.clearData();
     Map<Integer, Double> cr = t.getRules();
     Map<Integer, Input> s = t.getSets();
@@ -85,10 +103,17 @@ public class FuzzyPanel extends JPanel{
                                         String.format(format, r.OUT, cr.get(i)*100)
                         });
       }
-      output.setText("Output = " + t.getOutput());
+      output.setText(o.getName() + " | Differenz = " + t.getOutput());
     } else {
       output.setText("No Rules active");
     }
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < 4; i++) {
+      sb.append(String.format("%12s = %.2f", fdata.getColumnName(i+1), inputs.get(current_id)[i] ));
+    }
+    input.setText("Inputs: " + sb.toString());
+
     fdata.fireTableDataChanged();
   }
 
@@ -104,25 +129,35 @@ public class FuzzyPanel extends JPanel{
     setLayout(null);
 
     title = new JLabel();
-    title.setLocation(39, 5);
-    title.setSize(589, 50);
-    title.setForeground(MainFrame.getForegroundColor());
+    title.setLocation(39, 15);
+    title.setSize(589, 35);
     title.setHorizontalAlignment(SwingConstants.CENTER);
     title.setVerticalAlignment(SwingConstants.CENTER);
-    title.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+    title.setFont(new Font(Font.SANS_SERIF,Font.BOLD,16));
     title.setText("init");
     add(title);
 
+    input = new JLabel();
+    input.setLocation(39, 50);
+    input.setSize(589, 100);
+    StringBuilder s = new StringBuilder();
+    for (int i = 0; i < 4; i++) {
+      s.append(String.format("%12s = %.2f\t", fdata.getColumnName(i+1), 0.00));
+    }
+    input.setText(s.toString());
+    input.setFont(new Font(Font.SANS_SERIF,Font.BOLD,14));
+    add(input);
+
     rulesTable = new JTable(fdata);
-    rulesTable.setLocation(39, 80);
-    rulesTable.setSize(589, 300);
-    rulesTable.setForeground(MainFrame.getForegroundColor());
+    rulesTable.setLocation(39, 180);
+    rulesTable.setSize(589, 200);
     rulesTable.setGridColor(Color.DARK_GRAY);
     rulesTable.setColumnSelectionAllowed(false);
+    rulesTable.setRowSelectionAllowed(false);
+    rulesTable.setCellSelectionEnabled(false);
 
-    rulesTable.getTableHeader().setLocation(39, 55);
+    rulesTable.getTableHeader().setLocation(39, 155);
     rulesTable.getTableHeader().setSize(589, 25);
-    rulesTable.getTableHeader().setForeground(MainFrame.getForegroundColor());
     rulesTable.getTableHeader().setResizingAllowed(false);
     rulesTable.getTableHeader().setReorderingAllowed(false);
 
@@ -144,34 +179,31 @@ public class FuzzyPanel extends JPanel{
     add(rulesTable.getTableHeader());
     add(rulesTable);
 
-    //TODO fontsize to small
     output = new JLabel();
     output.setLocation(100, 380);
     output.setSize(560, 50);
-    output.setForeground(MainFrame.getForegroundColor());
     output.setHorizontalAlignment(SwingConstants.CENTER);
-    output.setFont(new Font(Font.SANS_SERIF,Font.BOLD,16));
+    output.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
     add(output);
 
     next = new JLabel();
-    next.setSize(50, 50);
-    next.setText(">");
-    next.setForeground(MainFrame.getForegroundColor());
-    next.setLocation(607, 420);
+    next.setSize(60, 60);
+    next.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/next.png")));
+    next.setLocation(597, 410);
     next.addMouseListener(new MouseListener() {
 
       public void mouseClicked(MouseEvent e) {
          //HACK: show next datapoint
-        List<List<Timepoint>> t = parser.getTimepoints();
-        int last_id_in_list = t.get(t.size()-1).get(0).getId();
-        int first_id_in_list = t.get(0).get(0).getId();
-        if(current_id == first_id_in_list)
-          updateData(t.get(0), current_output);
-        else if(current_id + 1 == last_id_in_list)
-          updateData(t.get(last_id_in_list), current_output);
+        int last_id_in_list = parser.getLastTimepoint().get(0).getId();
+        int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
+
+        if(current_id < first_id_in_list)
+          updateData(parser.getFirstTimepoint());
+        else if(current_id == last_id_in_list)
+          updateData(parser.getLastTimepoint());
         else
-          updateData(t.get(current_id-first_id_in_list+1),current_output);
-     }
+          updateData(parser.getTimepoints().get(current_id - first_id_in_list + 1));
+      }
 
       public void mousePressed(MouseEvent e) {
       }
@@ -186,23 +218,20 @@ public class FuzzyPanel extends JPanel{
       }
     });
     prev = new JLabel();
-    prev.setSize(50, 50);
-    prev.setText("<");
-    prev.setForeground(MainFrame.getForegroundColor());
-    prev.setLocation(10, 420);
+    prev.setSize(60, 60);
+    prev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/prev.png")));
+    prev.setLocation(10, 410);
     prev.addMouseListener(new MouseListener() {
 
       public void mouseClicked(MouseEvent e) {
         //HACK: show previous datapoint
-        List<List<Timepoint>> t = parser.getTimepoints();
-        int last_id_in_list = t.get(t.size()-1).get(0).getId();
-        int first_id_in_list = t.get(0).get(0).getId();
-        if(current_id == first_id_in_list)
-          updateData(t.get(0), current_output);
-        else if(current_id + 1 == last_id_in_list)
-          updateData(t.get(last_id_in_list), current_output);
+        int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
+
+        if(current_id <= first_id_in_list + 1)
+          updateData(parser.getFirstTimepoint());
         else
-          updateData(t.get(current_id-first_id_in_list-1),current_output);
+          updateData(parser.getTimepoints().get(current_id - first_id_in_list - 1));
+
       }
 
       public void mousePressed(MouseEvent e) {
@@ -221,6 +250,7 @@ public class FuzzyPanel extends JPanel{
     add(prev);
 
     setAllBackgrounds(this,Color.black);
+    setAllForegrounds(this,MainFrame.getForegroundColor());
   }
     private void setAllBackgrounds(Component component, Color color) {
         component.setBackground(color);
@@ -234,4 +264,18 @@ public class FuzzyPanel extends JPanel{
     public static String getFormatString(){
       return format;
     }
+
+  private void setAllForegrounds(Component component, Color color) {
+    component.setForeground(color);
+
+    if (component instanceof Container) {
+      for (Component child : ((Container) component).getComponents()) {
+          setAllForegrounds(child, color);
+      }
+    }
+  }
+
+  void setAbsInputs(List<Float[]> inputList) {
+    this.inputs = inputList;
+  }
 }

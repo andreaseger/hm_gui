@@ -4,6 +4,7 @@
  */
 package xmlparser;
 
+import gui.OutputEnum;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -43,18 +44,33 @@ public class ObservableParser extends AbstractParser implements Runnable{
     private final static int MAX_TIMEPOINTS = 100;
 
     private Thread runner;
-    private String[] files;
+//    private String[] files;
+    private OutputEnum[] output;
 
-    public ObservableParser(String[] files){
+//    public ObservableParser(String[] files){
+//      super();
+//      this.files = files;
+//
+//      runner = new Thread(this);
+//    }
+//
+//    public ObservableParser(String o0, String o1, String o2,String o3){
+//      super();
+//      this.files = new String[]{o0,o1,o2,o3};
+//
+//      runner = new Thread(this);
+//    }
+
+    public ObservableParser(OutputEnum[] output){
       super();
-      this.files = files;
+      this.output = output;
 
       runner = new Thread(this);
     }
 
-    public ObservableParser(String o0, String o1, String o2,String o3){
+    public ObservableParser(OutputEnum o0, OutputEnum o1, OutputEnum o2,OutputEnum o3){
       super();
-      this.files = new String[]{o0,o1,o2,o3};
+      this.output = new OutputEnum[]{o0,o1,o2,o3};
 
       runner = new Thread(this);
     }
@@ -66,7 +82,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
     @Override
     public void run() {
       try {
-        run(files);
+        run(output);
       } catch (Exception ex) {
         Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -123,6 +139,13 @@ public class ObservableParser extends AbstractParser implements Runnable{
      * @return Timepoints.
      */
     public List<List<Timepoint>> getTimepoints() {
-        return Collections.unmodifiableList(timepoints);
+      return Collections.unmodifiableList(timepoints);
+    }
+
+    public List<Timepoint>getLastTimepoint(){
+      return Collections.unmodifiableList(timepoints.getLast());
+    }
+    public List<Timepoint>getFirstTimepoint(){
+      return Collections.unmodifiableList(timepoints.getFirst());
     }
 }
