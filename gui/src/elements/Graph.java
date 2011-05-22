@@ -11,10 +11,9 @@
 package elements;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 
 /**
  *
@@ -35,7 +34,7 @@ public class Graph extends javax.swing.JPanel {
     public static final int STYLE_LINES = 0;
     public static final int STYLE_RECTS = 1;
     
-    private List<GraphData> data = null;
+    private List<Float> data = null;
     private Color graphColor = Color.GREEN;
     private Color graphBgColor = Color.black;
     private double targetValue;
@@ -51,6 +50,7 @@ public class Graph extends javax.swing.JPanel {
 
     public void setGraphBgColor(Color graphBgColor) {
         this.graphBgColor = graphBgColor;
+        setBackground(graphBgColor);
     }
 
     public void setGraphColor(Color graphColor) {
@@ -58,11 +58,20 @@ public class Graph extends javax.swing.JPanel {
     }
 
     /** Creates new form Graph */
-    public Graph() {
+    public Graph(int awidth, int aheight) {
+        Dimension dim = new Dimension(awidth, aheight);
         initComponents();
+        setBackground(Color.black);
+        
+        setMinimumSize(dim);
+        setSize(dim);
+        setPreferredSize(dim);
+        setMaximumSize(dim);
+        
+        
     }
     
-    public void showValues(List<GraphData> data){
+    public void showValues(List<Float> data){
         this.data = data;
         repaint();
     }
@@ -82,14 +91,16 @@ public class Graph extends javax.swing.JPanel {
         int height = this.getHeight() - 1;
         
         gr.setColor(graphBgColor);
-        gr.fillRect(this.getX(), this.getY(), this.getWidth(), height);
+        //gr.fillRect(this.getX(), this.getY(), this.getWidth(), height);
+        
+        gr.fillRect(0, 0, this.getWidth(), this.getHeight());
         
         gr.setColor(Color.red);
         gr.drawLine(0, height, this.getWidth(), height);
        
         gr.setColor(graphColor);
         
-        if(data != null){
+        if(data != null && data.size() > 0){
             int step = this.getWidth() / data.size();
             double maxValue = getDataMaxValue();
             int normHeight = (int)( (double)(height) / maxValue);
@@ -103,7 +114,7 @@ public class Graph extends javax.swing.JPanel {
             gr.setColor(graphColor);
             if(style == STYLE_LINES){
                 for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i).getValue() * normHeight));
+                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
                     if(point == null){
                         point = p;
                     }else{
@@ -114,7 +125,7 @@ public class Graph extends javax.swing.JPanel {
             }
             else if(style == STYLE_RECTS){
                 for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i).getValue() * normHeight));
+                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
                     if(point == null && i == 0){
                         point = p;
                         gr.drawLine(0, height - p.y, p.x + step/2, height - p.y);
@@ -132,9 +143,9 @@ public class Graph extends javax.swing.JPanel {
     
     private double getDataMaxValue(){
         double res = -1.0;
-        for(GraphData gd: data){
-            if(gd.getValue() > res){
-                res = gd.getValue();
+        for(Float gd: data){
+            if(gd > res){
+                res = gd;
             }
         }
         return res;
@@ -159,7 +170,7 @@ public class Graph extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     public static void main(String... str){
-        
+        /*
         ArrayList<GraphData> list = new ArrayList<GraphData>();
         for(int i = 0; i < 100; i++){
             list.add(new GraphData(null, Math.random()));
@@ -178,5 +189,7 @@ public class Graph extends javax.swing.JPanel {
         
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+        */
     }
 }

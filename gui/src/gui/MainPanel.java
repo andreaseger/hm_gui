@@ -5,9 +5,10 @@
 package gui;
 
 import elements.Graph;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -15,23 +16,68 @@ import javax.swing.JPanel;
  * @author sch1zo
  */
 public class MainPanel extends JPanel {
+    
+    JPanel graphPanel;
+    Graph[] graphs;
+    
+    DetailPanel detailPanel;
+        
     public MainPanel(){
         initComponents();
     }
+    
 
     private void initComponents() {
-        setLayout(new GridBagLayout());
-        
+        graphPanel = new JPanel();
+        graphPanel.setLayout(new GridBagLayout());
+               
         GridBagConstraints c = new GridBagConstraints();
-        Graph[] graphs = new Graph[4];
+        graphs = new Graph[4];
         c.gridx = 0;
         for(int i=0;i<graphs.length;i++){
-            graphs[i] = new Graph();
+            graphs[i] = new Graph(667, 120);
             c.gridy = i;
-            graphs[i].setMinimumSize(new Dimension(667,120));
-            graphs[i].setSize(667, 120);
-            graphs[i].setPreferredSize(new Dimension(667,120));
-            add(graphs[i],c);
+            graphPanel.add(graphs[i],c);
+            graphs[i].showValues(null);
+        }
+        
+        detailPanel = new DetailPanel(667, 480);
+        
+        showInputGraphs();
+    }
+    
+    public void showInputGraphs(){
+        remove(detailPanel);
+        add(graphPanel);
+    }
+    
+    public void showStartWizard(){
+        
+    }
+    
+    public void showDetails(){
+        remove(graphPanel);
+        add(detailPanel);
+    }
+
+    void updateInputGraphs(List<Float[]> inputList, int id) {
+        
+        ArrayList<ArrayList<Float>> lists = new ArrayList<ArrayList<Float>>();
+        
+        for(int i = 0; i < 4; i++){
+            lists.add(new ArrayList<Float>());
+        }
+        
+        for(int i = 0; i < id; i++){
+            
+            for(int j = 0; j < 4; j++){
+                lists.get(j).add(inputList.get(i+270)[j]);
+            }
+        }
+        
+        for(int i = 0; i < 4; i++){
+            graphs[i].showValues(lists.get(i));
+            //System.out.println("List :" + i + " size: " + (lists.get(i)).size());
         }
     }
 }

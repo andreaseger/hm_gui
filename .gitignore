@@ -20,3 +20,5 @@ gui-setup/build/**/*
 /gui/nbproject/private/
 /gui/build/
 /gui/dist/
+
+*.DS_Store
