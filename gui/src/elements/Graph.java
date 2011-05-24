@@ -34,7 +34,7 @@ public class Graph extends javax.swing.JPanel {
     public static final int STYLE_LINES = 0;
     public static final int STYLE_RECTS = 1;
     
-    private List<Float> data = null;
+    private List<Double> data = null;
     private Color graphColor = Color.GREEN;
     private Color graphBgColor = Color.black;
     private double targetValue;
@@ -71,7 +71,7 @@ public class Graph extends javax.swing.JPanel {
         
     }
     
-    public void showValues(List<Float> data){
+    public void showValues(List<Double> data){
         this.data = data;
         repaint();
     }
@@ -143,7 +143,7 @@ public class Graph extends javax.swing.JPanel {
     
     private double getDataMaxValue(){
         double res = -1.0;
-        for(Float gd: data){
+        for(Double gd: data){
             if(gd > res){
                 res = gd;
             }

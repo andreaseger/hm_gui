@@ -210,6 +210,8 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
       outputs[i].setValue(tmp);
     }
 
+    graphPanel.updateInputGraphs(parser.getTimepoints(), id);
+
     //fuzzyPanel.updateData(p, OutputEnum.ISDN); //send newest point to fuzzypanel
 
   }

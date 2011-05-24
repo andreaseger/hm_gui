@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import xmlparser.Timepoint;
 
 /**
  *
@@ -59,7 +60,7 @@ public class MainPanel extends JPanel {
         remove(graphPanel);
         add(detailPanel);
     }
-
+/*
     void updateInputGraphs(List<Float[]> inputList, int id) {
         
         ArrayList<ArrayList<Float>> lists = new ArrayList<ArrayList<Float>>();
@@ -75,6 +76,26 @@ public class MainPanel extends JPanel {
             }
         }
         
+        for(int i = 0; i < 4; i++){
+            graphs[i].showValues(lists.get(i));
+            //System.out.println("List :" + i + " size: " + (lists.get(i)).size());
+        }
+    }
+*/
+    void updateInputGraphs(List<List<Timepoint>> inputList, int id) {
+
+        ArrayList<ArrayList<Double>> lists = new ArrayList<ArrayList<Double>>();
+        for(int i = 0; i < 4; i++)
+            lists.add(new ArrayList<Double>());
+
+        for(List<Timepoint> ltp : inputList){
+            for(Timepoint tp : ltp){
+                for(int i = 0; i < 4; i++){
+                    lists.get(i).add(tp.getInputs().get(i));
+                }
+            }
+        }
+
         for(int i = 0; i < 4; i++){
             graphs[i].showValues(lists.get(i));
             //System.out.println("List :" + i + " size: " + (lists.get(i)).size());
