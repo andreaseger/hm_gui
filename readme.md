@@ -4,13 +4,13 @@ GUI Automatische Blutdruckregulierung mit Medikamenten
 Konzept
 ---
 
-– Unterschiedliche Erfahrungen: Umschalten zwischen Ärzte-Display und Fuzzy-Set-Anzeige für Experten
-– Konsistenz: Aufbau der Haupt-GUI analog zu den bisher vorhandenen Patientenmonitoren, so dass sich die bedienenden Ärzte nicht umgewöhnen müssen.
-– Aufgabenangemessenheit: Es werden nur die notwendigsten Informationen auf der globalen Anzeige angezeigt, weiterführende Informationen befinden sich hinter weiteren Buttons. Dies verbessert die Übersichtlichkeit und zeigt auf einen Blick alle relevanten Daten.
-– Geringe Belastung des Kurzzeitgedächnisses: Es wird maximal eine Ebene tiefer in den Informationen gegangen.
-– Ausdrucksweise des Anwenders, Erwartungskonformität: Die Fachsprache des Anwendungsgebiets ist auf den Anzeigen der aktuellen Werte vorhanden, dort finden sich gebräuchliche medizinische Abkürzungen für die gemessenen Werte und verabreichten Medikamente.
-– Selbstbeschreibungsfähigkeit: Das System warnt vor der schwerwiegenden Aktion, das Programm zu beenden, mit einer eindringlichen Warnmeldung. Wird der Medikationspause-Button gedrückt, wird dies unübersehbar visuell dargestellt.
-– Klare Auswege: Aus jedem Sub-Bildschirm kann über eine sichtbar plazierte, sich immer am selben Ort befindliche Zurück-Schaltfläche zur globalen Ansicht gewechselt werden.
+* Unterschiedliche Erfahrungen: Umschalten zwischen Ärzte-Display und Fuzzy-Set-Anzeige für Experten
+* Konsistenz: Aufbau der Haupt-GUI analog zu den bisher vorhandenen Patientenmonitoren, so dass sich die bedienenden Ärzte nicht umgewöhnen müssen.
+* Aufgabenangemessenheit: Es werden nur die notwendigsten Informationen auf der globalen Anzeige angezeigt, weiterführende Informationen befinden sich hinter weiteren Buttons. Dies verbessert die Übersichtlichkeit und zeigt auf einen Blick alle relevanten Daten.
+* Geringe Belastung des Kurzzeitgedächnisses: Es wird maximal eine Ebene tiefer in den Informationen gegangen.
+* Ausdrucksweise des Anwenders, Erwartungskonformität: Die Fachsprache des Anwendungsgebiets ist auf den Anzeigen der aktuellen Werte vorhanden, dort finden sich gebräuchliche medizinische Abkürzungen für die gemessenen Werte und verabreichten Medikamente.
+* Selbstbeschreibungsfähigkeit: Das System warnt vor der schwerwiegenden Aktion, das Programm zu beenden, mit einer eindringlichen Warnmeldung. Wird der Medikationspause-Button gedrückt, wird dies unübersehbar visuell dargestellt.
+* Klare Auswege: Aus jedem Sub-Bildschirm kann über eine sichtbar plazierte, sich immer am selben Ort befindliche Zurück-Schaltfläche zur globalen Ansicht gewechselt werden.
 
 Das Programm startet in der globalen Anzeige. Diese enthält vier Graphen, welche die Eingabedaten der vier Sensoren über die letzten zehn Minuten visualisiert. Neben dem Graph befindet sich die Anzeige des aktuell gemessenen Eingabewerts des dazugehörigen Graphen. Neben der Zahl symbolisiert ein kleiner Pfeil, ob der Wert im Vergleich zum letzten Wert gesunken, gestiegen oder gleich geblieben ist.
 
