@@ -103,7 +103,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
       notifyObservers();
 
       try {
-        runner.sleep(1000);
+        runner.sleep(300);
       } catch (InterruptedException ex) {
         Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }                

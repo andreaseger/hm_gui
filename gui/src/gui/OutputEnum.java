@@ -13,10 +13,10 @@ import java.util.Map;
  * @author sch1zo
  */
 public enum OutputEnum {
-  VOL(0,"VOL"),
-  DPM(1,"DPM"),
-  NEP(2,"NEP"),
-  ISDN(3,"ISDN");
+  VOL(0,"VOL", "VOL"),
+  DPM(1,"DPM", "DPM"),
+  NEP(2,"NEP", "NEP"),
+  ISDN(3,"ISDN", "ISDN");
 
   private static final Map<Integer, OutputEnum> lookup = new HashMap<Integer, OutputEnum>();
 
@@ -27,10 +27,12 @@ public enum OutputEnum {
   }
   private int code;
   private String name;
+  private String filename;
 
-  private OutputEnum(int code, String name) {
+  private OutputEnum(int code, String name, String filename) {
     this.code = code;
     this.name = name;
+    this.filename = filename;
   }
 
   public int getCode() {
@@ -45,11 +47,11 @@ public enum OutputEnum {
   }
 
   public String getXMLPath() {
-    return "resources/controller_" + name + ".xml";
+    return "resources/controller_" + filename + ".xml";
   }
 
   public String getFisPath() {
-    return "resources/cavacoMamdani" + name + "Change.fis";
+    return "resources/cavacoMamdani" + filename + "Change.fis";
   }
 
   public static OutputEnum get(int code) {

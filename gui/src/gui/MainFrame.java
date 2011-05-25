@@ -8,6 +8,7 @@ import elements.DataDisplayOutput;
 import elements.DataDisplayInput;
 import fisparser.Rule;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
@@ -18,7 +19,11 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import setup.PanelFactory;
+import setup.Result;
+import setup.Wizard;
 import xmlparser.ObservableParser;
 import xmlparser.Timepoint;
 
@@ -26,7 +31,8 @@ import xmlparser.Timepoint;
  *
  * @author sch1zo
  */
-public class MainFrame extends JFrame implements ObservableParser.Observer {
+public class MainFrame extends JFrame implements ObservableParser.Observer{
+  private static MainFrame current;
 
   private MainPanel graphPanel;
   private JPanel inputPanel;
@@ -35,7 +41,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   private DataDisplayInput[] inputs;
   private DataDisplayOutput[] outputs;
   private ObservableParser xmlparser;
-  //private List<String> timeList;
+  private List<String> timelist;
   private List<Float[]> inputList;
   private List<Float[]> outputList;
   private JLabel lpause;
@@ -47,12 +53,20 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   private FuzzyPanel fuzzyPanel;
   private EnumMap<OutputEnum, List<Rule>> rules;
   private JLabel settingsLabel;
+  private final Result results;
   private JLabel fuzzyLabel;
+  private JPanel fbPanel;
 
   public MainFrame() {
+    JOptionPane.showMessageDialog(current,"Achtung dies ist eine Testversion.\nBenutzung erfolg auf eigene Gefahr.\n Für Schäden wird nicht gehaftet.","Testversion!",JOptionPane.WARNING_MESSAGE);
+    PanelFactory panel_factory = new PanelFactory();
+    results = panel_factory.getResult();
     initComponents();
+    
+    //panel_factory.getWizard().registerOnSave(this);
     startParser();
   }
+
 
   private void initComponents() {
     loadPlayPauseGfx();
@@ -67,7 +81,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     this.add(graphPanel);
 
     inputPanel = new JPanel();
-    inputPanel.setBackground(Color.BLACK);
+    inputPanel.setBackground(foregroundColor);
     inputPanel.setLocation(667, 0);
     inputPanel.setSize(133, 480);
     this.add(inputPanel);
@@ -76,7 +90,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     addPauseButton();
 
     outputPanel = new JPanel();
-    outputPanel.setBackground(Color.BLACK);
+    outputPanel.setBackground(foregroundColor);
     outputPanel.setLocation(133, 480);
     outputPanel.setSize(532, 120);
     this.add(outputPanel);
@@ -102,15 +116,15 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   }
 
   public static void main(String... args) {
-    JFrame frame = new MainFrame();
-    frame.setSize(800, 600);
-    frame.setLocation(10, 10);
+    current = new MainFrame();
+    current.setSize(800, 600);
+    current.setLocation(10, 10);
 
-    frame.setResizable(true);
-    //frame.setUndecorated(true);   //with this you cant move the window, but all sizes fit well
+    current.setResizable(true);
+    current.setUndecorated(true);   //with this you cant move the window, but all sizes fit well
 
-    frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    current.setVisible(true);
+    current.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
   private void fillInputPanel(JPanel inputPanel) {
@@ -118,10 +132,9 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     inputs = new DataDisplayInput[4];
 
     for (int i = 0; i < inputs.length; i++) {
-      inputs[i] = new DataDisplayInput(133, 120);
-      inputs[i].setLocation(0, i * 120);
-      inputs[i].setCaption(InputEnum.get(i).getName());
-      inputs[i].setUnit(InputEnum.get(i).getUnit());
+      inputs[i] = new DataDisplayInput(132, 119);
+      inputs[i].setLocation(1, i * 120);
+      inputs[i].setType(InputEnum.get(results.getSelected_drugs()[i]));
       inputPanel.add(inputs[i]);
     }
   }
@@ -134,8 +147,9 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
 
   private void addPauseButton() {
     lpause = new JLabel();
-    lpause.addMouseListener(new MouseListener() {
+    lpause.addMouseListener(new SimpleClickHandler() {
 
+      @Override
       public void mouseClicked(MouseEvent e) {
         if (pause) {
           lpause.setIcon(ipause);
@@ -144,18 +158,6 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
           lpause.setIcon(iplay);
           pause = true;
         }
-      }
-
-      public void mousePressed(MouseEvent e) {
-      }
-
-      public void mouseReleased(MouseEvent e) {
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-
-      public void mouseExited(MouseEvent e) {
       }
     });
 
@@ -171,17 +173,16 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
 
     outputs = new DataDisplayOutput[4];
     for (int i = 0; i < outputs.length; i++) {
-      outputs[i] = new DataDisplayOutput(133, 120);
+      outputs[i] = new DataDisplayOutput(132, 119);
       outputs[i].addClickListener(new DataDisplayOutput.ClickListener() {
         public void onClick(DataDisplayOutput sender) {
           dehighlightAllOutputs();
           sender.setHighlight(true);
-          fuzzyPanel.setOutputType(OutputEnum.ISDN);  //TODO
+          fuzzyPanel.setOutputType(sender.getType());  //TODO
         }
       });
-      outputs[i].setLocation(i * 133, 0);
-      outputs[i].setCaption(OutputEnum.get(i).getName());
-      outputs[i].setUnit(OutputEnum.get(i).getUnit());
+      outputs[i].setLocation(i * 133, 1);
+      outputs[i].setType(OutputEnum.get(results.getSelected_drugs()[i]));
       outputPanel.add(outputs[i]);
     }
   }
@@ -217,30 +218,29 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   }
 
   private void startParser() {
-    xmlparser = new ObservableParser(OutputEnum.VOL, OutputEnum.DPM, OutputEnum.NEP, OutputEnum.ISDN);
-//    xmlparser = new ObservableParser(OutputEnum.VOL.getXMLPath(),
-//      OutputEnum.DPM.getXMLPath(),
-//      OutputEnum.NEP.getXMLPath(),
-//      OutputEnum.ISDN.getXMLPath());
+    OutputEnum[] o = new OutputEnum[]{OutputEnum.get(results.getSelected_drugs()[0]),
+                                      OutputEnum.get(results.getSelected_drugs()[1]),
+                                      OutputEnum.get(results.getSelected_drugs()[2]),
+                                      OutputEnum.get(results.getSelected_drugs()[3])};
+    xmlparser = new ObservableParser(o);
     xmlparser.addObserver(this);
     logparser.Parser lparser = new logparser.Parser();
     fisparser.Parser fparser = new fisparser.Parser();
     try {
       lparser.run("resources/controller.log");
-      fparser.run(OutputEnum.VOL.getFisPath(),
-        OutputEnum.DPM.getFisPath(),
-        OutputEnum.NEP.getFisPath(),
-        OutputEnum.ISDN.getFisPath());
+      fparser.run(o);
     } catch (FileNotFoundException ex) {
       Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
     }
     inputList = lparser.getInputs();
     outputList = lparser.getOutputs();
-    //timeList = lparser.getTimestamps();
+    timelist = lparser.getTimestamps();
     rules = fparser.getAllRules();
     fuzzyPanel.setRules(rules);
     fuzzyPanel.setAbsInputs(inputList);
     fuzzyPanel.setParser(xmlparser);
+    fuzzyPanel.setTimes(timelist);
+    fuzzyPanel.setOutputType(OutputEnum.ISDN);
     xmlparser.start();
   }
 
@@ -251,46 +251,54 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
     settingsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Settings.png")));
     settingsLabel.setSize(66, 60);
     settingsLabel.setLocation(66, 0);
+    settingsLabel.addMouseListener(new SimpleClickHandler(){
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        PanelFactory p = new PanelFactory();
+      }
+    });
     buttonPanel.add(settingsLabel);
+    fbPanel = new JPanel();
+    fbPanel.setSize(66, 60);
+    fbPanel.setLocation(0, 60);
+    fbPanel.setBackground(Color.black);
 
     fuzzyLabel = new JLabel();
     fuzzyLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Fuzzy.png")));
     fuzzyLabel.setSize(66, 60);
     fuzzyLabel.setLocation(0, 60);
-    fuzzyLabel.addMouseListener(new MouseListener() {
+    fuzzyLabel.addMouseListener(new SimpleClickHandler() {
+      @Override
       public void mouseClicked(MouseEvent e) {
-        if(fuzzyLabel.getBackground() == Color.black){
-          fuzzyLabel.setBackground(highlightColor);
+        if(fbPanel.getBackground() == Color.black){
+          fbPanel.setBackground(highlightColor);
           graphPanel.setVisible(false);
           fuzzyPanel.setVisible(true);
           List<List<Timepoint>> t = xmlparser.getTimepoints();
           fuzzyPanel.updateData(t.get(t.size()-1), OutputEnum.ISDN);
         }else{
-          fuzzyLabel.setBackground(Color.black);
+          fbPanel.setBackground(Color.black);
           graphPanel.setVisible(true);
           fuzzyPanel.setVisible(false);
         }
       }
-
-      public void mousePressed(MouseEvent e) {
-      }
-
-      public void mouseReleased(MouseEvent e) {
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-
-      public void mouseExited(MouseEvent e) {
-      }
     });
-
-    buttonPanel.add(fuzzyLabel);
+    fbPanel.add(fuzzyLabel);
+    buttonPanel.add(fbPanel);
 
     JLabel powerLabel = new JLabel();
     powerLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/Power.png")));
     powerLabel.setSize(66, 60);
     powerLabel.setLocation(66, 60);
+    powerLabel.addMouseListener(new SimpleClickHandler() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (JOptionPane.showConfirmDialog(current, "Wirklich beenden?","Quit",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+          current.dispose();
+          System.exit(0);
+        }
+      }
+    });
     buttonPanel.add(powerLabel);
   }
   
@@ -300,4 +308,5 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   public static Color getHighlightColor() {
     return highlightColor;
   }
+
 }

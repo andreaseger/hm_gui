@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import xmlparser.Input;
 import xmlparser.ObservableParser;
@@ -115,6 +116,7 @@ public class FuzzyPanel extends JPanel{
     input.setText("Inputs: " + sb.toString());
 
     fdata.fireTableDataChanged();
+    //updateColors();
   }
 
   public void setAllSizes(int width, int height){
@@ -190,8 +192,9 @@ public class FuzzyPanel extends JPanel{
     next.setSize(60, 60);
     next.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/next.png")));
     next.setLocation(597, 410);
-    next.addMouseListener(new MouseListener() {
+    next.addMouseListener(new SimpleClickHandler() {
 
+      @Override
       public void mouseClicked(MouseEvent e) {
          //HACK: show next datapoint
         int last_id_in_list = parser.getLastTimepoint().get(0).getId();
@@ -204,25 +207,14 @@ public class FuzzyPanel extends JPanel{
         else
           updateData(parser.getTimepoints().get(current_id - first_id_in_list + 1));
       }
-
-      public void mousePressed(MouseEvent e) {
-      }
-
-      public void mouseReleased(MouseEvent e) {
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-
-      public void mouseExited(MouseEvent e) {
-      }
     });
     prev = new JLabel();
     prev.setSize(60, 60);
     prev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/prev.png")));
     prev.setLocation(10, 410);
-    prev.addMouseListener(new MouseListener() {
+    prev.addMouseListener(new SimpleClickHandler() {
 
+      @Override
       public void mouseClicked(MouseEvent e) {
         //HACK: show previous datapoint
         int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
@@ -232,18 +224,6 @@ public class FuzzyPanel extends JPanel{
         else
           updateData(parser.getTimepoints().get(current_id - first_id_in_list - 1));
 
-      }
-
-      public void mousePressed(MouseEvent e) {
-      }
-
-      public void mouseReleased(MouseEvent e) {
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-
-      public void mouseExited(MouseEvent e) {
       }
     });
     add(next);
@@ -277,5 +257,9 @@ public class FuzzyPanel extends JPanel{
 
   void setAbsInputs(List<Float[]> inputList) {
     this.inputs = inputList;
+  }
+
+  void setTimes(List<String> timelist) {
+    ;
   }
 }

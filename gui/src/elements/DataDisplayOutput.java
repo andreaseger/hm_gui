@@ -10,6 +10,7 @@
  */
 package elements;
 
+import gui.OutputEnum;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -32,6 +33,17 @@ public class DataDisplayOutput extends javax.swing.JPanel {
     private ImageIcon downImage;
     private ImageIcon upImage;
     private ImageIcon sameImage;
+  private OutputEnum type;
+
+  public OutputEnum getType() {
+    return type;
+  }
+
+  public void setType(OutputEnum type) {
+      setCaption(type.getName());
+      setUnit(type.getUnit());
+      this.type=type;
+  }
 
     public interface ClickListener {
 

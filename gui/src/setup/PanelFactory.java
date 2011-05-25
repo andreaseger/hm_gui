@@ -25,6 +25,11 @@ public class PanelFactory extends JFrame {
     private int vasocon_index = -1;
     private int inotrope_index = -1;
     private int volume_index = -1;
+
+  public Wizard getWizard() {
+    return wizard;
+  }
+    private final Wizard wizard;
            
     public PanelFactory(){
     
@@ -43,7 +48,7 @@ public class PanelFactory extends JFrame {
         JPanel panel4 = signals.createPanel();
         panels.add(panel4);
 
-        new Wizard("Setup", panels, this);
+         wizard = new Wizard("Setup", panels, this);
     }
      
      
