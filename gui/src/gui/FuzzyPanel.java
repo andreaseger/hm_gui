@@ -11,7 +11,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import xmlparser.Input;
 import xmlparser.ObservableParser;
@@ -162,8 +160,8 @@ public class FuzzyPanel extends JPanel{
     input.setText(s.toString());
     input.setFont(new Font(Font.SANS_SERIF,Font.BOLD,14));
     add(input);
-
-    rulesTable = new JTable(fdata);
+    
+    rulesTable = new JTable(fdata);//new JTable(fdata);
     rulesTable.setLocation(39, 180);
     rulesTable.setSize(589, 180);
     rulesTable.setGridColor(Color.DARK_GRAY);
@@ -171,10 +169,16 @@ public class FuzzyPanel extends JPanel{
     rulesTable.setRowSelectionAllowed(false);
     rulesTable.setCellSelectionEnabled(false);
 
+    for (int i = 0; i < fdata.getColumnCount(); i++){
+       javax.swing.table.TableColumn column = rulesTable.getColumnModel().getColumn(i);
+       column.setCellRenderer(new ColorCellRenderer());
+    }
+
     rulesTable.getTableHeader().setLocation(39, 155);
     rulesTable.getTableHeader().setSize(589, 25);
     rulesTable.getTableHeader().setResizingAllowed(false);
     rulesTable.getTableHeader().setReorderingAllowed(false);
+    rulesTable.getTableHeader().setFont(new Font(Font.SANS_SERIF,Font.BOLD,14));
 
     TableColumn column = null;
     for (int i = 0; i < 6; i++) {
