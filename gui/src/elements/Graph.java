@@ -20,6 +20,8 @@ import java.util.List;
  * @author max
  */
 public class Graph extends javax.swing.JPanel {
+
+
     
     private class P2D{
         public int x;
@@ -34,7 +36,7 @@ public class Graph extends javax.swing.JPanel {
     public static final int STYLE_LINES = 0;
     public static final int STYLE_RECTS = 1;
     
-    private List<Double> data = null;
+    private List<Float> data = null;
     private Color graphColor = Color.GREEN;
     private Color graphBgColor = Color.black;
     private double targetValue;
@@ -71,7 +73,7 @@ public class Graph extends javax.swing.JPanel {
         
     }
     
-    public void showValues(List<Double> data){
+    public void showValues(List<Float> data){
         this.data = data;
         repaint();
     }
@@ -95,7 +97,7 @@ public class Graph extends javax.swing.JPanel {
         
         gr.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        gr.setColor(Color.red);
+        gr.setColor(Color.black);
         gr.drawLine(0, height, this.getWidth(), height);
        
         gr.setColor(graphColor);
@@ -103,6 +105,7 @@ public class Graph extends javax.swing.JPanel {
         if(data != null && data.size() > 0){
             int step = this.getWidth() / data.size();
             double maxValue = getDataMaxValue();
+            double minValue = getDataMinValue();
             int normHeight = (int)( (double)(height) / maxValue);
             
             // draw target line
@@ -142,9 +145,20 @@ public class Graph extends javax.swing.JPanel {
     }
     
     private double getDataMaxValue(){
-        double res = -1.0;
-        for(Double gd: data){
+        double res = Double.MIN_VALUE;
+        for(Float gd: data){
             if(gd > res){
+                res = gd;
+            }
+        }
+        return res;
+    }
+
+    private double getDataMinValue()
+    {
+        double res = Double.MAX_VALUE;
+        for(Float gd: data){
+            if(gd < res){
                 res = gd;
             }
         }

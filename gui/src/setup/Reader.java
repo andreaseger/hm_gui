@@ -69,9 +69,5 @@ public Reader(Result result) {
     }
 
     }
-
-
-    //methode: write in File -> String s = age_textfield.getText();
-    //int[] s = jList1.getSelectedIndices(); usw...
         
 }
