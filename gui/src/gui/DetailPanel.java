@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import setup.Result;
@@ -46,6 +48,13 @@ public class DetailPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    void setTargetValues(List<Double> targets)
+    {
+        for(int i = 0; i < targets.size(); i++){
+            graphs[i].setTargetValue(targets.get(i));
+        }
+    }
+
     private void initComponents() {
         setBackground(Color.black);
         setLayout(null);
@@ -67,9 +76,15 @@ public class DetailPanel extends javax.swing.JPanel {
         int gH = ((this.getHeight() / 5) * 4) / 5;
         for(int i = 0; i < 5; i++){
             graphs[i] = new Graph((this.getWidth() / 5) * 4, gH);
-            graphs[i].setLocation(0, gH * i);
+            graphs[i].setLocation(0, (gH + 1)* i);
+            graphs[i].setSteps(50);
             mainDetailPanel.add(graphs[i]);
         }
+
+        graphs[0].setMax((float) 110.0).setMin((float) 100.0);
+        graphs[1].setMax((float) 4).setMin((float) 1.5);
+        graphs[2].setMax((float) 4).setMin((float) 1.5);
+        graphs[3].setMax((float) 52.0).setMin((float) 45.0);
         System.out.println(this.getHeight());
         
         add(mainDetailPanel);
@@ -148,7 +163,9 @@ public class DetailPanel extends javax.swing.JPanel {
         add(backPanel);
     }
 
-    public void updateDetailGraphs(){
-        
+    public void updateDetailGraphs(ArrayList<ArrayList<Float>> lists){
+        for(int i = 0; i < lists.size(); i++){
+            graphs[i].showValues(lists.get(i));
+        }
     }
 }
