@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import setup.Result;
@@ -148,7 +150,9 @@ public class DetailPanel extends javax.swing.JPanel {
         add(backPanel);
     }
 
-    public void updateDetailGraphs(){
-        
+    public void updateDetailGraphs(ArrayList<ArrayList<Float>> lists){
+        for(int i = 0; i < lists.size(); i++){
+            graphs[i].showValues(lists.get(i));
+        }
     }
 }

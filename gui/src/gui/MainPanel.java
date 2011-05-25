@@ -92,5 +92,7 @@ public class MainPanel extends JPanel {
         for(int i = 0; i < 4; i++){
             graphs[i].showValues(lists.get(i));
         }
+
+        detailPanel.updateDetailGraphs(lists);
     }
 }
