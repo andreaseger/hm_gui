@@ -5,11 +5,14 @@
 package gui;
 
 import elements.Graph;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import setup.Result;
 import xmlparser.Timepoint;
 
 /**
@@ -20,85 +23,74 @@ public class MainPanel extends JPanel {
     
     JPanel graphPanel;
     Graph[] graphs;
+    Result results;
     
     DetailPanel detailPanel;
+    MainFrame parent;
         
-    public MainPanel(){
+    public MainPanel(Result res, MainFrame par){
+        setLayout(null);
+        results = res;
+        parent = par;
         initComponents();
     }
     
 
     private void initComponents() {
         graphPanel = new JPanel();
-        graphPanel.setLayout(new GridBagLayout());
-               
-        GridBagConstraints c = new GridBagConstraints();
+        graphPanel.setLayout(null);
+        graphPanel.setVisible(false);
+        Dimension dim = new Dimension(667, 480);
+        graphPanel.setSize(dim);
+        graphPanel.setPreferredSize(dim);
+        graphPanel.setMinimumSize(dim);
+        graphPanel.setMaximumSize(dim);
+        graphPanel.setBackground(Color.red);
+
         graphs = new Graph[4];
-        c.gridx = 0;
         for(int i=0;i<graphs.length;i++){
-            graphs[i] = new Graph(667, 120);
-            c.gridy = i;
-            graphPanel.add(graphs[i],c);
+            graphs[i] = new Graph(667, 119);
+            graphs[i].setLocation(0, 120 * i);
+            graphPanel.add(graphs[i]);
             graphs[i].showValues(null);
         }
         
-        detailPanel = new DetailPanel(667, 480);
+        detailPanel = new DetailPanel(667, 480, results, this);
+        detailPanel.setLocation(0, 0);
+        detailPanel.setVisible(false);
         
+        add(graphPanel);
+        add(detailPanel);
+
         showInputGraphs();
     }
     
     public void showInputGraphs(){
-        remove(detailPanel);
-        add(graphPanel);
+        detailPanel.setVisible(false);
+        graphPanel.setVisible(true);
+        parent.dehighlightAllOutputs();
     }
-    
-    public void showStartWizard(){
         
-    }
-    
     public void showDetails(){
-        remove(graphPanel);
-        add(detailPanel);
+        graphPanel.setVisible(false);
+        detailPanel.setVisible(true);
     }
-/*
+    
     void updateInputGraphs(List<Float[]> inputList, int id) {
-        
+
         ArrayList<ArrayList<Float>> lists = new ArrayList<ArrayList<Float>>();
-        
-        for(int i = 0; i < 4; i++){
-            lists.add(new ArrayList<Float>());
-        }
-        
-        for(int i = 0; i < id; i++){
-            
-            for(int j = 0; j < 4; j++){
-                lists.get(j).add(inputList.get(i+270)[j]);
-            }
-        }
-        
-        for(int i = 0; i < 4; i++){
-            graphs[i].showValues(lists.get(i));
-            //System.out.println("List :" + i + " size: " + (lists.get(i)).size());
-        }
-    }
-*/
-    void updateInputGraphs(List<List<Timepoint>> inputList, int id) {
-
-        ArrayList<ArrayList<Double>> lists = new ArrayList<ArrayList<Double>>();
         for(int i = 0; i < 4; i++)
-            lists.add(new ArrayList<Double>());
+            lists.add(new ArrayList<Float>());
 
-        for(List<Timepoint> ltp : inputList){
-            for(Timepoint tp : ltp){
-                for(int i = 0; i < 4; i++){
-                    lists.get(i).add(tp.getInputs().get(i));
-                }
+        for(int i = 0; i < id; i++){
+            Float[] curr = inputList.get(i);
+            for(int j = 0; j < curr.length; j++){
+                lists.get(j).add(curr[j]);
             }
         }
 
         for(int i = 0; i < 4; i++){
             graphs[i].showValues(lists.get(i));
-            //System.out.println("List :" + i + " size: " + (lists.get(i)).size());
         }
     }
 }

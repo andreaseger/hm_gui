@@ -1,19 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * DetailPanel.java
  *
  * Created on 18.05.2011, 14:18:10
  */
 package gui;
 
+import elements.DataDisplayInput;
+import elements.DataDisplayOutput;
 import elements.Graph;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import setup.Result;
 
 /**
  *
@@ -24,14 +25,23 @@ public class DetailPanel extends javax.swing.JPanel {
     private JPanel inputPanel;
     private JPanel outputPanel;
     private Graph[] graphs;
+    private DataDisplayInput[] inputs;
+    private Result results;
+    private DataDisplayOutput[] outputs;
+    private JPanel backPanel;
+    private JLabel backLabel;
+    private MainPanel parent;
 
     /** Creates new form DetailPanel */
-    public DetailPanel(int awidth, int aheight) {
+    public DetailPanel(int awidth, int aheight, Result aResults, MainPanel par) {
         Dimension dim = new Dimension(awidth, aheight);
         setMinimumSize(dim);
         setSize(dim);
         setPreferredSize(dim);
         setMaximumSize(dim);
+
+        results = aResults;
+        parent = par;
         
         initComponents();
     }
@@ -42,7 +52,7 @@ public class DetailPanel extends javax.swing.JPanel {
         
         mainDetailPanel = new JPanel();
         System.out.println(this.getWidth());
-        Dimension dim = new Dimension((this.getWidth() / 6) * 5, (this.getHeight() / 6) * 5);
+        Dimension dim = new Dimension((this.getWidth() / 5) * 4, (this.getHeight() / 5) * 4);
         mainDetailPanel.setSize(dim);
         mainDetailPanel.setPreferredSize(dim);
         mainDetailPanel.setMinimumSize(dim);
@@ -54,38 +64,91 @@ public class DetailPanel extends javax.swing.JPanel {
         
         
         graphs = new Graph[5];
+        int gH = ((this.getHeight() / 5) * 4) / 5;
         for(int i = 0; i < 5; i++){
-            graphs[i] = new Graph((this.getWidth() / 6) * 5, (this.getHeight() / 6));
-            graphs[i].setLocation(0, (this.getHeight() / 6) * i);
+            graphs[i] = new Graph((this.getWidth() / 5) * 4, gH);
+            graphs[i].setLocation(0, gH * i);
             mainDetailPanel.add(graphs[i]);
-            System.out.println((this.getHeight() / 6) * i);
         }
         System.out.println(this.getHeight());
         
         add(mainDetailPanel);
         
         inputPanel = new JPanel();
-        dim = new Dimension((this.getWidth() / 6), (this.getHeight() / 6) * 5);
+        dim = new Dimension((this.getWidth() / 5), (this.getHeight() / 5) * 4);
         inputPanel.setSize(dim);
         inputPanel.setPreferredSize(dim);
         inputPanel.setMinimumSize(dim);
         inputPanel.setMaximumSize(dim);
-        inputPanel.setLocation((this.getWidth() / 6) * 5, 0);
+        inputPanel.setLocation((this.getWidth() / 5) * 4, 0);
         
         inputPanel.setBackground(Color.blue);
+
+        inputPanel.setLayout(null);
+        inputs = new DataDisplayInput[4];
+
+        for (int i = 0; i < inputs.length; i++) {
+          inputs[i] = new DataDisplayInput((this.getWidth() / 5), (this.getHeight() / 5));
+          inputs[i].setLocation(0, i * (this.getHeight() / 5));
+          inputs[i].setType(InputEnum.get(results.getSelected_drugs()[i]));
+          inputPanel.add(inputs[i]);
+        }
         
         add(inputPanel);
         
         outputPanel = new JPanel();
-        dim = new Dimension((this.getWidth() / 6) * 5, (this.getHeight() / 6));
+        dim = new Dimension((this.getWidth() / 5) * 4, (this.getHeight() / 5));
         outputPanel.setSize(dim);
         outputPanel.setPreferredSize(dim);
         outputPanel.setMinimumSize(dim);
         outputPanel.setMaximumSize(dim);
-        outputPanel.setLocation(0, (this.getHeight() / 6) * 5);
+        outputPanel.setLocation(0, (this.getHeight() / 5) * 4);
         
         outputPanel.setBackground(Color.green);
+
+        outputPanel.setLayout(null);
+
+        outputs = new DataDisplayOutput[4];
+        for (int i = 0; i < outputs.length; i++) {
+          outputs[i] = new DataDisplayOutput((this.getWidth() / 5), (this.getHeight() / 5));
+          outputs[i].setLocation(i * (this.getWidth() / 5), 0);
+          outputs[i].setType(OutputEnum.get(results.getSelected_drugs()[i]));
+          outputPanel.add(outputs[i]);
+        }
         
         add(outputPanel);
+
+        backPanel = new JPanel();
+        backPanel.setLayout(null);
+        backPanel.setLocation((this.getWidth() / 5) * 4, (this.getHeight() / 5) * 4);
+        dim = new Dimension((this.getWidth() / 5), (this.getHeight() / 5));
+        backPanel.setSize(dim);
+        backPanel.setPreferredSize(dim);
+        backPanel.setMinimumSize(dim);
+        backPanel.setMaximumSize(dim);
+        backPanel.setBackground(Color.black);
+
+        backLabel = new JLabel("<-");
+        backLabel.setFont(new Font("Dialog", 1, 36));
+        backLabel.setForeground(Color.green);
+        backLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        //backLabel.setBackground(Color.red);
+        backLabel.setLocation(0, 0);
+        backLabel.setSize(dim);
+        backLabel.setPreferredSize(dim);
+        backLabel.setMinimumSize(dim);
+        backLabel.setMaximumSize(dim);
+        backLabel.addMouseListener(new SimpleClickHandler(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                parent.showInputGraphs();
+            }});
+        backPanel.add(backLabel);
+
+        add(backPanel);
+    }
+
+    public void updateDetailGraphs(){
+        
     }
 }

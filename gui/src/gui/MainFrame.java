@@ -73,12 +73,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     setLayout(null);
     this.getContentPane().setBackground(Color.BLACK);
 
-    graphPanel = new MainPanel();
-    graphPanel.setBackground(Color.BLACK);
-    graphPanel.setLocation(0, 0);
-    graphPanel.setSize(667, 480);
-    graphPanel.setVisible(false);
-    this.add(graphPanel);
+    
 
     inputPanel = new JPanel();
     inputPanel.setBackground(foregroundColor);
@@ -95,6 +90,13 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     outputPanel.setSize(532, 120);
     this.add(outputPanel);
     fillOutputPanel(outputPanel);
+
+    graphPanel = new MainPanel(results, this);
+    graphPanel.setBackground(Color.BLACK);
+    graphPanel.setLocation(0, 0);
+    graphPanel.setSize(667, 480);
+    graphPanel.setVisible(false);
+    this.add(graphPanel);
 
     buttonPanel = new JPanel();
     buttonPanel.setLocation(667, 480);
@@ -139,7 +141,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     }
   }
 
-  private void dehighlightAllOutputs() {
+  public void dehighlightAllOutputs() {
     for (DataDisplayOutput output : this.outputs) {
       output.setHighlight(false);
     }
@@ -187,6 +189,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
           dehighlightAllOutputs();
           sender.setHighlight(true);
           fuzzyPanel.setOutputType(sender.getType());  //TODO
+          graphPanel.showDetails();
         }
       });
       outputs[i].setLocation(i * 133, 1);
@@ -220,7 +223,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
       outputs[i].setValue(tmp);
     }
 
-    graphPanel.updateInputGraphs(parser.getTimepoints(), id);
+    graphPanel.updateInputGraphs(inputList, id);
 
     //fuzzyPanel.updateData(p, OutputEnum.ISDN); //send newest point to fuzzypanel
 

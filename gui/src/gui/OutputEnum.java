@@ -13,7 +13,7 @@ import java.util.Map;
  * @author sch1zo
  */
 public enum OutputEnum {
-  ISDN(3,"ISDN");
+  //ISDN(3,"ISDN"),
   VOL(0,"HEAS","VOL"),
   DPM(1,"DPM","DPM"),
   NEP(2,"NEP","NEP"),
