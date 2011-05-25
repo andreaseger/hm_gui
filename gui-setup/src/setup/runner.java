@@ -10,7 +10,7 @@ package setup;
  */
 public class runner {
      public static void main(String[] args) {
-            Middle middle = new Middle();
+            PanelFactory panel_factory = new PanelFactory();
             
 	}
 }

@@ -38,17 +38,17 @@ public class Wizard extends JFrame {
 	private String title;
 	private ArrayList<JPanel> panels;
 	private int currentPanel;
-        private Middle middle;
+        private PanelFactory panel_factory;
         
         private boolean page3 = false; 
         private int counter = 0;
 
         
       
-	public Wizard(String title, ArrayList<JPanel> panels, Middle middle) {
+	public Wizard(String title, ArrayList<JPanel> panels, PanelFactory panel_factory) {
 		this.title = title;
 		this.panels = panels;
-                this.middle = middle;
+                this.panel_factory = panel_factory;
 		
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setTitle(title);
@@ -74,7 +74,7 @@ public class Wizard extends JFrame {
 		
 		setLocation(100, 100);
 		setLocationByPlatform(true);
-		setSize(800, 600);
+		setSize(667, 480);
 		setVisible(true);
 	}
 	
@@ -120,14 +120,10 @@ public class Wizard extends JFrame {
 	}
 	
 	private void nextButtonActionPerformed() {
-		if(nextButton.getText().equals("Finish")) {
-                        
-                        //und alles abspeichern!
-                        //reader aufrufen um in File zu speichern
-                    
-			dispose();
+		if(nextButton.getText().equals("Save")) {
+                       dispose();
 		} else {
-                       if(currentPanel == 1 && counter == 0){
+                       if(currentPanel == 1){
                             page3 = true;
                             ++counter;
                         }
@@ -146,12 +142,18 @@ public class Wizard extends JFrame {
 	}
 	
 	private void updatePanel() {
-                JPanel panelPage3 = getPanelPage3();
 		container.removeAll();
 		container.setLayout(new BorderLayout());
-                if(page3){
+                if(page3 && counter == 1){
+                    JPanel panelPage3 = getPanelPage3();
                     ++currentPanel;
                     panels.add(currentPanel, panelPage3);
+                    container.add(panelPage3, BorderLayout.CENTER);
+                    page3 = false;
+                }else if(page3 && counter > 1){
+                    JPanel panelPage3 = getPanelPage3();
+                    ++currentPanel;
+                    panels.set(currentPanel, panelPage3);
                     container.add(panelPage3, BorderLayout.CENTER);
                     page3 = false;
                 }else{
@@ -163,7 +165,7 @@ public class Wizard extends JFrame {
 	
 	private void updateButtons() {
 		if(currentPanel>=(panels.size()-1)) { //finish
-			nextButton.setText("Finish");
+			nextButton.setText("Save");
 		} else {
 			nextButton.setText("Next");
 		}
@@ -182,7 +184,8 @@ public class Wizard extends JFrame {
 	}
         
         private JPanel getPanelPage3(){
-            JPanel panel1 = middle.getPanelTherapy2();
+            DrugsInfo3 drugs_info_panel = new DrugsInfo3(panel_factory.getResult(), panel_factory);
+            JPanel panel1 = drugs_info_panel.createPanel();
             
             return panel1;
         }
