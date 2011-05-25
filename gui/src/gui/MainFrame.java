@@ -134,7 +134,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     for (int i = 0; i < inputs.length; i++) {
       inputs[i] = new DataDisplayInput(132, 119);
       inputs[i].setLocation(1, i * 120);
-      inputs[i].setType(InputEnum.get(results.getSelected_drugs()[i]));
+      inputs[i].setType(InputEnum.get(results.getSelected_inputs()[i]));
       inputPanel.add(inputs[i]);
     }
   }
