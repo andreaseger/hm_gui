@@ -22,9 +22,16 @@ Bei einem Klick auf den Fuzzy-Set-Button öffnet sich ein Fenster, welches Exper
 
 Bei einem Klick auf eine Medikamenten- oder Eingabewertanzeige öffnet sich das Detail-Fenster zu diesem Wert. Beim Detail-Fenster bleiben die Medikamenten- und Eingabeanzeigen an den Rändern erhalten, damit der Benutzer diese wichtigen Daten auch auf der Detailseite im Blick hat. Im "Inneren" der Detailseite wird ein großer Graph angezeigt, welcher den Verlauf des gewählten Werts (Eingabe oder Medikament) anzeigt. Eine horizontale gestrichelte Linie zeigt an, was der Sollwert für diesen Wert ist. Der Graph wird auf der Unterseite und an der rechten Seite von Anzeigen eingerahmt, die die Eingabedaten und Medikamentendaten zum gewählten Zeitpunkt anzeigen. Ein Zeitpunkt kann durch einen Klick in den Graphen gewählt werden und wird durch eine vertikale Linie symbolisiert. Weiterhin kann durch zwei Schaltflächen in der Zeit vor- und zurückgesprungen werden.
 
-
-
 Meta
 ---
 
-**Mutige Mungos**
+###Lizenz
+
+Lizenziert unter GPL v3 siehe *licence.txt*
+
+###Mutige Mungos
+
+* Brandstetter Franziska
+* Eger Andreas
+* Führer Maximilian
+* Kammerer Moritz
