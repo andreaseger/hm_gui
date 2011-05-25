@@ -13,6 +13,7 @@ package elements;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,27 @@ public class Graph extends javax.swing.JPanel {
     private Color graphBgColor = Color.black;
     private double targetValue;
     private int style = STYLE_LINES;
+    private int steps;
+
+    public void setSteps(int steps)
+    {
+        this.steps = steps;
+    }
+
+    private float min;
+    private float max = -1;
+
+    public Graph setMax(float max)
+    {
+        this.max = max;
+        return this;
+    }
+
+    public Graph setMin(float min)
+    {
+        this.min = min;
+        return this;
+    }
 
     public void setStyle(int style) {
         this.style = style;
@@ -74,7 +96,19 @@ public class Graph extends javax.swing.JPanel {
     }
     
     public void showValues(List<Float> data){
-        this.data = data;
+        if(data != null){
+        List<Float> tmp = new ArrayList<Float>(data);
+        if(tmp.size() > steps){
+            int num = tmp.size() - steps - 1;
+            for(int i = 0; i < num; i++){
+                tmp.remove(0);
+            }
+        }
+        this.data = tmp;
+        }
+        else
+            this.data = data;
+        
         repaint();
     }
     
@@ -104,20 +138,32 @@ public class Graph extends javax.swing.JPanel {
         
         if(data != null && data.size() > 0){
             int step = this.getWidth() / data.size();
-            double maxValue = getDataMaxValue();
+            float maxValue = getDataMaxValue();
+            if(maxValue > max){
+                max = maxValue;
+            }
+            else{
+                maxValue = max;
+            }
             double minValue = getDataMinValue();
-            int normHeight = (int)( (double)(height) / maxValue);
+            int normHeight = (int)( (double)(height) / (maxValue - min));
+            //double diff = max - min;
+            //int normHeight = (int)( (double)(height) / diff);
+            
             
             // draw target line
-            int y = height - (int)(targetValue * normHeight);
+            int y = height - (int)((targetValue - min) * normHeight);
             drawDashed(gr, Color.yellow, 0, y, this.getWidth(), y);
             
             // draw values
             P2D point = null;
             gr.setColor(graphColor);
-            if(style == STYLE_LINES){
-                for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
+
+            int idx = data.size() > steps ? data.size() - steps : 0;
+            for(int i = idx; i < data.size(); i++){
+              P2D p = new P2D(i * step, (int)((data.get(i) - min) * normHeight));
+
+                if(style == STYLE_LINES){
                     if(point == null){
                         point = p;
                     }else{
@@ -125,11 +171,8 @@ public class Graph extends javax.swing.JPanel {
                         point = p;
                     }
                 }
-            }
-            else if(style == STYLE_RECTS){
-                for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
-                    if(point == null && i == 0){
+                else if(style == STYLE_RECTS){
+                    if(point == null && i == idx){
                         point = p;
                         gr.drawLine(0, height - p.y, p.x + step/2, height - p.y);
                     }else{
@@ -138,14 +181,14 @@ public class Graph extends javax.swing.JPanel {
                         point = p;
                     }
                 }
-            }
+            }            
         }else{
             gr.drawLine(0, 0, this.getWidth(), height);
         }
     }
     
-    private double getDataMaxValue(){
-        double res = Double.MIN_VALUE;
+    private float getDataMaxValue(){
+        float res = Float.MIN_VALUE;
         for(Float gd: data){
             if(gd > res){
                 res = gd;

@@ -53,7 +53,12 @@ public class MainPanel extends JPanel {
             graphs[i].setLocation(0, 120 * i);
             graphPanel.add(graphs[i]);
             graphs[i].showValues(null);
+            graphs[i].setSteps(50);
         }
+        graphs[0].setMax((float) 110.0).setMin((float) 100.0);
+        graphs[1].setMax((float) 3).setMin((float) 1.5);
+        graphs[2].setMax((float) 3).setMin((float) 1.5);
+        graphs[3].setMax((float) 52.0).setMin((float) 45.0);
         
         detailPanel = new DetailPanel(667, 480, results, this);
         detailPanel.setLocation(0, 0);
@@ -61,6 +66,15 @@ public class MainPanel extends JPanel {
         
         add(graphPanel);
         add(detailPanel);
+
+        //@TODO echte Target Werte eintragen
+        List<Double> targets = new ArrayList<Double>();
+        targets.add(105.0);
+        targets.add(2.0);
+        targets.add(2.0);
+        targets.add(50.0);
+        setTargetValues(targets);
+        
 
         showInputGraphs();
     }
@@ -82,7 +96,7 @@ public class MainPanel extends JPanel {
         for(int i = 0; i < 4; i++)
             lists.add(new ArrayList<Float>());
 
-        for(int i = 0; i < id; i++){
+        for(int i = 250; i < id+250; i++){
             Float[] curr = inputList.get(i);
             for(int j = 0; j < curr.length; j++){
                 lists.get(j).add(curr[j]);
@@ -94,5 +108,12 @@ public class MainPanel extends JPanel {
         }
 
         detailPanel.updateDetailGraphs(lists);
+    }
+
+    void setTargetValues(List<Double> targets){
+        for(int i = 0; i < targets.size() && i < graphs.length; i++){
+            graphs[i].setTargetValue(targets.get(i));
+            detailPanel.setTargetValues(targets);
+        }
     }
 }
