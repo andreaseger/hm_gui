@@ -8,9 +8,7 @@ import elements.DataDisplayOutput;
 import elements.DataDisplayInput;
 import fisparser.Rule;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.util.EnumMap;
 import java.util.List;
@@ -23,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import setup.PanelFactory;
 import setup.Result;
-import setup.Wizard;
 import xmlparser.ObservableParser;
 import xmlparser.Timepoint;
 
@@ -235,7 +232,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     logparser.Parser lparser = new logparser.Parser();
     fisparser.Parser fparser = new fisparser.Parser();
     try {
-      lparser.run("resources/controller.log");
+      lparser.run("resources/controller.log"); 
       fparser.run(o);
     } catch (FileNotFoundException ex) {
       Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);

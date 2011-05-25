@@ -43,6 +43,7 @@ public class FuzzyPanel extends JPanel{
   private JLabel prev;
   private JLabel input;
   private List<Float[]> inputs;
+  private List<String> times;
 
   /** Creates new form FuzzyPanel */
   FuzzyPanel(EnumMap<OutputEnum, List<Rule>> rules, String[] header) {
@@ -89,7 +90,7 @@ public class FuzzyPanel extends JPanel{
   private void updateData(EnumMap<OutputEnum, Timepoint> points, OutputEnum o) {
     Timepoint t = points.get(o);
     current_id = t.getId();
-    title.setText("Timepoint# " + current_id);
+    title.setText(times.get(current_id));
     fdata.clearData();
     Map<Integer, Double> cr = t.getRules();
     Map<Integer, Input> s = t.getSets();
@@ -260,6 +261,6 @@ public class FuzzyPanel extends JPanel{
   }
 
   void setTimes(List<String> timelist) {
-    ;
+    this.times = timelist;
   }
 }
