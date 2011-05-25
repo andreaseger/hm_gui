@@ -10,6 +10,8 @@
  */
 package elements;
 
+import gui.OutputEnum;
+import gui.SimpleClickHandler;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -32,6 +34,19 @@ public class DataDisplayOutput extends javax.swing.JPanel {
     private ImageIcon downImage;
     private ImageIcon upImage;
     private ImageIcon sameImage;
+    private OutputEnum type;
+    private boolean pause;
+
+  public OutputEnum getType() {
+    return type;
+  }
+
+  public void setType(OutputEnum type) {
+      setCaption(type.getName());
+      setUnit(type.getUnit());
+      this.type=type;
+  }
+
 
     public interface ClickListener {
 
@@ -47,27 +62,11 @@ public class DataDisplayOutput extends javax.swing.JPanel {
 
     private void setClickListener() {
         for (Component component : this.getComponents()) {
-            component.addMouseListener(new MouseListener() {
+            component.addMouseListener(new SimpleClickHandler() {
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     somethingWasClicked(e);
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
                 }
             });
         }
@@ -86,7 +85,9 @@ public class DataDisplayOutput extends javax.swing.JPanel {
     }
 
     public DataDisplayOutput setValue(float value) {
-        if (value == this.value) {
+        if (pause) {
+            showSameGraphics();
+        } else if (value == this.value) {
             showSameGraphics();
         } else if (value > this.value) {
             showUpGraphics();
@@ -96,7 +97,7 @@ public class DataDisplayOutput extends javax.swing.JPanel {
 
         this.value = value;
         updateValueLabel();
-
+        
         return this;
     }
 
@@ -113,8 +114,12 @@ public class DataDisplayOutput extends javax.swing.JPanel {
     }
 
     private void updateValueLabel() {
-        DecimalFormat f = new DecimalFormat("#0.00");
-        valueLabel.setText(f.format(this.value));
+        if (pause) {
+            valueLabel.setText("---");
+        } else {
+            DecimalFormat f = new DecimalFormat("#0.00");
+            valueLabel.setText(f.format(this.value));
+        }
     }
 
     public DataDisplayOutput setUnit(String unit) {
@@ -195,6 +200,21 @@ public class DataDisplayOutput extends javax.swing.JPanel {
     }
 
     public void setHighlight(boolean highlight) {
-        setAllBackgrounds(this, highlight ? new Color(0, 80, 0) : Color.BLACK);
+        if (pause) {
+            setAllBackgrounds(this, highlight ? new Color(0, 80, 0) : new Color(120, 0, 0));
+        } else {
+            setAllBackgrounds(this, highlight ? new Color(0, 80, 0) : Color.BLACK);
+        }
     }
+    
+    public void setPause(boolean pause) {
+        if (pause) {
+            setAllBackgrounds(this, new Color(120, 0, 0));
+        } else {
+            setAllBackgrounds(this, Color.BLACK);
+        }
+        
+        this.pause = pause;
+        updateValueLabel();
+    }    
 }

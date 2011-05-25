@@ -91,19 +91,4 @@ public class Parser {
   public List<String> getTimestamps(){
     return controllerTimestamps;
   }
-
-  public static void main(String... aArgs) throws FileNotFoundException {
-    Parser parser = new Parser();
-    parser.run(aArgs);
-
-    for(Float[] p : parser.getInputs()){
-      System.out.println(p.toString());
-    }
-    for(Float[] p : parser.getOutputs()){
-      System.out.println(p.toString());
-    }
-    for(String p : parser.getTimestamps()){
-      System.out.println(p);
-    }
-  }
 }

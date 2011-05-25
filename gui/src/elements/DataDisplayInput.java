@@ -1,5 +1,6 @@
 package elements;
 
+import gui.InputEnum;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
 import javax.swing.ImageIcon;
@@ -16,6 +17,11 @@ public class DataDisplayInput extends javax.swing.JPanel {
     private ImageIcon downImage;
     private ImageIcon upImage;
     private ImageIcon sameImage;
+  private InputEnum type;
+
+  public InputEnum getType() {
+    return type;
+  }
     
     /** Creates new form DataDisplayLeft */
     public DataDisplayInput(int width, int height) {
@@ -129,4 +135,10 @@ public class DataDisplayInput extends javax.swing.JPanel {
         this.upImage = new javax.swing.ImageIcon(getClass().getResource("/resource/up.png"));
         this.sameImage = new javax.swing.ImageIcon(getClass().getResource("/resource/same.png"));
     }
+
+  public void setType(InputEnum type) {
+    setCaption(type.getName());
+    setUnit(type.getUnit());
+    this.type = type;
+  }
 }

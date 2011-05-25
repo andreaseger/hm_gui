@@ -13,6 +13,7 @@ import java.util.Map;
  * @author sch1zo
  */
 public enum OutputEnum {
+  ISDN(3,"ISDN");
   VOL(0,"HEAS","VOL"),
   DPM(1,"DPM","DPM"),
   NEP(2,"NEP","NEP"),
@@ -50,11 +51,11 @@ public enum OutputEnum {
   }
 
   public String getXMLPath() {
-    return "resources/controller_" + name + ".xml";
+    return "resources/controller_" + filename + ".xml";
   }
 
   public String getFisPath() {
-    return "resources/cavacoMamdani" + name + "Change.fis";
+    return "resources/cavacoMamdani" + filename + "Change.fis";
   }
 
   public static OutputEnum get(int code) {

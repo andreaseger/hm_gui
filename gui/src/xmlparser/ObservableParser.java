@@ -96,14 +96,14 @@ public class ObservableParser extends AbstractParser implements Runnable{
           timepoints.removeFirst();
       }
       //HACK to get faster to the interesting data
-      if (points.get(0).getId() < 250) {
+      /*if (points.get(0).getId() < 250) {
         return;
-      }
+      }*/
 
       notifyObservers();
 
       try {
-        runner.sleep(1000);
+        runner.sleep(300);
       } catch (InterruptedException ex) {
         Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }                

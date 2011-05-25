@@ -4,6 +4,7 @@
  */
 package fisparser;
 
+import com.sun.corba.se.spi.orb.StringPair;
 import gui.OutputEnum;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,6 +25,13 @@ public class Parser {
 
   public Parser(){
     p = Pattern.compile("(\\s|,\\s)");
+  }
+  public void run(OutputEnum[] o) throws FileNotFoundException{
+    String[] files = new String[]{o[0].getFisPath(),
+                                  o[1].getFisPath(),
+                                  o[2].getFisPath(),
+                                  o[3].getFisPath()};
+    run(files);
   }
   public void run(String[] files) throws FileNotFoundException{
     rules = new EnumMap<OutputEnum, List<Rule>>(OutputEnum.class);
