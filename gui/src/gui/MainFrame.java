@@ -151,13 +151,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
 
       @Override
       public void mouseClicked(MouseEvent e) {
-        if (pause) {
-          lpause.setIcon(ipause);
-          pause = false;
-        } else {
-          lpause.setIcon(iplay);
-          pause = true;
-        }
+        togglePause();
       }
     });
 
@@ -168,6 +162,20 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     this.add(lpause);
   }
 
+  private void togglePause() {
+    if (pause) {
+      lpause.setIcon(ipause);
+      pause = false;
+    } else {
+      lpause.setIcon(iplay);
+      pause = true;
+    }
+    
+    for(DataDisplayOutput output: this.outputs) {
+        output.setPause(pause);
+    }
+  }
+  
   private void fillOutputPanel(JPanel outputPanel) {
     outputPanel.setLayout(null);
 
