@@ -44,6 +44,8 @@ public class FuzzyPanel extends JPanel{
   private JLabel input;
   private List<Float[]> inputs;
   private List<String> times;
+  private JLabel newest;
+  private JLabel goToDetail;
 
   /** Creates new form FuzzyPanel */
   FuzzyPanel(EnumMap<OutputEnum, List<Rule>> rules, String[] header) {
@@ -67,6 +69,16 @@ public class FuzzyPanel extends JPanel{
   }
   public void setOutputType(OutputEnum output_type){
     this.output_type = output_type;
+  }
+
+  public void updateData(){
+    List<Timepoint> p = parser.getTimepoints().get(current_id);
+    EnumMap<OutputEnum, Timepoint> h = new EnumMap<OutputEnum, Timepoint>(OutputEnum.class);
+    for (int i = 0; i < p.size(); i++) {
+      h.put(OutputEnum.get(i), p.get(i));
+    }
+    updateData(h, output_type);
+
   }
 
   public void updateData(List<Timepoint> p){
@@ -153,7 +165,7 @@ public class FuzzyPanel extends JPanel{
 
     rulesTable = new JTable(fdata);
     rulesTable.setLocation(39, 180);
-    rulesTable.setSize(589, 200);
+    rulesTable.setSize(589, 180);
     rulesTable.setGridColor(Color.DARK_GRAY);
     rulesTable.setColumnSelectionAllowed(false);
     rulesTable.setRowSelectionAllowed(false);
@@ -183,21 +195,48 @@ public class FuzzyPanel extends JPanel{
     add(rulesTable);
 
     output = new JLabel();
-    output.setLocation(100, 380);
-    output.setSize(560, 50);
+    output.setLocation(100, 370);
+    output.setSize(560, 30);
     output.setHorizontalAlignment(SwingConstants.CENTER);
     output.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
     add(output);
 
+    goToDetail = new JLabel();
+    goToDetail.setSize(417, 60);
+    goToDetail.setText("Back To Details");
+    goToDetail.setHorizontalAlignment(SwingConstants.CENTER);
+    goToDetail.setVerticalAlignment(SwingConstants.CENTER);
+    goToDetail.setLocation(90, 410);
+    goToDetail.addMouseListener(new SimpleClickHandler() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        //TODO
+        //this is the currently displayed timepoint
+        //parser.getTimepoints().get(current_id);
+      }
+    });
+    add(goToDetail);
+
+    newest = new JLabel();
+    newest.setSize(60, 60);
+    newest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/next.png")));
+    newest.setLocation(597, 410);
+    newest.addMouseListener(new SimpleClickHandler() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+          updateData(parser.getLastTimepoint());
+      }
+    });
     next = new JLabel();
     next.setSize(60, 60);
     next.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/next.png")));
-    next.setLocation(597, 410);
+    next.setLocation(527, 410);
     next.addMouseListener(new SimpleClickHandler() {
 
       @Override
       public void mouseClicked(MouseEvent e) {
-         //HACK: show next datapoint
         int last_id_in_list = parser.getLastTimepoint().get(0).getId();
         int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
 
@@ -217,7 +256,6 @@ public class FuzzyPanel extends JPanel{
 
       @Override
       public void mouseClicked(MouseEvent e) {
-        //HACK: show previous datapoint
         int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
 
         if(current_id <= first_id_in_list + 1)
@@ -227,6 +265,8 @@ public class FuzzyPanel extends JPanel{
 
       }
     });
+
+    add(newest);
     add(next);
     add(prev);
 

@@ -92,7 +92,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     graphPanel.setBackground(Color.BLACK);
     graphPanel.setLocation(0, 0);
     graphPanel.setSize(667, 480);
-    graphPanel.setVisible(false);
+    graphPanel.setVisible(true);
     this.add(graphPanel);
 
     buttonPanel = new JPanel();
@@ -110,7 +110,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
                                             "Outputset"});
     fuzzyPanel.setLocation(0, 0);
     fuzzyPanel.setSize(667, 480);
-    fuzzyPanel.setVisible(true);
+    fuzzyPanel.setVisible(false);
     this.add(fuzzyPanel);
   }
 
