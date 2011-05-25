@@ -187,6 +187,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer {
   }
 
   private void loadPlayPauseGfx() {
+
     ipause = new javax.swing.ImageIcon(getClass().getResource("/resource/Pause.png"));
     iplay = new javax.swing.ImageIcon(getClass().getResource("/resource/Play.png"));
   }

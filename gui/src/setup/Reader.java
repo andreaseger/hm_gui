@@ -16,7 +16,8 @@ public Reader(Result result) {
     
     this.result = result;
     
-    File file = new File("D:/ICU.cfg");
+    File file = new File("resources/ICU.cfg");
+    //File file = new File("resources/controller.txt");
     Properties propFile = new Properties();
 
     try {
@@ -69,9 +70,5 @@ public Reader(Result result) {
     }
 
     }
-
-
-    //methode: write in File -> String s = age_textfield.getText();
-    //int[] s = jList1.getSelectedIndices(); usw...
         
 }

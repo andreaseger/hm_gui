@@ -6,6 +6,7 @@ package setup;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -14,7 +15,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,8 +82,9 @@ public class Wizard extends JFrame {
 		//bottom
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 2));
+                bottomPanel.setBackground(Color.BLACK);
                 Dimension dim = new Dimension(90,26);
-		backButton = new JButton("Back", new ImageIcon("berg-tal-plakat.png"));
+		backButton = new JButton("Back");
                 backButton.setPreferredSize(dim);
 		backButton.addActionListener(new ActionListener() {
 			@Override
@@ -92,7 +93,7 @@ public class Wizard extends JFrame {
 			}
 		});
 		bottomPanel.add(backButton);
-		nextButton = new JButton("Next", new ImageIcon("berg-tal-plakat.png"));
+		nextButton = new JButton("Next");
 		nextButton.setHorizontalTextPosition(JButton.LEFT);
                 nextButton.setPreferredSize(dim);
 		nextButton.addActionListener(new ActionListener() {
@@ -102,7 +103,7 @@ public class Wizard extends JFrame {
 			}
 		});
 		bottomPanel.add(nextButton);
-		cancelButton = new JButton("Cancel", new ImageIcon("berg-tal-plakat.png"));
+		cancelButton = new JButton("Cancel");
                 cancelButton.setPreferredSize(dim);
 		cancelButton.setHorizontalTextPosition(JButton.LEFT);
 		cancelButton.addActionListener(new ActionListener() {
@@ -121,6 +122,7 @@ public class Wizard extends JFrame {
 	
 	private void nextButtonActionPerformed() {
 		if(nextButton.getText().equals("Save")) {
+                    panel_factory.getResult().saveResults();
                        dispose();
 		} else {
                        if(currentPanel == 1){
