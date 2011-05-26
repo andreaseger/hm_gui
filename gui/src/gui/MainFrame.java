@@ -183,6 +183,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
       outputs[i] = new DataDisplayOutput(132, 119);
       outputs[i].addClickListener(new DataDisplayOutput.ClickListener() {
         public void onClick(DataDisplayOutput sender) {
+
           dehighlightAllOutputs();
           sender.setHighlight(true);
           fuzzyPanel.setOutputType(sender.getType());
@@ -223,7 +224,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
       outputs[i].setValue(tmp);
     }
 
-    graphPanel.updateInputGraphs(inputList, id);
+    graphPanel.updateInputGraphs(inputList, outputList, id);
 
     //fuzzyPanel.updateData(p, OutputEnum.ISDN); //send newest point to fuzzypanel
 

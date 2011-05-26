@@ -33,6 +33,7 @@ public class DetailPanel extends javax.swing.JPanel {
     private JPanel backPanel;
     private JLabel backLabel;
     private MainPanel parent;
+    private int currentOutput;
 
     /** Creates new form DetailPanel */
     public DetailPanel(int awidth, int aheight, Result aResults, MainPanel par) {
@@ -44,7 +45,7 @@ public class DetailPanel extends javax.swing.JPanel {
 
         results = aResults;
         parent = par;
-        
+        currentOutput = -1;
         initComponents();
     }
 
@@ -53,6 +54,11 @@ public class DetailPanel extends javax.swing.JPanel {
         for(int i = 0; i < targets.size(); i++){
             graphs[i].setTargetValue(targets.get(i));
         }
+    }
+
+    void showOutput(int id)
+    {
+        currentOutput = id;
     }
 
     private void initComponents() {
@@ -81,10 +87,10 @@ public class DetailPanel extends javax.swing.JPanel {
             mainDetailPanel.add(graphs[i]);
         }
 
-        graphs[0].setMax((float) 110.0).setMin((float) 100.0);
-        graphs[1].setMax((float) 4).setMin((float) 1.5);
-        graphs[2].setMax((float) 4).setMin((float) 1.5);
-        graphs[3].setMax((float) 52.0).setMin((float) 45.0);
+        graphs[0].setMax((float) 120.0).setMin((float) 90.0);
+        graphs[1].setMax((float) 2.5).setMin((float) 1.5);
+        graphs[2].setMax((float) 2.5).setMin((float) 1.5);
+        graphs[3].setMax((float) 60.0).setMin((float) 40.0);
         System.out.println(this.getHeight());
         
         add(mainDetailPanel);
@@ -163,9 +169,18 @@ public class DetailPanel extends javax.swing.JPanel {
         add(backPanel);
     }
 
-    public void updateDetailGraphs(ArrayList<ArrayList<Float>> lists){
+    public void updateDetailGraphs(ArrayList<ArrayList<Float>> lists, List<Float[]> inputList, List<Float[]> outputList, int id){
         for(int i = 0; i < lists.size(); i++){
             graphs[i].showValues(lists.get(i));
         }
+        
+        // TODO set output graph
+        //graphs[graphs.length].showValues();
+
+        for(int i = 0; i < inputs.length; i++){
+            inputs[i].setValue(inputList.get(id)[i]);
+            outputs[i].setValue(outputList.get(id)[i]);
+        }
     }
 }
+
