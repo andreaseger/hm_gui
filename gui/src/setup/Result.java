@@ -83,7 +83,9 @@ public class Result {
         
         //here: selected_drugs constant because of lack of data
         //setSelected_drugs(drugs_buffer);
-        
+        //Hack to get the always the default outputs
+        setSelected_drugs(new int[]{0,1,2,3});
+
         setDrugs(drugs_changed);
     
         setMonitoring_intervall(monitoring_intervall_buffer);

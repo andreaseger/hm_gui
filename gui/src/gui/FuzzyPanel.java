@@ -70,7 +70,8 @@ public class FuzzyPanel extends JPanel{
   }
 
   public void updateData(){
-    List<Timepoint> p = parser.getTimepoints().get(current_id);
+    int first_id_in_list = parser.getFirstTimepoint().get(0).getId();
+    List<Timepoint> p = parser.getTimepoints().get(current_id - first_id_in_list);
     EnumMap<OutputEnum, Timepoint> h = new EnumMap<OutputEnum, Timepoint>(OutputEnum.class);
     for (int i = 0; i < p.size(); i++) {
       h.put(OutputEnum.get(i), p.get(i));

@@ -103,11 +103,10 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     this.add(buttonPanel);
 
     //todo use choosen inputs
-    fuzzyPanel = new FuzzyPanel(rules, new String[]{"Rule#",
-                                            InputEnum.MAP.getName(),
-                                            InputEnum.SVR.getName(),
-                                            InputEnum.CVP.getName(),
-                                            InputEnum.CO.getName(),
+    fuzzyPanel = new FuzzyPanel(rules, new String[]{"Rule#", InputEnum.get(results.getSelected_inputs()[0]).getName(),
+                                            InputEnum.get(results.getSelected_inputs()[1]).getName(),
+                                            InputEnum.get(results.getSelected_inputs()[2]).getName(),
+                                            InputEnum.get(results.getSelected_inputs()[3]).getName(),
                                             "Outputset"});
     fuzzyPanel.setLocation(0, 0);
     fuzzyPanel.setSize(667, 480);
@@ -186,8 +185,11 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
         public void onClick(DataDisplayOutput sender) {
           dehighlightAllOutputs();
           sender.setHighlight(true);
-          fuzzyPanel.setOutputType(sender.getType());  //TODO
-          graphPanel.showDetails();
+          fuzzyPanel.setOutputType(sender.getType());
+          if(fuzzyPanel.isVisible())
+            fuzzyPanel.updateData();
+          else
+            graphPanel.showDetails();
         }
       });
       outputs[i].setLocation(i * 133, 1);
@@ -285,7 +287,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
           graphPanel.setVisible(false);
           fuzzyPanel.setVisible(true);
           List<List<Timepoint>> t = xmlparser.getTimepoints();
-          fuzzyPanel.updateData(t.get(t.size()-1), OutputEnum.ISDN);
+          fuzzyPanel.updateData();
         }else{
           fbPanel.setBackground(Color.black);
           graphPanel.setVisible(true);

@@ -105,7 +105,7 @@ public class DetailPanel extends javax.swing.JPanel {
         for (int i = 0; i < inputs.length; i++) {
           inputs[i] = new DataDisplayInput((this.getWidth() / 5), (this.getHeight() / 5));
           inputs[i].setLocation(0, i * (this.getHeight() / 5));
-          inputs[i].setType(InputEnum.get(results.getSelected_drugs()[i]));
+          inputs[i].setType(InputEnum.get(results.getSelected_inputs()[i]));
           inputPanel.add(inputs[i]);
         }
         
