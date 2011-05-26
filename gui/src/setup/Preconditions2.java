@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -25,6 +26,8 @@ public class Preconditions2 extends JFrame {
 
     private Result result;
     private PanelFactory panel_factory;
+    private boolean is_warned = false;
+    private int counter = 0;
     
     
     
@@ -36,6 +39,8 @@ public class Preconditions2 extends JFrame {
     public JPanel createPanel(){
     
         JPanel jPanel1 = new JPanel();
+        
+        
     
         JLabel title_label = new javax.swing.JLabel();
         JLabel drugs_label = new javax.swing.JLabel();
@@ -44,11 +49,9 @@ public class Preconditions2 extends JFrame {
         JLabel inotrope_label = new javax.swing.JLabel();
         JLabel volume_label = new javax.swing.JLabel();
         JLabel preconditions_label = new javax.swing.JLabel();
-        JLabel intol_label = new javax.swing.JLabel();
         JScrollPane jScrollPane5 = new javax.swing.JScrollPane();
         JList precond_list = new javax.swing.JList();
-        JScrollPane jScrollPane6 = new javax.swing.JScrollPane();
-        JList jList6 = new javax.swing.JList();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         
@@ -82,47 +85,67 @@ public class Preconditions2 extends JFrame {
 
         panel_factory.getVasodi_box().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                ++counter;
+                if(!is_warned && counter > 4){
+                    showWarning();
+                    is_warned = true;
+                }
                 JComboBox cb = (JComboBox)e.getSource();
                 panel_factory.setVasodi_index((int)cb.getSelectedIndex());
                 int selected_drug = (int)cb.getSelectedIndex();
-                result.getSelected_drugs()[0] = selected_drug;
+                result.getDrugs_buffer()[0] = selected_drug;
             }
         });
         panel_factory.getVasodi_box().setSelectedIndex(result.getSelected_drugs()[0]);
         
         panel_factory.getVasocon_box().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                ++counter;
+                if(!is_warned && counter > 4){
+                    showWarning();
+                    is_warned = true;
+                }
                 JComboBox cb = (JComboBox)e.getSource();
                 panel_factory.setVasocon_index((int)cb.getSelectedIndex());
                 int selected_drug = (int)cb.getSelectedIndex();
-                result.getSelected_drugs()[1] = selected_drug;
+                result.getDrugs_buffer()[1] = selected_drug;
             }
         });
         panel_factory.getVasocon_box().setSelectedIndex(result.getSelected_drugs()[1]);
         
         panel_factory.getInotrope_box().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                ++counter;
+                if(!is_warned && counter > 4){
+                    showWarning();
+                    is_warned = true;
+                }
                 JComboBox cb = (JComboBox)e.getSource();
                 panel_factory.setInotrope_index((int)cb.getSelectedIndex());
                 int selected_drug = (int)cb.getSelectedIndex();
-                result.getSelected_drugs()[2] = selected_drug;
+                result.getDrugs_buffer()[2] = selected_drug;
             }
         });
         panel_factory.getInotrope_box().setSelectedIndex(result.getSelected_drugs()[2]);
         
         panel_factory.getVolume_box().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                ++counter;
+                if(!is_warned && counter > 4){
+                    showWarning();
+                    is_warned = true;
+                }
                 JComboBox cb = (JComboBox)e.getSource();
                 panel_factory.setVolume_index((int)cb.getSelectedIndex());
                 int selected_drug = (int)cb.getSelectedIndex();
-                result.getSelected_drugs()[3] = selected_drug;
+                result.getDrugs_buffer()[3] = selected_drug;
             }
         });
         panel_factory.getVolume_box().setSelectedIndex(result.getSelected_drugs()[3]);
         
         preconditions_label.setText("Vorerkrankungen:");
 
-        intol_label.setText("Unverträglichkeiten:");
+        //intol_label.setText("Unverträglichkeiten:");
 
         precond_list.setModel(new javax.swing.AbstractListModel() {
             String[] strings = result.getPre_conditions();
@@ -131,9 +154,9 @@ public class Preconditions2 extends JFrame {
         });
         
         ArrayList<Integer> indices_list = new ArrayList<Integer>();
-        for(int i = 0; i < result.getSelected_preconditions().size(); ++i){
+        for(int i = 0; i < result.getPreconditions_buffer().size(); ++i){
             for(int j = 0; j < result.getPre_conditions().length; j++){
-                if(result.getSelected_preconditions().get(i).equals(result.getPre_conditions()[j])){
+                if(result.getPreconditions_buffer().get(i).equals(result.getPre_conditions()[j])){
                     indices_list.add(j);
                 }
             }
@@ -164,21 +187,11 @@ public class Preconditions2 extends JFrame {
                         }
                     }
                 }
-                int i = 42;
             }
         });
         
        jScrollPane5.setViewportView(precond_list);
-      
-
-        jList6.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane6.setViewportView(jList6);
-
-        
+              
        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -191,23 +204,20 @@ public class Preconditions2 extends JFrame {
                         .addComponent(preconditions_label)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(intol_label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        )
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(panel_factory.getInotrope_box(), javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(panel_factory.getInotrope_box(), javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE)
                                 .addComponent(vasodilator_label, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(panel_factory.getVasodi_box(), javax.swing.GroupLayout.Alignment.LEADING, 0, 113, Short.MAX_VALUE))
+                                .addComponent(panel_factory.getVasodi_box(), javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE))
                             .addComponent(inotrope_label))
                         .addGap(66, 66, 66)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(volume_label)
-                            .addComponent(panel_factory.getVasocon_box(), 0, 113, Short.MAX_VALUE)
+                            .addComponent(panel_factory.getVasocon_box(), 0, 180, Short.MAX_VALUE)
                             .addComponent(vasoconst_label)
-                            .addComponent(panel_factory.getVolume_box(), 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(panel_factory.getVolume_box(), 0, 180, Short.MAX_VALUE)))
                     .addComponent(drugs_label))
                 .addContainerGap(377, Short.MAX_VALUE))
         );
@@ -219,9 +229,8 @@ public class Preconditions2 extends JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(intol_label)
-                    .addComponent(preconditions_label)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(preconditions_label))
+
                 .addGap(29, 29, 29)
                 .addComponent(drugs_label)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -254,10 +263,18 @@ public class Preconditions2 extends JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        
+        
         pack();
+        
            
         return jPanel1;
         
+    }
+    
+    private void showWarning(){
+        final String message = "Da nur Daten für die Medikamente VOL, DPM, NEP und ISDN vorhanden sind,\nkönnen hier zwar andere Medikamente ausgewählt werden,\ndie Auswahl wird aber nicht übernommen.";
+        JOptionPane.showMessageDialog(null, message, "Medikamentenauswahl",JOptionPane.PLAIN_MESSAGE );
     }
     
 

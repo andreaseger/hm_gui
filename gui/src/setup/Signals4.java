@@ -24,10 +24,12 @@ import javax.swing.text.BadLocationException;
 public class Signals4 extends JFrame {
 
     private Result result; 
-    private ArrayList<JTextField> signal_fields;
+    private ArrayList<JLabel> signal_fields;
     private ArrayList<JTextField> goal_fields;
     private ArrayList<JCheckBox> checkboxes;
     private int item_changed_index;
+    private boolean is_warned = false;
+    private int counter = 0;
     
     public Signals4(Result result) {
         this.result = result;
@@ -36,8 +38,8 @@ public class Signals4 extends JFrame {
     public JPanel createPanel(){
     
      JPanel jPanel1 = new JPanel();
-    
-     signal_fields = new ArrayList<JTextField>();
+         
+     signal_fields = new ArrayList<JLabel>();
      goal_fields  = new ArrayList<JTextField>();
      checkboxes = new ArrayList<JCheckBox>();     
      
@@ -69,11 +71,11 @@ public class Signals4 extends JFrame {
         
                 
         JLabel jLabel3 = new javax.swing.JLabel();
-        JTextField jTextField2 = new javax.swing.JTextField();
+        JLabel jSignalLabel1 = new javax.swing.JLabel();
         JLabel jLabel4 = new javax.swing.JLabel();
-        JTextField jTextField3 = new javax.swing.JTextField();
-        JTextField jTextField4 = new javax.swing.JTextField();
-        JTextField jTextField5 = new javax.swing.JTextField();
+        JLabel jSignalLabel2 = new javax.swing.JLabel();
+        JLabel jSignalLabel3 = new javax.swing.JLabel();
+        JLabel jSignalLabel4 = new javax.swing.JLabel();
         JTextField jTextField6 = new javax.swing.JTextField();
         JTextField jTextField7 = new javax.swing.JTextField();
         JTextField jTextField8 = new javax.swing.JTextField();
@@ -86,6 +88,7 @@ public class Signals4 extends JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setLabelFor(jTextField1);
+        
         jLabel2.setText("Monitoring Intervall:");
 
         jTextField1.setText(result.getMonitoring_intervall());
@@ -106,7 +109,7 @@ public class Signals4 extends JFrame {
             private void saveChange(DocumentEvent e){
                 try {
                     String s = e.getDocument().getText(0, e.getDocument().getLength());
-                    result.setMonitoring_intervall(s);
+                    result.setMonitoring_intervall_buffer(s);
                 }catch (BadLocationException badLocationException) {
                  System.out.println("Contents: Unknown");
                 }
@@ -127,15 +130,15 @@ public class Signals4 extends JFrame {
         jLabel4.setLabelFor(jTextField1);
         jLabel4.setText("sec");
         //signals
-        jTextField2.setText(s);
-        jTextField3.setText(s);
-        jTextField4.setText(s);
-        jTextField5.setText(s);
+        jSignalLabel1.setText(s);
+        jSignalLabel2.setText(s);
+        jSignalLabel3.setText(s);
+        jSignalLabel4.setText(s);
         
-        signal_fields.add(jTextField2);
-        signal_fields.add(jTextField3);
-        signal_fields.add(jTextField4);
-        signal_fields.add(jTextField5);
+        signal_fields.add(jSignalLabel1);
+        signal_fields.add(jSignalLabel2);
+        signal_fields.add(jSignalLabel3);
+        signal_fields.add(jSignalLabel4);
         //goal values
         jTextField6.setText(s);
         jTextField7.setText(s);
@@ -147,9 +150,12 @@ public class Signals4 extends JFrame {
         goal_fields.add(jTextField8);
         goal_fields.add(jTextField9);
         
+                
         ItemListener item_listener = new ItemListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) { 
+            public void itemStateChanged(ItemEvent e) {
+                ++counter;
+                
                  Object source = e.getItemSelectable();
                 item_changed_index = -1;
                 //welche checkbox auf Seite 4 wurde ausgewählt?
@@ -158,18 +164,27 @@ public class Signals4 extends JFrame {
                         item_changed_index = i;
                 }
                 if (e.getStateChange() == ItemEvent.DESELECTED){
+                    /*if(!is_warned && counter > 4){
+                        showWarning();
+                        is_warned = true;
+                    }*/
                     for(int i = 0; i < signal_fields.size(); ++i){
                         String sg = checkboxes.get(item_changed_index).getText();
                         String[] ss = sg.split(" ");
                         String s = ss[ss.length-1].substring(1,ss.length);
+                        
                         if(signal_fields.get(i).getText().equals(s)){
-                            result.getSelected_signal_targets().remove(sg);
+                            result.getSelected_signal_targets_buffer().remove(item_changed_index);
                             signal_fields.get(i).setText("-");
                             goal_fields.get(i).setText("-");
                         }
                     }
                 }
                 else{
+                    if(!is_warned && counter > 4){
+                        showWarning();
+                        is_warned = true;
+                    }
                     for(int i = 0; i < signal_fields.size(); ++i){
                     //noch nicht belegt
                         if(signal_fields.get(i).getText().equals("-")){
@@ -179,8 +194,9 @@ public class Signals4 extends JFrame {
                             String[] ss = sg.split(" ");
                             String s = ss[ss.length-1].substring(1,ss.length);
                             signal_fields.get(i).setText(s);
+                            result.getSelected_signal_targets_buffer().put(item_changed_index, result.getSignal_targets().get(sg));
                             item_changed_index = -1;
-                            result.getSelected_signal_targets().put(sg, result.getSignal_targets().get(sg));
+                            
                             break;
                         }
                         //wenn alle belegt?
@@ -198,9 +214,9 @@ public class Signals4 extends JFrame {
         }
         
         //preselection from previous changes
-        for(String key : result.getSelected_signal_targets().keySet()){
+        for(Integer key : result.getSelected_signal_targets().keySet()){
             for(int i = 0; i < checkboxes.size(); ++i){
-                if(checkboxes.get(i).getText().equals(key)){
+                if(i == key){
                     checkboxes.get(i).setSelected(true);
                 }
             }
@@ -241,17 +257,17 @@ public class Signals4 extends JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField6, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSignalLabel1, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField7, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSignalLabel2, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField4, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSignalLabel3, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField5, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jSignalLabel4, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTextField8, 100,100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -289,10 +305,10 @@ public class Signals4 extends JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSignalLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSignalLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSignalLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSignalLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -323,6 +339,11 @@ public class Signals4 extends JFrame {
         
         return jPanel1;
     
+    }
+    
+    private void showWarning(){
+        final String message = "Da nur Daten für die Inputs MAP, CVP, SVR und CO vorhanden sind,\nkönnen hier zwar andere Signale ausgewählt werden,\ndie Auswahl wird aber nicht übernommen.";
+        JOptionPane.showMessageDialog(null, message, "Inputauswahl",JOptionPane.PLAIN_MESSAGE );
     }
     
 }

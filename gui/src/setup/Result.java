@@ -51,7 +51,7 @@ public class Result {
     
     
     private int[] selected_inputs = {0,1,2,3};
-    private double[] selected_input_targets = {1.0,1.0,1.0,1.0};
+    private double[] selected_input_targets = {105,2.0,2.0,50};
 
     private ArrayList<String> preconditions_buffer = new ArrayList<String>();
     private ArrayList<String> selected_preconditions = new ArrayList<String>();
@@ -59,6 +59,16 @@ public class Result {
     private int[] drugs_buffer = {0,0,0,0};
     private int[] selected_drugs = {0,0,0,0};
 
+    
+    public Result(){
+        this.reader = new Reader(this);
+        selected_signal_targets.put(0,signal_targets.get(signals[0]));
+        selected_signal_targets.put(1,signal_targets.get(signals[1]));
+        selected_signal_targets.put(2,signal_targets.get(signals[2]));
+        selected_signal_targets.put(3,signal_targets.get(signals[3]));
+    }
+    
+    
     
     public void saveResults(){
     
@@ -70,7 +80,9 @@ public class Result {
         setWeight(weight_buffer);
         
         setSelected_preconditions(preconditions_buffer);
-        setSelected_drugs(drugs_buffer);
+        
+        //here: selected_drugs constant because of lack of data
+        //setSelected_drugs(drugs_buffer);
         
         setDrugs(drugs_changed);
     
@@ -78,11 +90,11 @@ public class Result {
         
         setSelected_signal_targets(selected_signal_targets_buffer);
         
-        //selected_inputs???
-        for(int i = 0; i < selected_input_targets.length; ++i){
+        //here: selected_inputs constant because of lack of data
+        /*for(int i = 0; i < selected_input_targets.length; ++i){
             double target  = Double.parseDouble(selected_signal_targets.get(i));
             selected_input_targets[i] = target;
-        }
+        }*/
         
     }
     
@@ -134,15 +146,7 @@ public class Result {
         this.weight_buffer = weight_buffer;
     }
    
-       
-        
-    public Result(){
-        this.reader = new Reader(this);
-        
-    }
-    
-
-    
+           
     public String getAge() {
         return age;
     }

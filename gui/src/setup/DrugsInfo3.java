@@ -4,6 +4,7 @@
  */
 package setup;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -166,25 +167,25 @@ public class DrugsInfo3 extends JFrame {
                     for(int i = 0; i < 9; ++i){
                         String ss = "field1-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_1)[i+1] = s;
+                            result.getDrugs_changed().get(index_1)[i+1] = s;
                         }
                     }
                     for(int i = 0; i < 9; ++i){
                         String ss = "field2-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_2)[i+1] = s;
+                            result.getDrugs_changed().get(index_2)[i+1] = s;
                         }
                     }
                     for(int i = 0; i < 9; ++i){
                         String ss = "field3-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_3)[i+1] = s;
+                            result.getDrugs_changed().get(index_3)[i+1] = s;
                         }
                     }
                     for(int i = 0; i < 9; ++i){
                         String ss = "field4-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_4)[i+1] = s;
+                            result.getDrugs_changed().get(index_4)[i+1] = s;
                         }
                     }
                     

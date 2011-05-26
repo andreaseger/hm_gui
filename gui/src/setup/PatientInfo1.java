@@ -4,6 +4,7 @@
  */
 package setup;
 
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +30,7 @@ public class PatientInfo1 extends JFrame {
     public JPanel createPanel(){
         
         JPanel jPanel1 = new javax.swing.JPanel();
-        
+                
         JLabel title = new javax.swing.JLabel();
         JLabel name_label = new javax.swing.JLabel();
         JLabel firstname_label = new javax.swing.JLabel();
@@ -62,13 +63,13 @@ public class PatientInfo1 extends JFrame {
                     String s = doc.getText(0, length);
                     
                     if(doc.getProperty("name").equals("name")){
-                        result.setName(s);
+                        result.setName_buffer(s);
                     }else if(doc.getProperty("name").equals("firstname")){
-                        result.setFirstname(s);
+                        result.setFirstname_buffer(s);
                     }else if(doc.getProperty("name").equals("age")){
-                        result.setAge(s);
+                        result.setAge_buffer(s);
                     }else if(doc.getProperty("name").equals("weight")){
-                        result.setWeight(s);
+                        result.setWeight_buffer(s);
                     }
                 }catch (BadLocationException badLocationException) {
                  System.out.println("Contents: Unknown");
