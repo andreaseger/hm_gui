@@ -44,22 +44,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
     private final static int MAX_TIMEPOINTS = 100;
 
     private Thread runner;
-//    private String[] files;
     private OutputEnum[] output;
-
-//    public ObservableParser(String[] files){
-//      super();
-//      this.files = files;
-//
-//      runner = new Thread(this);
-//    }
-//
-//    public ObservableParser(String o0, String o1, String o2,String o3){
-//      super();
-//      this.files = new String[]{o0,o1,o2,o3};
-//
-//      runner = new Thread(this);
-//    }
 
     public ObservableParser(OutputEnum[] output){
       super();
@@ -96,9 +81,9 @@ public class ObservableParser extends AbstractParser implements Runnable{
           timepoints.removeFirst();
       }
       //HACK to get faster to the interesting data
-      /*if (points.get(0).getId() < 250) {
+      if (points.get(0).getId() < 250) {
         return;
-      }*/
+      }
 
       notifyObservers();
 

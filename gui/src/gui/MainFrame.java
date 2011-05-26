@@ -55,7 +55,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
   private JPanel fbPanel;
 
   public MainFrame() {
-    JOptionPane.showMessageDialog(current,"Achtung dies ist eine Testversion.\nBenutzung erfolg auf eigene Gefahr.\n Für Schäden wird nicht gehaftet.","Testversion!",JOptionPane.WARNING_MESSAGE);
+    //JOptionPane.showMessageDialog(current,"Achtung dies ist eine Testversion.\nBenutzung erfolg auf eigene Gefahr.\nFür Schäden wird nicht gehaftet.","Testversion!",JOptionPane.WARNING_MESSAGE);
     PanelFactory panel_factory = new PanelFactory();
     results = panel_factory.getResult();
     initComponents();
@@ -102,6 +102,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     fillButtonPanel(buttonPanel);
     this.add(buttonPanel);
 
+    //todo use choosen inputs
     fuzzyPanel = new FuzzyPanel(rules, new String[]{"Rule#",
                                             InputEnum.MAP.getName(),
                                             InputEnum.SVR.getName(),
@@ -133,7 +134,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     for (int i = 0; i < inputs.length; i++) {
       inputs[i] = new DataDisplayInput(132, 119);
       inputs[i].setLocation(1, i * 120);
-      inputs[i].setType(InputEnum.get(results.getSelected_drugs()[i]));
+      inputs[i].setType(InputEnum.get(results.getSelected_inputs()[i]));
       inputPanel.add(inputs[i]);
     }
   }
