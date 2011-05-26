@@ -55,10 +55,10 @@ public class MainPanel extends JPanel {
             graphs[i].showValues(null);
             graphs[i].setSteps(50);
         }
-        graphs[0].setMax((float) 110.0).setMin((float) 100.0);
-        graphs[1].setMax((float) 3).setMin((float) 1.5);
-        graphs[2].setMax((float) 3).setMin((float) 1.5);
-        graphs[3].setMax((float) 52.0).setMin((float) 45.0);
+        graphs[0].setMax((float) 120.0).setMin((float) 90.0);
+        graphs[1].setMax((float) 2.5).setMin((float) 1.5);
+        graphs[2].setMax((float) 2.5).setMin((float) 1.5);
+        graphs[3].setMax((float) 60.0).setMin((float) 40.0);
         
         detailPanel = new DetailPanel(667, 480, results, this);
         detailPanel.setLocation(0, 0);
@@ -88,9 +88,10 @@ public class MainPanel extends JPanel {
     public void showDetails(){
         graphPanel.setVisible(false);
         detailPanel.setVisible(true);
+        //detailPanel.showOutput();
     }
     
-    void updateInputGraphs(List<Float[]> inputList, int id) {
+    void updateInputGraphs(List<Float[]> inputList, List<Float[]> outputList, int id) {
 
         ArrayList<ArrayList<Float>> lists = new ArrayList<ArrayList<Float>>();
         for(int i = 0; i < 4; i++)
@@ -107,7 +108,7 @@ public class MainPanel extends JPanel {
             graphs[i].showValues(lists.get(i));
         }
 
-        detailPanel.updateDetailGraphs(lists);
+        detailPanel.updateDetailGraphs(lists, inputList, outputList, id);
     }
 
     void setTargetValues(List<Double> targets){
