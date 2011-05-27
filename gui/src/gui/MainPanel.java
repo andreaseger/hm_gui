@@ -45,7 +45,7 @@ public class MainPanel extends JPanel {
         graphPanel.setPreferredSize(dim);
         graphPanel.setMinimumSize(dim);
         graphPanel.setMaximumSize(dim);
-        graphPanel.setBackground(Color.red);
+        graphPanel.setBackground(new Color(0, 64, 0));
 
         graphs = new Graph[4];
         for(int i=0;i<graphs.length;i++){
@@ -85,8 +85,9 @@ public class MainPanel extends JPanel {
         parent.dehighlightAllOutputs();
     }
         
-    public void showDetails(){
+    public void showDetails(int idx){
         graphPanel.setVisible(false);
+        detailPanel.setOutput(idx);
         detailPanel.setVisible(true);
         //detailPanel.showOutput();
     }
@@ -97,7 +98,7 @@ public class MainPanel extends JPanel {
         for(int i = 0; i < 4; i++)
             lists.add(new ArrayList<Float>());
 
-        for(int i = 250; i < id+250; i++){
+        for(int i = 0; i < id; i++){
             Float[] curr = inputList.get(i);
             for(int j = 0; j < curr.length; j++){
                 lists.get(j).add(curr[j]);

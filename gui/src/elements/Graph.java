@@ -43,6 +43,12 @@ public class Graph extends javax.swing.JPanel {
     private double targetValue;
     private int style = STYLE_LINES;
     private int steps;
+    private boolean showTarget;
+
+    public void setShowTarget(boolean showTarget)
+    {
+        this.showTarget = showTarget;
+    }
 
     public void setSteps(int steps)
     {
@@ -92,7 +98,7 @@ public class Graph extends javax.swing.JPanel {
         setPreferredSize(dim);
         setMaximumSize(dim);
         
-        
+        showTarget = true;
     }
     
     public void showValues(List<Float> data){
@@ -152,8 +158,10 @@ public class Graph extends javax.swing.JPanel {
             
             
             // draw target line
-            int y = height - (int)((targetValue - min) * normHeight);
-            drawDashed(gr, Color.yellow, 0, y, this.getWidth(), y);
+            if(showTarget){
+                int y = height - (int)((targetValue - min) * normHeight);
+                drawDashed(gr, Color.yellow, 0, y, this.getWidth(), y);
+            }
             
             // draw values
             P2D point = null;

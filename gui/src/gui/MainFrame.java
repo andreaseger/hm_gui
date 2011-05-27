@@ -180,17 +180,17 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
 
     outputs = new DataDisplayOutput[4];
     for (int i = 0; i < outputs.length; i++) {
+        final int num = i;
       outputs[i] = new DataDisplayOutput(132, 119);
       outputs[i].addClickListener(new DataDisplayOutput.ClickListener() {
         public void onClick(DataDisplayOutput sender) {
-
           dehighlightAllOutputs();
           sender.setHighlight(true);
           fuzzyPanel.setOutputType(sender.getType());
           if(fuzzyPanel.isVisible())
             fuzzyPanel.updateData();
           else
-            graphPanel.showDetails();
+            graphPanel.showDetails(num);
         }
       });
       outputs[i].setLocation(i * 133, 1);

@@ -49,16 +49,18 @@ public class DetailPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    void setOutput(int idx)
+    {
+        dehighlight();
+        currentOutput = idx;
+        outputs[idx].setHighlight(true);
+    }
+
     void setTargetValues(List<Double> targets)
     {
         for(int i = 0; i < targets.size(); i++){
             graphs[i].setTargetValue(targets.get(i));
         }
-    }
-
-    void showOutput(int id)
-    {
-        currentOutput = id;
     }
 
     private void initComponents() {
@@ -74,7 +76,7 @@ public class DetailPanel extends javax.swing.JPanel {
         mainDetailPanel.setMaximumSize(dim);
         mainDetailPanel.setLocation(0, 0);
         
-        mainDetailPanel.setBackground(Color.red);
+        mainDetailPanel.setBackground(new Color(0, 64, 0));
         mainDetailPanel.setLayout(null);
         
         
@@ -86,6 +88,8 @@ public class DetailPanel extends javax.swing.JPanel {
             graphs[i].setSteps(50);
             mainDetailPanel.add(graphs[i]);
         }
+        graphs[4].setGraphColor(new Color(190, 190, 0));
+        graphs[4].setShowTarget(false);
 
         graphs[0].setMax((float) 120.0).setMin((float) 90.0);
         graphs[1].setMax((float) 2.5).setMin((float) 1.5);
@@ -169,9 +173,23 @@ public class DetailPanel extends javax.swing.JPanel {
         add(backPanel);
     }
 
+    public void dehighlight() {
+        for (DataDisplayOutput output : this.outputs) {
+          output.setHighlight(false);
+        }
+      }
+
     public void updateDetailGraphs(ArrayList<ArrayList<Float>> lists, List<Float[]> inputList, List<Float[]> outputList, int id){
         for(int i = 0; i < lists.size(); i++){
             graphs[i].showValues(lists.get(i));
+        }
+
+        if(currentOutput >= 0){
+            ArrayList<Float> out = new ArrayList<Float>();
+            for(int i = 0; i < outputList.size() && i < id; i++){
+                out.add(outputList.get(i)[currentOutput]);
+            }
+            graphs[4].showValues(out);
         }
         
         // TODO set output graph
