@@ -119,18 +119,30 @@ public class Wizard extends JDialog {
 
   private void nextButtonActionPerformed() {
     if (nextButton.getText().equals("Save")) {
-      panel_factory.getResult().saveResults();
-      dispose();
+        if(panel_factory.getResult().getSignals_disable_counter() != 0){
+            final String message = "Ihre Eingabe ist ungültig.";
+            JOptionPane.showMessageDialog(null, message, "Ungültige Eingaben",JOptionPane.PLAIN_MESSAGE );
+        }else{
+            panel_factory.getResult().saveResults();
+            dispose();
+        }
     } else {
-      if (currentPanel == 1) {
-        page3 = true;
-        ++counter;
-      }
-      if (!page3) {
-        currentPanel++;
-      }
-      updatePanel();
-      updateButtons();
+      //invalid inputs -> "next" not possible
+      if(panel_factory.getResult().getDrugs_info_disable_counter() != 0
+              || panel_factory.getResult().getPatient_info_disable_counter() != 0){
+          final String message = "Ihre Eingabe ist ungültig.";
+          JOptionPane.showMessageDialog(null, message, "Ungültige Eingaben",JOptionPane.PLAIN_MESSAGE );
+      }else{
+        if(currentPanel == 1) {
+            page3 = true;
+            ++counter;
+        }
+        if (!page3) {
+            currentPanel++;
+        }
+        updatePanel();
+        updateButtons();
+        }
     }
   }
 

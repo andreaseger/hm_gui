@@ -4,6 +4,7 @@
  */
 package setup;
 
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class Signals4 extends JFrame {
     private int item_changed_index;
     private boolean is_warned = false;
     private int counter = 0;
+    private JLabel error_label = new JLabel();
+    private JTextField jTextField1 = new javax.swing.JTextField();
+    
+    private boolean was_insert;
     
     public Signals4(Result result) {
         this.result = result;
@@ -45,7 +50,7 @@ public class Signals4 extends JFrame {
      
         JLabel jLabel1 = new javax.swing.JLabel();
         JLabel jLabel2 = new javax.swing.JLabel();
-        JTextField jTextField1 = new javax.swing.JTextField();
+        
         JCheckBox jCheckBox1 = new javax.swing.JCheckBox();
         JCheckBox jCheckBox2 = new javax.swing.JCheckBox();
         JCheckBox jCheckBox3 = new javax.swing.JCheckBox();
@@ -73,6 +78,7 @@ public class Signals4 extends JFrame {
         JLabel jLabel3 = new javax.swing.JLabel();
         JLabel jSignalLabel1 = new javax.swing.JLabel();
         JLabel jLabel4 = new javax.swing.JLabel();
+        
         JLabel jSignalLabel2 = new javax.swing.JLabel();
         JLabel jSignalLabel3 = new javax.swing.JLabel();
         JLabel jSignalLabel4 = new javax.swing.JLabel();
@@ -90,15 +96,18 @@ public class Signals4 extends JFrame {
         jLabel2.setLabelFor(jTextField1);
         
         jLabel2.setText("Monitoring Intervall:");
+        error_label.setText("");
 
         jTextField1.setText(result.getMonitoring_intervall());
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                was_insert = true;
                 saveChange(e);
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
+                was_insert = false;
                 saveChange(e);
             }
             @Override
@@ -109,6 +118,22 @@ public class Signals4 extends JFrame {
             private void saveChange(DocumentEvent e){
                 try {
                     String s = e.getDocument().getText(0, e.getDocument().getLength());
+                    int input;
+                        try{
+                            input = Integer.parseInt(s);
+                            if(input < 1 || input > 120){
+                                result.setSignals_disable_counter(result.getSignals_disable_counter()+1);
+                                error_label.setText("Geben Sie eine Dezimalzahl zwischen 1 und 100 ein!");
+                            }else{
+                                if(was_insert && s.length() == 1)
+                                    result.setSignals_disable_counter(result.getSignals_disable_counter()-1);
+                                error_label.setText("");
+                                result.setAge_buffer(s);
+                            }
+                        }catch(NumberFormatException f){
+                            result.setSignals_disable_counter(result.getSignals_disable_counter()+1);
+                            error_label.setText("Geben Sie eine Dezimalzahl zwischen 1 und 100 ein!");
+                        }
                     result.setMonitoring_intervall_buffer(s);
                 }catch (BadLocationException badLocationException) {
                  System.out.println("Contents: Unknown");
@@ -250,9 +275,11 @@ public class Signals4 extends JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabel4)
+                        .addGap(5,5,5)
+                        .addComponent(error_label))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -320,7 +347,8 @@ public class Signals4 extends JFrame {
                     .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
+                        .addComponent(jLabel4)
+                        .addComponent(error_label)))
                 .addContainerGap(252, Short.MAX_VALUE))
         );
 

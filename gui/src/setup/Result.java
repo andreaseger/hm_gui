@@ -41,7 +41,7 @@ public class Result {
     private String monitoring_intervall_buffer;
 
         
-    private String[] signals;
+    private String[] signals = new String[11];
     private HashMap<String, String> signal_targets = new HashMap<String, String>();
     //<Integer,String> index of the signal -> String[] signals
     private HashMap<Integer, String> selected_signal_targets_buffer = new HashMap<Integer, String>();
@@ -59,13 +59,18 @@ public class Result {
     private int[] drugs_buffer = {0,0,0,0};
     private int[] selected_drugs = {0,0,0,0};
 
-    
+    private int drugs_info_disable_counter = 0;
+    private int patient_info_disable_counter = 0;
+    private int signals_disable_counter = 0;
+
+        
     public Result(){
         this.reader = new Reader(this);
         selected_signal_targets.put(0,signal_targets.get(signals[0]));
         selected_signal_targets.put(1,signal_targets.get(signals[1]));
         selected_signal_targets.put(2,signal_targets.get(signals[2]));
         selected_signal_targets.put(3,signal_targets.get(signals[3]));
+        preconditions_buffer.add(pre_conditions[0]);
     }
     
     
@@ -331,5 +336,29 @@ public class Result {
 
     public void setIs_valid(boolean is_valid) {
         this.is_valid = is_valid;
+    }
+    
+    public int getDrugs_info_disable_counter() {
+        return drugs_info_disable_counter;
+    }
+
+    public void setDrugs_info_disable_counter(int drugs_info_disable_counter) {
+        this.drugs_info_disable_counter = drugs_info_disable_counter;
+    }
+    
+    public int getPatient_info_disable_counter() {
+        return patient_info_disable_counter;
+    }
+
+    public void setPatient_info_disable_counter(int patient_info_disable_counter) {
+        this.patient_info_disable_counter = patient_info_disable_counter;
+    }
+
+    public int getSignals_disable_counter() {
+        return signals_disable_counter;
+    }
+
+    public void setSignals_disable_counter(int signals_disable_counter) {
+        this.signals_disable_counter = signals_disable_counter;
     }
 }
