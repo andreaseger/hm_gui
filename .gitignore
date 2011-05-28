@@ -22,3 +22,6 @@ gui-setup/build/**/*
 /gui/dist/
 
 *.DS_Store
+/gui/src/resource/back_to_overview.psd
+/gui/src/resource/setup.psd
+/gui/src/resource/back_to_details.psd
