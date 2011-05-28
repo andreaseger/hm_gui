@@ -115,7 +115,13 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
   }
 
   public static void main(String... args) {
-    current = new MainFrame(Integer.parseInt(args[0]));
+    int s;
+    try{
+      s = Integer.parseInt(args[0]);
+    }catch(NumberFormatException e){
+      s = 300;
+    }
+    current = new MainFrame(s);
     current.setSize(800, 600);
     current.setLocation(10, 10);
 
