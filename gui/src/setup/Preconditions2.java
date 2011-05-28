@@ -145,7 +145,6 @@ public class Preconditions2 extends JFrame {
         
         preconditions_label.setText("Vorerkrankungen:");
 
-        //intol_label.setText("Unverträglichkeiten:");
 
         precond_list.setModel(new javax.swing.AbstractListModel() {
             String[] strings = result.getPre_conditions();
