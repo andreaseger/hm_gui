@@ -10,12 +10,12 @@ import elements.DataDisplayOutput;
 import elements.Graph;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import setup.Result;
 
 /**
@@ -30,10 +30,13 @@ public class DetailPanel extends javax.swing.JPanel {
     private DataDisplayInput[] inputs;
     private Result results;
     private DataDisplayOutput[] outputs;
-    private JPanel backPanel;
-    private JLabel backLabel;
+    private JLabel backButton;
     private MainPanel parent;
     private int currentOutput;
+  private JPanel buttonPanel;
+  private JLabel fuzzyButton;
+  private JLabel backLabel;
+  private JLabel fuzzyLabel;
 
     /** Creates new form DetailPanel */
     public DetailPanel(int awidth, int aheight, Result aResults, MainPanel par) {
@@ -68,7 +71,7 @@ public class DetailPanel extends javax.swing.JPanel {
         setLayout(null);
         
         mainDetailPanel = new JPanel();
-        System.out.println(this.getWidth());
+//        System.out.println(this.getWidth());
         Dimension dim = new Dimension((this.getWidth() / 5) * 4, (this.getHeight() / 5) * 4);
         mainDetailPanel.setSize(dim);
         mainDetailPanel.setPreferredSize(dim);
@@ -95,7 +98,7 @@ public class DetailPanel extends javax.swing.JPanel {
         graphs[1].setMax((float) 2.5).setMin((float) 1.5);
         graphs[2].setMax((float) 2.5).setMin((float) 1.5);
         graphs[3].setMax((float) 60.0).setMin((float) 40.0);
-        System.out.println(this.getHeight());
+//        System.out.println(this.getHeight());
         
         add(mainDetailPanel);
         
@@ -107,14 +110,14 @@ public class DetailPanel extends javax.swing.JPanel {
         inputPanel.setMaximumSize(dim);
         inputPanel.setLocation((this.getWidth() / 5) * 4, 0);
         
-        inputPanel.setBackground(Color.blue);
+        inputPanel.setBackground(Color.red);
 
         inputPanel.setLayout(null);
         inputs = new DataDisplayInput[4];
 
         for (int i = 0; i < inputs.length; i++) {
-          inputs[i] = new DataDisplayInput((this.getWidth() / 5), (this.getHeight() / 5));
-          inputs[i].setLocation(0, i * (this.getHeight() / 5));
+          inputs[i] = new DataDisplayInput((this.getWidth() / 5)-1, (this.getHeight() / 5)-1);
+          inputs[i].setLocation(1, i * (this.getHeight() / 5));
           inputs[i].setType(InputEnum.get(results.getSelected_inputs()[i]));
           inputPanel.add(inputs[i]);
         }
@@ -129,48 +132,26 @@ public class DetailPanel extends javax.swing.JPanel {
         outputPanel.setMaximumSize(dim);
         outputPanel.setLocation(0, (this.getHeight() / 5) * 4);
         
-        outputPanel.setBackground(Color.green);
+        outputPanel.setBackground(Color.red);
 
         outputPanel.setLayout(null);
 
         outputs = new DataDisplayOutput[4];
         for (int i = 0; i < outputs.length; i++) {
-          outputs[i] = new DataDisplayOutput((this.getWidth() / 5), (this.getHeight() / 5));
-          outputs[i].setLocation(i * (this.getWidth() / 5), 0);
+          outputs[i] = new DataDisplayOutput((this.getWidth() / 5)-1, (this.getHeight() / 5)-1);
+          outputs[i].setLocation(i * (this.getWidth() / 5), 1);
           outputs[i].setType(OutputEnum.get(results.getSelected_drugs()[i]));
           outputPanel.add(outputs[i]);
         }
         
         add(outputPanel);
 
-        backPanel = new JPanel();
-        backPanel.setLayout(null);
-        backPanel.setLocation((this.getWidth() / 5) * 4, (this.getHeight() / 5) * 4);
-        dim = new Dimension((this.getWidth() / 5), (this.getHeight() / 5));
-        backPanel.setSize(dim);
-        backPanel.setPreferredSize(dim);
-        backPanel.setMinimumSize(dim);
-        backPanel.setMaximumSize(dim);
-        backPanel.setBackground(Color.black);
-
-        backLabel = new JLabel("<-");
-        backLabel.setFont(new Font("Dialog", 1, 36));
-        backLabel.setForeground(Color.green);
-        backLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        //backLabel.setBackground(Color.red);
-        backLabel.setLocation(0, 0);
-        backLabel.setSize(dim);
-        backLabel.setPreferredSize(dim);
-        backLabel.setMinimumSize(dim);
-        backLabel.setMaximumSize(dim);
-        backLabel.addMouseListener(new SimpleClickHandler(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                parent.showInputGraphs();
-            }});
-        backPanel.add(backLabel);
-
-        add(backPanel);
+        buttonPanel = new JPanel();
+        buttonPanel.setLocation((this.getWidth() / 5) * 4, (this.getHeight() / 5) * 4);
+        buttonPanel.setSize((this.getWidth() / 5), (this.getHeight() / 5));
+        buttonPanel.setBackground(Color.BLACK);
+        fillButtonPanel(buttonPanel);
+        add(buttonPanel);
     }
 
     public void dehighlight() {
@@ -200,5 +181,75 @@ public class DetailPanel extends javax.swing.JPanel {
             outputs[i].setValue(outputList.get(id)[i]);
         }
     }
+
+  private void fillButtonPanel(JPanel buttonPanel) {
+    buttonPanel.setLayout(null);
+    Dimension dim = new Dimension(buttonPanel.getSize().width/2,buttonPanel.getSize().height-10);
+
+    backButton = new JLabel();
+    backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/back_to_overview.png")));
+    backButton.setLocation(0, 5);
+    backButton.setSize(dim);
+    backButton.setVerticalAlignment(SwingConstants.TOP);
+    backButton.setHorizontalAlignment(SwingConstants.CENTER);
+    backButton.addMouseListener(new SimpleClickHandler(){
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            parent.showInputGraphs();
+        }
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        backLabel.setVisible(true);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        backLabel.setVisible(false);
+      }
+    });
+    backLabel = new JLabel("<html>Zurück<br/>zur<br/>Übersicht</html>");
+    backLabel.setForeground(MainFrame.getForegroundColor());
+    backLabel.setLocation(0, 5);
+    backLabel.setSize(dim);
+    backLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+    backLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    backLabel.setVisible(false);
+
+    buttonPanel.add(backLabel);
+    buttonPanel.add(backButton);
+
+    fuzzyButton = new JLabel();
+    fuzzyButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/fuzzy.png")));
+    fuzzyButton.setSize(dim);
+    fuzzyButton.setLocation(60,5);
+    fuzzyButton.setVerticalAlignment(SwingConstants.TOP);
+    fuzzyButton.setHorizontalAlignment(SwingConstants.CENTER);
+    fuzzyButton.addMouseListener(new SimpleClickHandler() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        parent.parent.showFuzzy();
+      }
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        fuzzyLabel.setVisible(true);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        fuzzyLabel.setVisible(false);
+      }
+    });
+    fuzzyLabel = new JLabel("<html>Fuzzy-<br/>anzeige</html>");
+    fuzzyLabel.setForeground(MainFrame.getForegroundColor());
+    fuzzyLabel.setSize(dim);
+    fuzzyLabel.setLocation(60,5);
+    fuzzyLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+    fuzzyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    fuzzyLabel.setAlignmentX(CENTER_ALIGNMENT);
+    fuzzyLabel.setVisible(false);
+
+    buttonPanel.add(fuzzyLabel);
+    buttonPanel.add(fuzzyButton);
+  }
 }
 

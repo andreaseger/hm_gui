@@ -45,17 +45,20 @@ public class ObservableParser extends AbstractParser implements Runnable{
 
     private Thread runner;
     private OutputEnum[] output;
+    private final int sleeper;
 
-    public ObservableParser(OutputEnum[] output){
+    public ObservableParser(OutputEnum[] output, int sleep){
       super();
       this.output = output;
+      sleeper = sleep;
 
       runner = new Thread(this);
     }
 
-    public ObservableParser(OutputEnum o0, OutputEnum o1, OutputEnum o2,OutputEnum o3){
+    public ObservableParser(OutputEnum o0, OutputEnum o1, OutputEnum o2,OutputEnum o3, int sleep){
       super();
       this.output = new OutputEnum[]{o0,o1,o2,o3};
+      sleeper = sleep;
 
       runner = new Thread(this);
     }
@@ -80,15 +83,15 @@ public class ObservableParser extends AbstractParser implements Runnable{
       while(timepoints.size() > MAX_TIMEPOINTS) {
           timepoints.removeFirst();
       }
-      //HACK to get faster to the interesting data
-      if (points.get(0).getId() < 250) {
-        return;
-      }
+//      //HACK to get faster to the interesting data
+//      if (points.get(0).getId() < 250) {
+//        return;
+//      }
 
       notifyObservers();
 
       try {
-        runner.sleep(300);
+        runner.sleep(sleeper);
       } catch (InterruptedException ex) {
         Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }                

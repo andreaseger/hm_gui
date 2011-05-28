@@ -7,13 +7,10 @@ package gui;
 import elements.Graph;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import setup.Result;
-import xmlparser.Timepoint;
 
 /**
  *
