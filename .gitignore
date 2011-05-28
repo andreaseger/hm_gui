@@ -23,5 +23,6 @@ DataDisplayLeft/*
 /gui/nbproject/private/
 /gui/build/
 /gui/dist/
-
+/gui/nbproject/build-impl.xml
+/gui/nbproject/genfiles.properties
 *.DS_Store

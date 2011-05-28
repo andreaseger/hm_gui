@@ -41,7 +41,7 @@ public class ObservableParser extends AbstractParser implements Runnable{
     /**
      * Maximum number of timepoints. If more timepoints are read, the oldest timepoints are discarded.
      */
-    private final static int MAX_TIMEPOINTS = 100;
+    private final static int MAX_TIMEPOINTS = 150;
 
     private Thread runner;
     private OutputEnum[] output;

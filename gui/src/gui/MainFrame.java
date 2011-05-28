@@ -287,7 +287,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
           fbPanel.setBackground(highlightColor);
           graphPanel.setVisible(false);
           fuzzyPanel.setVisible(true);
-          List<List<Timepoint>> t = xmlparser.getTimepoints();
+          fuzzyPanel.setCurrent_id(xmlparser.getLastTimepoint().get(0).getId());
           fuzzyPanel.updateData();
         }else{
           fbPanel.setBackground(Color.black);

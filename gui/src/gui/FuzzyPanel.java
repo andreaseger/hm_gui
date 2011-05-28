@@ -308,4 +308,9 @@ public class FuzzyPanel extends JPanel{
   void setTimes(List<String> timelist) {
     this.times = timelist;
   }
+
+  public void setCurrent_id(int current_id) {
+    this.current_id = current_id;
+  }
+  
 }

@@ -85,7 +85,7 @@ public class DetailPanel extends javax.swing.JPanel {
         for(int i = 0; i < 5; i++){
             graphs[i] = new Graph((this.getWidth() / 5) * 4, gH);
             graphs[i].setLocation(0, (gH + 1)* i);
-            graphs[i].setSteps(50);
+            graphs[i].setSteps(150);
             mainDetailPanel.add(graphs[i]);
         }
         graphs[4].setGraphColor(new Color(190, 190, 0));
