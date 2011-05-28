@@ -13,6 +13,7 @@ package elements;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
  * @author max
  */
 public class Graph extends javax.swing.JPanel {
+
+
     
     private class P2D{
         public int x;
@@ -34,11 +37,38 @@ public class Graph extends javax.swing.JPanel {
     public static final int STYLE_LINES = 0;
     public static final int STYLE_RECTS = 1;
     
-    private List<Double> data = null;
+    private List<Float> data = null;
     private Color graphColor = Color.GREEN;
     private Color graphBgColor = Color.black;
     private double targetValue;
     private int style = STYLE_LINES;
+    private int steps;
+    private boolean showTarget;
+
+    public void setShowTarget(boolean showTarget)
+    {
+        this.showTarget = showTarget;
+    }
+
+    public void setSteps(int steps)
+    {
+        this.steps = steps;
+    }
+
+    private float min;
+    private float max = -1;
+
+    public Graph setMax(float max)
+    {
+        this.max = max;
+        return this;
+    }
+
+    public Graph setMin(float min)
+    {
+        this.min = min;
+        return this;
+    }
 
     public void setStyle(int style) {
         this.style = style;
@@ -68,11 +98,23 @@ public class Graph extends javax.swing.JPanel {
         setPreferredSize(dim);
         setMaximumSize(dim);
         
-        
+        showTarget = true;
     }
     
-    public void showValues(List<Double> data){
-        this.data = data;
+    public void showValues(List<Float> data){
+        if(data != null){
+        List<Float> tmp = new ArrayList<Float>(data);
+        if(tmp.size() > steps){
+            int num = tmp.size() - steps - 1;
+            for(int i = 0; i < num; i++){
+                tmp.remove(0);
+            }
+        }
+        this.data = tmp;
+        }
+        else
+            this.data = data;
+        
         repaint();
     }
     
@@ -95,26 +137,41 @@ public class Graph extends javax.swing.JPanel {
         
         gr.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        gr.setColor(Color.red);
+        gr.setColor(Color.black);
         gr.drawLine(0, height, this.getWidth(), height);
        
         gr.setColor(graphColor);
         
         if(data != null && data.size() > 0){
             int step = this.getWidth() / data.size();
-            double maxValue = getDataMaxValue();
-            int normHeight = (int)( (double)(height) / maxValue);
+            float maxValue = getDataMaxValue();
+            if(maxValue > max){
+                max = maxValue;
+            }
+            else{
+                maxValue = max;
+            }
+            double minValue = getDataMinValue();
+            int normHeight = (int)( (double)(height) / (maxValue - min));
+            //double diff = max - min;
+            //int normHeight = (int)( (double)(height) / diff);
+            
             
             // draw target line
-            int y = height - (int)(targetValue * normHeight);
-            drawDashed(gr, Color.yellow, 0, y, this.getWidth(), y);
+            if(showTarget){
+                int y = height - (int)((targetValue - min) * normHeight);
+                drawDashed(gr, Color.yellow, 0, y, this.getWidth(), y);
+            }
             
             // draw values
             P2D point = null;
             gr.setColor(graphColor);
-            if(style == STYLE_LINES){
-                for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
+
+            int idx = data.size() > steps ? data.size() - steps : 0;
+            for(int i = idx; i < data.size(); i++){
+              P2D p = new P2D(i * step, (int)((data.get(i) - min) * normHeight));
+
+                if(style == STYLE_LINES){
                     if(point == null){
                         point = p;
                     }else{
@@ -122,11 +179,8 @@ public class Graph extends javax.swing.JPanel {
                         point = p;
                     }
                 }
-            }
-            else if(style == STYLE_RECTS){
-                for(int i = 0; i < data.size(); i++){
-                    P2D p = new P2D(i * step, (int)(data.get(i) * normHeight));
-                    if(point == null && i == 0){
+                else if(style == STYLE_RECTS){
+                    if(point == null && i == idx){
                         point = p;
                         gr.drawLine(0, height - p.y, p.x + step/2, height - p.y);
                     }else{
@@ -135,16 +189,27 @@ public class Graph extends javax.swing.JPanel {
                         point = p;
                     }
                 }
-            }
+            }            
         }else{
             gr.drawLine(0, 0, this.getWidth(), height);
         }
     }
     
-    private double getDataMaxValue(){
-        double res = -1.0;
-        for(Double gd: data){
+    private float getDataMaxValue(){
+        float res = Float.MIN_VALUE;
+        for(Float gd: data){
             if(gd > res){
+                res = gd;
+            }
+        }
+        return res;
+    }
+
+    private double getDataMinValue()
+    {
+        double res = Double.MAX_VALUE;
+        for(Float gd: data){
+            if(gd < res){
                 res = gd;
             }
         }

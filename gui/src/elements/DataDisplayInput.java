@@ -1,10 +1,8 @@
 package elements;
 
 import gui.InputEnum;
-import java.awt.Dimension;
 import java.text.DecimalFormat;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 
 /**
  * @author Moe

@@ -41,36 +41,24 @@ public class ObservableParser extends AbstractParser implements Runnable{
     /**
      * Maximum number of timepoints. If more timepoints are read, the oldest timepoints are discarded.
      */
-    private final static int MAX_TIMEPOINTS = 100;
+    private final static int MAX_TIMEPOINTS = 150;
 
     private Thread runner;
-//    private String[] files;
     private OutputEnum[] output;
+    private final int sleeper;
 
-//    public ObservableParser(String[] files){
-//      super();
-//      this.files = files;
-//
-//      runner = new Thread(this);
-//    }
-//
-//    public ObservableParser(String o0, String o1, String o2,String o3){
-//      super();
-//      this.files = new String[]{o0,o1,o2,o3};
-//
-//      runner = new Thread(this);
-//    }
-
-    public ObservableParser(OutputEnum[] output){
+    public ObservableParser(OutputEnum[] output, int sleep){
       super();
       this.output = output;
+      sleeper = sleep;
 
       runner = new Thread(this);
     }
 
-    public ObservableParser(OutputEnum o0, OutputEnum o1, OutputEnum o2,OutputEnum o3){
+    public ObservableParser(OutputEnum o0, OutputEnum o1, OutputEnum o2,OutputEnum o3, int sleep){
       super();
       this.output = new OutputEnum[]{o0,o1,o2,o3};
+      sleeper = sleep;
 
       runner = new Thread(this);
     }
@@ -95,15 +83,15 @@ public class ObservableParser extends AbstractParser implements Runnable{
       while(timepoints.size() > MAX_TIMEPOINTS) {
           timepoints.removeFirst();
       }
-      //HACK to get faster to the interesting data
-      /*if (points.get(0).getId() < 250) {
-        return;
-      }*/
+//      //HACK to get faster to the interesting data
+//      if (points.get(0).getId() < 250) {
+//        return;
+//      }
 
       notifyObservers();
 
       try {
-        runner.sleep(300);
+        runner.sleep(sleeper);
       } catch (InterruptedException ex) {
         Logger.getLogger(ObservableParser.class.getName()).log(Level.SEVERE, null, ex);
       }                
