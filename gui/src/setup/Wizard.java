@@ -77,8 +77,8 @@ public class Wizard extends JDialog {
     //bottom
     JPanel bottomPanel = new JPanel();
     bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 2));
-    Dimension dim = new Dimension(90, 26);
-    backButton = new JButton("Back", new ImageIcon("berg-tal-plakat.png"));
+    Dimension dim = new Dimension(110, 26);
+    backButton = new JButton("Zurück");
     backButton.setPreferredSize(dim);
     backButton.addActionListener(new ActionListener() {
 
@@ -88,7 +88,7 @@ public class Wizard extends JDialog {
       }
     });
     bottomPanel.add(backButton);
-    nextButton = new JButton("Next", new ImageIcon("berg-tal-plakat.png"));
+    nextButton = new JButton("Weiter");
     nextButton.setHorizontalTextPosition(JButton.LEFT);
     nextButton.setPreferredSize(dim);
     nextButton.addActionListener(new ActionListener() {
@@ -99,7 +99,7 @@ public class Wizard extends JDialog {
       }
     });
     bottomPanel.add(nextButton);
-    cancelButton = new JButton("Cancel", new ImageIcon("berg-tal-plakat.png"));
+    cancelButton = new JButton("Abbrechen");
     cancelButton.setPreferredSize(dim);
     cancelButton.setHorizontalTextPosition(JButton.LEFT);
     cancelButton.addActionListener(new ActionListener() {
@@ -118,7 +118,7 @@ public class Wizard extends JDialog {
   }
 
   private void nextButtonActionPerformed() {
-    if (nextButton.getText().equals("Save")) {
+    if (nextButton.getText().equals("Speichern")) {
         if(panel_factory.getResult().getSignals_disable_counter() != 0){
             final String message = "Ihre Eingabe ist ungültig.";
             JOptionPane.showMessageDialog(null, message, "Ungültige Eingaben",JOptionPane.PLAIN_MESSAGE );
@@ -176,9 +176,9 @@ public class Wizard extends JDialog {
 
   private void updateButtons() {
     if (currentPanel >= (panels.size() - 1)) { //finish
-      nextButton.setText("Save");
+      nextButton.setText("Speichern");
     } else {
-      nextButton.setText("Next");
+      nextButton.setText("Weiter");
     }
     if (currentPanel <= 0) {
       backButton.setEnabled(false);
