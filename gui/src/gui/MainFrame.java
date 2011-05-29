@@ -55,14 +55,14 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
   private JLabel timestampLabel;
   private JLabel descriptionLabel;
 
-  public MainFrame(int sleep) {
+  public MainFrame(int sleep, boolean skip) {
     JOptionPane.showMessageDialog(current,"Achtung dies ist eine Testversion.\nBenutzung erfolg auf eigene Gefahr.\nFür Schäden wird nicht gehaftet.","Testversion!",JOptionPane.WARNING_MESSAGE);
     PanelFactory panel_factory = new PanelFactory();
     results = panel_factory.getResult();
     initComponents();
     
     //panel_factory.getWizard().registerOnSave(this);
-    startParser(sleep);
+    startParser(sleep,skip);
   }
 
 
@@ -115,13 +115,23 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
   }
 
   public static void main(String... args) {
-    int s;
+    int s=500;
+    boolean skip = false;
     try{
-      s = Integer.parseInt(args[0]);
+      if(args[0].equals("--skip"))
+        skip =true;
+      else if(args[0].equals("--sleep"))
+        s = Integer.parseInt(args[1]);
+      else if(args[1].equals("--skip"))
+        skip =true;
+      else if(args[1].equals("--sleep"))
+        s = Integer.parseInt(args[2]);
     }catch(Exception e){
-      s = 300;
+      System.out.println("wrong input format try\n\tjava -jar \"gui.jar\" [--sleep <miliseconds>] [--skip]\nor simply\n\tjava -jar \"gui.jar\"");
+      return;
     }
-    current = new MainFrame(s);
+    
+    current = new MainFrame(s,skip);
     current.setSize(800, 600);
     current.setLocation(10, 10);
 
@@ -236,12 +246,12 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
 
   }
 
-  private void startParser(int sleep) {
+  private void startParser(int sleep, boolean skip) {
     OutputEnum[] o = new OutputEnum[]{OutputEnum.get(results.getSelected_drugs()[0]),
                                       OutputEnum.get(results.getSelected_drugs()[1]),
                                       OutputEnum.get(results.getSelected_drugs()[2]),
                                       OutputEnum.get(results.getSelected_drugs()[3])};
-    xmlparser = new ObservableParser(o, sleep);
+    xmlparser = new ObservableParser(o, sleep,skip);
     xmlparser.addObserver(this);
     logparser.Parser lparser = new logparser.Parser();
     fisparser.Parser fparser = new fisparser.Parser();
