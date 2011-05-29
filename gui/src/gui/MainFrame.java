@@ -118,7 +118,7 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
     int s;
     try{
       s = Integer.parseInt(args[0]);
-    }catch(NumberFormatException e){
+    }catch(Exception e){
       s = 300;
     }
     current = new MainFrame(s);
