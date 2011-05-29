@@ -115,17 +115,45 @@ public class MainFrame extends JFrame implements ObservableParser.Observer{
   }
 
   public static void main(String... args) {
-    int s=500;
-    boolean skip = false;
+    int s;
+    boolean skip;
+    s=500; skip=false;
     try{
-      if(args[0].equals("--skip"))
-        skip =true;
-      else if(args[0].equals("--sleep"))
-        s = Integer.parseInt(args[1]);
-      else if(args[1].equals("--skip"))
-        skip =true;
-      else if(args[1].equals("--sleep"))
-        s = Integer.parseInt(args[2]);
+      switch(args.length){
+        case 0:
+          break;
+        case 1:
+          if(args[0].equals("--skip"))
+            skip =true;
+          else
+            throw new Exception();
+          break;
+        case 2:
+          if(args[0].equals("--sleep"))
+            s = Integer.parseInt(args[1]);
+          else
+            throw new Exception();
+          break;
+        case 3:
+          if(args[0].equals("--skip")){
+            skip =true;
+            if(args[1].equals("--sleep")){
+              s = Integer.parseInt(args[2]);
+            } else
+              throw new Exception();
+          
+          }else if(args[0].equals("--sleep")){
+            s = Integer.parseInt(args[1]);
+            if(args[2].equals("--skip")){
+              skip =true;
+            } else
+              throw new Exception();
+          } else
+            throw new Exception();
+          break;
+        default:
+          throw new Exception();
+      }
     }catch(Exception e){
       System.out.println("wrong input format try\n\tjava -jar \"gui.jar\" [--sleep <miliseconds>] [--skip]\nor simply\n\tjava -jar \"gui.jar\"");
       return;
