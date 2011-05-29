@@ -15,36 +15,145 @@ public class Result {
     
     private Reader reader;
     
+    private boolean is_valid = false;
+    
     private String name;
+    private String name_buffer;
     private String firstname;
+    private String firstname_buffer;
     private String age;
+    private String age_buffer;
     private String weight;
+    private String weight_buffer;
+    
     private String[] pre_conditions;
     private String[] intolerances;
+    
     private String[] drugs_vasodilator;
     private String[] drugs_vasoconstrictor;
     private String[] drugs_inotrope;
     private String[] drugs_volume;
-    private String[] signals;
+    
     private ArrayList<String[]> drugs = new ArrayList<String[]>();
+    private ArrayList<String[]> drugs_changed = new ArrayList<String[]>();
+
     private String monitoring_intervall;
+    private String monitoring_intervall_buffer;
+
+        
+    private String[] signals = new String[11];
     private HashMap<String, String> signal_targets = new HashMap<String, String>();
-    
-    private ArrayList<String> selected_preconditions = new ArrayList<String>();
-    
-    private int[] selected_drugs = {0,0,0,0};
-    
-    private HashMap<String, String> selected_signal_targets = new HashMap<String, String>();
+    //<Integer,String> index of the signal -> String[] signals
+    private HashMap<Integer, String> selected_signal_targets_buffer = new HashMap<Integer, String>();
 
     
+    private HashMap<Integer, String> selected_signal_targets = new HashMap<Integer, String>();
+    
+    
+    private int[] selected_inputs = {0,1,2,3};
+    private double[] selected_input_targets = {105,2.0,2.0,50};
+
+    private ArrayList<String> preconditions_buffer = new ArrayList<String>();
+    private ArrayList<String> selected_preconditions = new ArrayList<String>();
+    
+    private int[] drugs_buffer = {0,0,0,0};
+    private int[] selected_drugs = {0,0,0,0};
+
+    private int drugs_info_disable_counter = 0;
+    private int patient_info_disable_counter = 0;
+    private int signals_disable_counter = 0;
+
         
     public Result(){
         this.reader = new Reader(this);
+        selected_signal_targets.put(0,signal_targets.get(signals[0]));
+        selected_signal_targets.put(1,signal_targets.get(signals[1]));
+        selected_signal_targets.put(2,signal_targets.get(signals[2]));
+        selected_signal_targets.put(3,signal_targets.get(signals[3]));
+        preconditions_buffer.add(pre_conditions[0]);
+    }
+    
+    
+    
+    public void saveResults(){
+    
+        is_valid = true;
+        
+        setName(name_buffer);
+        setFirstname(firstname_buffer);
+        setAge(age_buffer);
+        setWeight(weight_buffer);
+        
+        setSelected_preconditions(preconditions_buffer);
+        
+        //here: selected_drugs constant because of lack of data
+        //setSelected_drugs(drugs_buffer);
+        //Hack to get the always the default outputs
+        setSelected_drugs(new int[]{0,1,2,3});
+
+        setDrugs(drugs_changed);
+    
+        setMonitoring_intervall(monitoring_intervall_buffer);
+        
+        setSelected_signal_targets(selected_signal_targets_buffer);
+        
+        //here: selected_inputs constant because of lack of data
+        /*for(int i = 0; i < selected_input_targets.length; ++i){
+            double target  = Double.parseDouble(selected_signal_targets.get(i));
+            selected_input_targets[i] = target;
+        }*/
         
     }
     
+    public String getAge_buffer() {
+        return age_buffer;
+    }
 
-    
+    public void setAge_buffer(String age_buffer) {
+        this.age_buffer = age_buffer;
+    }
+
+    public int[] getDrugs_buffer() {
+        return drugs_buffer;
+    }
+
+    public void setDrugs_buffer(int[] drugs_buffer) {
+        this.drugs_buffer = drugs_buffer;
+    }
+
+    public String getFirstname_buffer() {
+        return firstname_buffer;
+    }
+
+    public void setFirstname_buffer(String firstname_buffer) {
+        this.firstname_buffer = firstname_buffer;
+    }
+
+    public String getName_buffer() {
+        return name_buffer;
+    }
+
+    public void setName_buffer(String name_buffer) {
+        this.name_buffer = name_buffer;
+    }
+
+    public ArrayList<String> getPreconditions_buffer() {
+        return preconditions_buffer;
+    }
+
+    public void setPreconditions_buffer(ArrayList<String> preconditions_buffer) {
+        this.preconditions_buffer = preconditions_buffer;
+    }
+
+    public String getWeight_buffer() {
+        return weight_buffer;
+    }
+
+    public void setWeight_buffer(String weight_buffer) {
+        this.weight_buffer = weight_buffer;
+    }
+   
+           
     public String getAge() {
         return age;
     }
@@ -173,12 +282,83 @@ public class Result {
         this.selected_drugs = selected_drugs;
     }
     
-    public HashMap<String, String> getSelected_signal_targets() {
+    public HashMap<Integer, String> getSelected_signal_targets() {
         return selected_signal_targets;
     }
 
-    public void setSelected_signal_targets(HashMap<String, String> selected_signal_targets) {
+    public void setSelected_signal_targets(HashMap<Integer, String> selected_signal_targets) {
         this.selected_signal_targets = selected_signal_targets;
     }
+    
+    public ArrayList<String[]> getDrugs_changed() {
+        return drugs_changed;
+    }
 
+    public void setDrugs_changed(ArrayList<String[]> drugs_changed) {
+        this.drugs_changed = drugs_changed;
+    }
+
+    public String getMonitoring_intervall_buffer() {
+        return monitoring_intervall_buffer;
+    }
+
+    public void setMonitoring_intervall_buffer(String monitoring_intervall_buffer) {
+        this.monitoring_intervall_buffer = monitoring_intervall_buffer;
+    }
+    
+    public double[] getSelected_input_targets() {
+        return selected_input_targets;
+    }
+
+    public void setSelected_input_targets(double[] selected_input_targets) {
+        this.selected_input_targets = selected_input_targets;
+    }
+
+    public int[] getSelected_inputs() {
+        return selected_inputs;
+    }
+
+    public void setSelected_inputs(int[] selected_inputs) {
+        this.selected_inputs = selected_inputs;
+    }
+
+    public HashMap<Integer, String> getSelected_signal_targets_buffer() {
+        return selected_signal_targets_buffer;
+    }
+
+    public void setSelected_signal_targets_buffer(HashMap<Integer, String> selected_signal_targets_buffer) {
+        this.selected_signal_targets_buffer = selected_signal_targets_buffer;
+    }
+    
+    public boolean isIs_valid() {
+        return is_valid;
+    }
+
+    public void setIs_valid(boolean is_valid) {
+        this.is_valid = is_valid;
+    }
+    
+    public int getDrugs_info_disable_counter() {
+        return drugs_info_disable_counter;
+    }
+
+    public void setDrugs_info_disable_counter(int drugs_info_disable_counter) {
+        this.drugs_info_disable_counter = drugs_info_disable_counter;
+    }
+    
+    public int getPatient_info_disable_counter() {
+        return patient_info_disable_counter;
+    }
+
+    public void setPatient_info_disable_counter(int patient_info_disable_counter) {
+        this.patient_info_disable_counter = patient_info_disable_counter;
+    }
+
+    public int getSignals_disable_counter() {
+        return signals_disable_counter;
+    }
+
+    public void setSignals_disable_counter(int signals_disable_counter) {
+        this.signals_disable_counter = signals_disable_counter;
+    }
 }

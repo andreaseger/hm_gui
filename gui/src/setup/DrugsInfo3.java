@@ -4,6 +4,7 @@
  */
 package setup;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,8 @@ public class DrugsInfo3 extends JFrame {
 
     private Result result;
     private PanelFactory panel_factory;
+    private JLabel error_label = new JLabel();
+    private boolean was_insert;
     
     public DrugsInfo3(Result result, PanelFactory panel_factory) {
         
@@ -128,13 +131,17 @@ public class DrugsInfo3 extends JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Ausgewählte Medikamente:");
         
+        error_label.setText("  ");
+        
         DocumentListener document_listener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+               was_insert = true;
                saveChange(e);
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
+                was_insert = false;
                 saveChange(e);
             }
             @Override
@@ -146,7 +153,6 @@ public class DrugsInfo3 extends JFrame {
                 int length =doc.getLength();
                 try {
                     String s = doc.getText(0, length);
-                    
                     int index_1 = -1;
                     int index_2 = -1;
                     int index_3 = -1;
@@ -162,35 +168,36 @@ public class DrugsInfo3 extends JFrame {
                         if(result.getDrugs().get(i)[0].equals(result.getDrugs_volume()[result.getSelected_drugs()[3]].split(" ")[0]))
                             index_4 = i;
                     }
-                    
+                    //------------------------------
                     for(int i = 0; i < 9; ++i){
                         String ss = "field1-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_1)[i+1] = s;
+                            limitValues(i, index_1, s);
                         }
                     }
+                    //----------------------------
                     for(int i = 0; i < 9; ++i){
                         String ss = "field2-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_2)[i+1] = s;
+                            limitValues(i, index_2, s);
                         }
                     }
+                    //------------------------------
                     for(int i = 0; i < 9; ++i){
                         String ss = "field3-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_3)[i+1] = s;
+                            limitValues(i, index_3, s);
                         }
                     }
+                    
+                    //----------------------------
                     for(int i = 0; i < 9; ++i){
                         String ss = "field4-"+i;
                         if(doc.getProperty("name").equals(ss)){
-                            result.getDrugs().get(index_4)[i+1] = s;
+                            limitValues(i, index_4, s);
                         }
                     }
                     
-                    
-                                        
-                    int i = 42;
                 }catch (BadLocationException badLocationException) {
                  System.out.println("Contents: Unknown");
                 }
@@ -303,6 +310,9 @@ public class DrugsInfo3 extends JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(error_label))
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
@@ -399,7 +409,9 @@ public class DrugsInfo3 extends JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
+                .addComponent(error_label)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
@@ -516,5 +528,44 @@ public class DrugsInfo3 extends JFrame {
         
         return jPanel1;
     
-    }    
+    }
+    
+    public void limitValues(int i, int index, String s){
+        if(s.equals("") && (i==0 || i==1)){
+           switch(i){
+                case 0: error_label.setText("Abkürzung darf nicht leer sein.");
+                        result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()+1);
+                        break;
+                case 1: error_label.setText("Port darf nicht leer sein.");
+                        result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()+1);
+                        break;
+           }
+        }else if(i < 8 && i > 1){
+           double input = 0;
+           try{
+                input = Double.parseDouble(s);
+                if(input < 0 || input > 120){
+                     error_label.setBackground(Color.magenta);
+                     error_label.setText("Geben Sie eine Zahl zwischen 0 und 120 ein!");
+                     result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()+1);
+                }else{
+                     if(was_insert && s.length() == 1)
+                            result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()-1);
+                     error_label.setBackground(Color.white);
+                     error_label.setText("  ");
+                     result.getDrugs().get(index)[i+1] = s;
+                }
+           }catch(NumberFormatException f){
+                     error_label.setBackground(Color.magenta);
+                     error_label.setText("Geben Sie eine Zahl zwischen 0 und 120 ein!");
+                     result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()+1);
+           }
+        }else{
+           if(was_insert && s.length() == 1)
+               result.setDrugs_info_disable_counter(result.getDrugs_info_disable_counter()-1);
+           error_label.setBackground(Color.white);
+           error_label.setText("  ");
+           result.getDrugs().get(index)[i+1] = s;
+        }
+    }
 }

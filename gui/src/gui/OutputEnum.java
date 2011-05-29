@@ -13,10 +13,14 @@ import java.util.Map;
  * @author sch1zo
  */
 public enum OutputEnum {
-  VOL(0,"VOL", "VOL"),
-  DPM(1,"DPM", "DPM"),
-  NEP(2,"NEP", "NEP"),
-  ISDN(3,"ISDN", "ISDN");
+  //ISDN(3,"ISDN"),
+  VOL(0,"HEAS","VOL"),
+  DPM(1,"DPM","DPM"),
+  NEP(2,"NEP","NEP"),
+  ISDN(3,"ISDN","ISDN"),
+  SNP(4,"SNP","ISDN"),
+  PNP(5,"PNP","NEP"),
+  DBT(6,"DBT","DPM");
 
   private static final Map<Integer, OutputEnum> lookup = new HashMap<Integer, OutputEnum>();
 

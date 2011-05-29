@@ -4,7 +4,6 @@
  */
 package fisparser;
 
-import com.sun.corba.se.spi.orb.StringPair;
 import gui.OutputEnum;
 import java.io.File;
 import java.io.FileNotFoundException;

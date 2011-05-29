@@ -41,25 +41,24 @@ public Reader(Result result) {
         
         string = propFile.getProperty("VOLUME");
         result.setDrugs_volume(string.split(","));
+
         
-        string = propFile.getProperty("SIGNALS");
-        result.setSignals(string.split(","));
-        if(result.getSignals().length != 11)
-            System.out.println("too many signals!!!!");
-        string = propFile.getProperty("DRUGS");
-        String[] strings = string.split("-");
-        for(int i=0;i<strings.length;++i){
-            String[] drug = strings[i].split(",");
-            result.getDrugs().add(drug);
+        for(int i = 1; i < result.getSignals().length+1; ++i){
+            String key = "SIGNAL"+i;
+            string = propFile.getProperty(key);
+            String[] ss = string.split(",");
+            result.getSignals()[i-1] = ss[0];
+            result.getSignal_targets().put(ss[0], ss[1]);
         }
+        
+        for(int i = 1; i < (6+1); ++i){
+            String drug = "DRUG"+i;
+            string = propFile.getProperty(drug);
+            String[] ss = string.split(",");
+            result.getDrugs().add(ss);
+        }
+                
         result.setMonitoring_intervall(propFile.getProperty("INTERVALINSECONDS"));
-        
-        string = propFile.getProperty("SIGNAL_TARGETS");
-        String[] targets = string.split(",");
-        for(int i = 0; i < result.getSignals().length; ++i){
-            result.getSignal_targets().put(result.getSignals()[i], targets[i]);
-        }
-        
 
 
     } catch (FileNotFoundException e) {
@@ -69,9 +68,5 @@ public Reader(Result result) {
     }
 
     }
-
-
-    //methode: write in File -> String s = age_textfield.getText();
-    //int[] s = jList1.getSelectedIndices(); usw...
         
 }

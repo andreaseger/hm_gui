@@ -15,8 +15,8 @@ import java.util.Map;
 public enum InputEnum {
   MAP(0,"MAP","Mean Arterial Pressure","mmHg"),
   CVP(1,"CVP", "Central Venous Pressure","mmHg"),
-  SVR(2,"SVR", "Systemic Vascular Resistance","dyn*sec"),
-  CO(3,"CO", "Cardiac Output","l/min");
+  CO(2,"CO", "Cardiac Output","l/min"),
+  SVR(3,"SVR", "Systemic Vascular Resistance","dyn*sec");
 
   private static final Map<Integer, InputEnum> lookup = new HashMap<Integer, InputEnum>();
 

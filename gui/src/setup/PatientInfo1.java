@@ -4,6 +4,7 @@
  */
 package setup;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +22,21 @@ public class PatientInfo1 extends JFrame {
 
     
     private Result result;
+    private JLabel age_error_label = new JLabel();
+    private JLabel weight_error_label = new JLabel();
+    private JLabel title = new javax.swing.JLabel();
+    private JLabel name_label = new javax.swing.JLabel();
+    private JLabel firstname_label = new javax.swing.JLabel();
+    private JLabel age_label = new javax.swing.JLabel();
+    private JLabel weight_label = new javax.swing.JLabel();
+    private JTextField name_textfield = new javax.swing.JTextField();
+    private JTextField firstname_textfield = new javax.swing.JTextField();
+    private JTextField age_textfield = new javax.swing.JTextField();
+    private JTextField weight_textfield = new javax.swing.JTextField();
+    private JLabel kg_label = new javax.swing.JLabel();
+    
+    private boolean was_insert;
+        
 
     public PatientInfo1(Result result) {
         this.result = result;
@@ -29,26 +45,20 @@ public class PatientInfo1 extends JFrame {
     public JPanel createPanel(){
         
         JPanel jPanel1 = new javax.swing.JPanel();
+                
+       
         
-        JLabel title = new javax.swing.JLabel();
-        JLabel name_label = new javax.swing.JLabel();
-        JLabel firstname_label = new javax.swing.JLabel();
-        JLabel age_label = new javax.swing.JLabel();
-        JLabel weight_label = new javax.swing.JLabel();
-        JTextField name_textfield = new javax.swing.JTextField();
-        JTextField firstname_textfield = new javax.swing.JTextField();
-        JTextField age_textfield = new javax.swing.JTextField();
-        JTextField weight_textfield = new javax.swing.JTextField();
-        JLabel kg_label = new javax.swing.JLabel();
                 
         
         DocumentListener document_listener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+               was_insert = true;
                saveChange(e);
             }
             @Override
             public void removeUpdate(DocumentEvent e) {
+                was_insert = false;
                 saveChange(e);
             }
             @Override
@@ -60,15 +70,44 @@ public class PatientInfo1 extends JFrame {
                 int length =doc.getLength();
                 try {
                     String s = doc.getText(0, length);
-                    
                     if(doc.getProperty("name").equals("name")){
-                        result.setName(s);
+                        result.setName_buffer(s);
                     }else if(doc.getProperty("name").equals("firstname")){
-                        result.setFirstname(s);
+                        result.setFirstname_buffer(s);
                     }else if(doc.getProperty("name").equals("age")){
-                        result.setAge(s);
+                        int input;
+                        try{
+                            input = Integer.parseInt(s);
+                            if(input < 0 || input > 120){
+                                result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()+1);
+                                age_error_label.setText("Geben Sie eine Dezimalzahl zwischen 0 und 120 ein!");
+                            }else{
+                                if(was_insert && s.length() == 1)
+                                    result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()-1);
+                                age_error_label.setText("");
+                                result.setAge_buffer(s);
+                            }
+                        }catch(NumberFormatException f){
+                            result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()+1);
+                            age_error_label.setText("Geben Sie eine Dezimalzahl zwischen 0 und 120 ein!");
+                        }
                     }else if(doc.getProperty("name").equals("weight")){
-                        result.setWeight(s);
+                        int input;
+                        try{
+                            input = Integer.parseInt(s);
+                            if(input < 0 || input > 250){
+                                result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()+1);
+                                weight_error_label.setText("Geben Sie eine Dezimalzahl zwischen 0 und 250 ein!");
+                            }else{
+                                if(was_insert && s.length() == 1)
+                                    result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()-1);
+                                weight_error_label.setText("");
+                                result.setWeight_buffer(s);
+                            }
+                        }catch(NumberFormatException f){
+                            result.setPatient_info_disable_counter(result.getPatient_info_disable_counter()+1);
+                            weight_error_label.setText("Geben Sie eine Dezimalzahl zwischen 0 und 250 ein!");
+                        }
                     }
                 }catch (BadLocationException badLocationException) {
                  System.out.println("Contents: Unknown");
@@ -102,6 +141,9 @@ public class PatientInfo1 extends JFrame {
 
         weight_label.setLabelFor(weight_textfield);
         weight_label.setText("Gewicht:");
+        
+        age_error_label.setText("");
+        weight_error_label.setText("");
 
         name_textfield.setText(result.getName());
         firstname_textfield.setText(result.getFirstname());
@@ -136,7 +178,12 @@ public class PatientInfo1 extends JFrame {
                                     .addComponent(age_textfield, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                                     .addComponent(weight_textfield, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                                     .addGap(5,5,5)
-                                    .addComponent(kg_label))
+                                    .addComponent(kg_label)
+                                    .addGap(5,5,5)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(weight_error_label)
+                                        //.addGap(5,5,5)
+                                        .addComponent(age_error_label)))
                 ))).addGap(105, 105, 105)
                 )
         );
@@ -156,12 +203,14 @@ public class PatientInfo1 extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(age_label)
-                    .addComponent(age_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(age_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(age_error_label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(weight_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(weight_label)
-                    .addComponent(kg_label))
+                    .addComponent(kg_label)
+                    .addComponent(weight_error_label))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGap(90, 90, 90)
                 )

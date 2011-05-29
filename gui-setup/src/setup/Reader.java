@@ -16,7 +16,7 @@ public Reader(Result result) {
     
     this.result = result;
     
-    File file = new File("D:/ICU.cfg");
+    File file = new File("resources/controller.txt");
     Properties propFile = new Properties();
 
     try {
